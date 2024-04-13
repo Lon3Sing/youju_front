@@ -1,26 +1,26 @@
 <template>
   <div>
     <v-navigation-drawer
-        v-if="!$vuetify.breakpoint.smAndUp"
         v-model="drawer"
-        :clipped="$vuetify.breakpoint.lgAndUp"
+
+        :clipped="false"
         app
         color="primary"
         dark
     >
       <v-list color="primary" nav>
-        <v-list-item
-            v-for="(item, i) in btnItems"
-            :key="i"
-            :href="item.href"
-            :target="item.target"
-            :to="item.to"
-            link
-        >
-          <v-list-item-content>
-            <v-list-item-title>{{ item.text }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+<!--        <v-list-item-->
+<!--            v-for="(item, i) in btnItems"-->
+<!--            :key="i"-->
+<!--            :href="item.href"-->
+<!--            :target="item.target"-->
+<!--            :to="item.to"-->
+<!--            link-->
+<!--        >-->
+<!--          <v-list-item-content>-->
+<!--            <v-list-item-title>{{ item.text }}</v-list-item-title>-->
+<!--          </v-list-item-content>-->
+<!--        </v-list-item>-->
         <v-list-item
             v-for="(item, i) in barItems"
             :key="i"
@@ -51,7 +51,7 @@
         >
           <v-col class="d-flex align-center">
             <v-app-bar-nav-icon
-                v-if="!$vuetify.breakpoint.mdAndUp"
+
                 @click.stop="drawer = !drawer"
             />
             <v-toolbar-title
@@ -103,7 +103,7 @@
 <script>
 export default {
   data: () => ({
-    drawer: null,
+    drawer: false,
     btnItems: [
       {
         text: "注册/登录",
