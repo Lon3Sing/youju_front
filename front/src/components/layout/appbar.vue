@@ -59,7 +59,10 @@
                 style="cursor: pointer"
                 @click="$router.push('/')"
             >
-              <v-icon color="primary" large>mdi-feather</v-icon>
+<!--          TODO    -->
+              <v-icon style="display: inline-block;">
+                <img src="@/images/logo.jpg" alt="youjv" >
+              </v-icon>
               游桔
               <span class="accent--text"></span>
             </v-toolbar-title>
