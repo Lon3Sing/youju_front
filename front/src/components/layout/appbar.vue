@@ -37,7 +37,7 @@
     </v-navigation-drawer>
 
     <v-app-bar
-        :clipped-left="$vuetify.breakpoint.lgAndUp"
+        :clipped-left="!$vuetify.breakpoint.lgAndUp"
         app
         color="white"
         elevate-on-scroll
@@ -59,7 +59,7 @@
                 style="cursor: pointer"
                 @click="$router.push('/')"
             >
-<!--              <v-icon color="primary" large>mdi-feather</v-icon>-->
+              <v-icon color="primary" large>mdi-feather</v-icon>
               游桔
               <span class="accent--text"></span>
             </v-toolbar-title>
@@ -107,7 +107,8 @@ export default {
     btnItems: [
       {
         text: "注册/登录",
-        href: "https://github.com/AGDholo/giraffe",
+        // href: "https://github.com/AGDholo/giraffe",
+        to: "/login",
         target: "_black",
         color: "primary",
       },
