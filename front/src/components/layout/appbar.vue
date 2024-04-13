@@ -60,8 +60,8 @@
                 @click="$router.push('/')"
             >
 <!--          TODO    -->
-              <v-icon style="display: inline-block;">
-                <img src="@/images/logo.jpg" alt="youjv" >
+              <v-icon>
+                <img src="@/images/2.png" alt="youjv" >
               </v-icon>
               游桔
               <span class="accent--text"></span>
