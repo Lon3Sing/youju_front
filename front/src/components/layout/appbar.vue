@@ -90,7 +90,7 @@
                 :to="item.to"
                 class="ml-3 text-capitalize"
             >
-              <v-icon left>{{ item.icon }}</v-icon>
+              <v-icon middle>{{ item.icon }}</v-icon>
               {{ item.text }}
             </v-btn>
           </v-col>
