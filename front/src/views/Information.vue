@@ -8,11 +8,11 @@
           <div class="pt-16">
             <!-- <h2 class="text-h4 font-weight-bold pb-4">新闻       攻略       资讯</h2> -->
             <v-btn-toggle v-model="selectedTab" class="mb-4">
-              <v-btn @click="selectedTab = 'news'">新闻</v-btn>
-              <v-btn @click="selectedTab = 'strategy'">攻略</v-btn>
-              <v-btn @click="selectedTab = 'information'">资讯</v-btn>
+              <v-btn>新闻</v-btn>
+              <v-btn>攻略</v-btn>
+              <v-btn>资讯</v-btn>
             </v-btn-toggle>
-            <div v-if="selectedTab === 'news'">
+            <div v-if="selectedTab === 0">
                 <v-row>
                 <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
                     <v-hover
@@ -65,14 +65,112 @@
                 </v-col>
                 </v-row>
             </div>
-            <div v-else-if="selectedTab === 'strategy'">
-                攻略
-              <!-- 攻略内容 -->
+            <div v-else-if="selectedTab === 1">
+                <v-row>
+                <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
+                    <v-hover
+                        v-slot:default="{ hover }"
+                        close-delay="50"
+                        open-delay="50"
+                    >
+                    <div>
+                        <v-card
+                            :color="hover ? 'white' : 'transparent'"
+                            :elevation="hover ? 12 : 0"
+                            flat
+                            hover
+                            to="/detail"
+                        >
+                        <v-img
+                            :aspect-ratio="16 / 9"
+                            class="elevation-2"
+                            gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
+                            height="200px"
+                            src="https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg"
+                            style="border-radius: 16px"
+                        >
+                            <v-card-text>
+                            <v-btn color="accent" to="category">攻略</v-btn>
+                            </v-card-text>
+                        </v-img>
+
+                        <v-card-text>
+                            <div class="text-h5 font-weight-bold primary--text">
+                            How to write an awesome blog post in 5 steps
+                            </div>
+
+                            <div class="text-body-1 py-4">
+                            Ultrices sagittis orci a scelerisque. Massa placerat
+                            duis ultricies lacus sed turpis
+                            </div>
+
+                            <div class="d-flex align-center">
+                            <v-avatar color="accent" size="36">
+                                <v-icon dark>mdi-feather</v-icon>
+                            </v-avatar>
+
+                            <div class="pl-2">Yan Lee · 22 July 2019</div>
+                            </div>
+                        </v-card-text>
+                        </v-card>
+                    </div>
+                    </v-hover>
+                </v-col>
+                </v-row>
             </div>
 
-            <div v-else-if="selectedTab === 'information'">
-                资讯
-              <!-- 资讯内容 -->
+            <div v-show="selectedTab === 2">
+                <v-row>
+                <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
+                    <v-hover
+                        v-slot:default="{ hover }"
+                        close-delay="50"
+                        open-delay="50"
+                    >
+                    <div>
+                        <v-card
+                            :color="hover ? 'white' : 'transparent'"
+                            :elevation="hover ? 12 : 0"
+                            flat
+                            hover
+                            to="/detail"
+                        >
+                        <v-img
+                            :aspect-ratio="16 / 9"
+                            class="elevation-2"
+                            gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
+                            height="200px"
+                            src="https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg"
+                            style="border-radius: 16px"
+                        >
+                            <v-card-text>
+                            <v-btn color="accent" to="category">资讯</v-btn>
+                            </v-card-text>
+                        </v-img>
+
+                        <v-card-text>
+                            <div class="text-h5 font-weight-bold primary--text">
+                            How to write an awesome blog post in 5 steps
+                            </div>
+
+                            <div class="text-body-1 py-4">
+                            Ultrices sagittis orci a scelerisque. Massa placerat
+                            duis ultricies lacus sed turpis
+                            </div>
+
+                            <div class="d-flex align-center">
+                            <v-avatar color="accent" size="36">
+                                <v-icon dark>mdi-feather</v-icon>
+                            </v-avatar>
+
+                            <div class="pl-2">Yan Lee · 22 July 2019</div>
+                            </div>
+                        </v-card-text>
+                        </v-card>
+                    </div>
+                    </v-hover>
+                </v-col>
+                </v-row>
             </div>
 
           </div>
@@ -182,7 +280,7 @@ export default {
   },
   data() {
     return {
-      selectedTab: "news",
+      selectedTab: 0,
     };
   },
 };
