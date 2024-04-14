@@ -12,6 +12,7 @@
               <v-btn>攻略</v-btn>
               <v-btn>资讯</v-btn>
             </v-btn-toggle>
+            <div>{{selectedTab}}</div>
             <div v-if="selectedTab === 0">
                 <v-row>
                 <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">

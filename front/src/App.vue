@@ -1,7 +1,6 @@
 <template>
   <v-app>
-    <AppBar></AppBar>
-
+      <AppBar></AppBar>
     <v-container class="mt-16">
       <router-view></router-view>
     </v-container>

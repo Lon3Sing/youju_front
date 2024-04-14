@@ -9,18 +9,18 @@
         dark
     >
       <v-list color="primary" nav>
-<!--        <v-list-item-->
-<!--            v-for="(item, i) in btnItems"-->
-<!--            :key="i"-->
-<!--            :href="item.href"-->
-<!--            :target="item.target"-->
-<!--            :to="item.to"-->
-<!--            link-->
-<!--        >-->
-<!--          <v-list-item-content>-->
-<!--            <v-list-item-title>{{ item.text }}</v-list-item-title>-->
-<!--          </v-list-item-content>-->
-<!--        </v-list-item>-->
+        <!--        <v-list-item-->
+        <!--            v-for="(item, i) in btnItems"-->
+        <!--            :key="i"-->
+        <!--            :href="item.href"-->
+        <!--            :target="item.target"-->
+        <!--            :to="item.to"-->
+        <!--            link-->
+        <!--        >-->
+        <!--          <v-list-item-content>-->
+        <!--            <v-list-item-title>{{ item.text }}</v-list-item-title>-->
+        <!--          </v-list-item-content>-->
+        <!--        </v-list-item>-->
         <v-list-item
             v-for="(item, i) in barItems"
             :key="i"
@@ -43,7 +43,7 @@
         elevate-on-scroll
         flat
     >
-      <v-container :class="{ 'px-0': !$vuetify.breakpoint.smAndUp }">
+      <v-container :class="{ 'px-4': !$vuetify.breakpoint.smAndUp }">
         <v-row
             :no-gutters="!$vuetify.breakpoint.smAndUp"
             align="center"
@@ -59,9 +59,10 @@
                 style="cursor: pointer"
                 @click="$router.push('/')"
             >
-              <img src="https://cdn.jsdelivr.net/gh/Lon3Sing/Youju-Pic/logo_text_new.png" alt="youjv" width="80" height="45" style="position:relative; top:3px">
-                <!--              游桔-->
-<!--              <span class="accent&#45;&#45;text"></span>-->
+              <img src="https://cdn.jsdelivr.net/gh/Lon3Sing/Youju-Pic/logo_text_new.png" alt="youjv" width="80"
+                   height="45" style="position:relative; top:3px">
+              <!--              游桔-->
+              <!--              <span class="accent&#45;&#45;text"></span>-->
             </v-toolbar-title>
           </v-col>
 
@@ -70,13 +71,32 @@
                 v-for="(item, i) in barItems"
                 :key="i"
                 :to="item.to"
-                class="text-capitalize"
+                class="text-capitalize font-weight-bold text-h6 primary--text"
                 exact
                 exact-active-class="accent--text"
                 text
             >{{ item.title }}
             </v-btn
             >
+          </v-col>
+
+          <v-col>
+            <v-row>
+              <v-text-field
+                  flat
+                  solo-inverted
+                  hide-details
+                  prepend-inner-icon="mdi-magnify"
+                  label="Search"
+                  class="hidden-sm-and-down"
+                  v-model="searchQuery"
+                  style="width: 175px"
+              ></v-text-field>
+            </v-row>
+          </v-col>
+
+          <v-col>
+            <v-btn @click="submitSearch">Search</v-btn>
           </v-col>
 
           <v-col v-if="$vuetify.breakpoint.mdAndUp" class="text-center">
@@ -135,6 +155,12 @@ export default {
         to: "/authors",
       },
     ],
+    searchQuery: '',
   }),
+  methods: {
+    submitSearch() {}
+  }
 };
 </script>
+
+
