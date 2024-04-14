@@ -180,7 +180,7 @@
       </v-col>
 
       <v-col>
-        <div class="pt-16">
+        <div class="pt-16" style="position:sticky; top:0;">
           <siderbar/>
         </div>
       </v-col>
