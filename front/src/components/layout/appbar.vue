@@ -59,12 +59,9 @@
                 style="cursor: pointer"
                 @click="$router.push('/')"
             >
-<!--          TODO    -->
-              <v-icon>
-                <img src="@/images/2.png" alt="youjv" >
-              </v-icon>
-              游桔
-              <span class="accent--text"></span>
+              <img src="https://cdn.jsdelivr.net/gh/Lon3Sing/Youju-Pic/logo_text_new.png" alt="youjv" width="80" height="45" style="position:relative; top:3px">
+<!--              游桔-->
+<!--              <span class="accent&#45;&#45;text"></span>-->
             </v-toolbar-title>
           </v-col>
 
