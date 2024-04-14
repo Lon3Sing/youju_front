@@ -1,13 +1,19 @@
 <template>
   <div>
     <div>
-      <v-card to="detail">
-        <v-img
+      <v-card>
+        <v-carousel cycle>
+        <v-carousel-item v-for="(item, i) in items"
+                         :key="i"
+                         @click.native="goToDetailPage(item.detail)"
+                         style="cursor: pointer"
+        >
+          <v-img
             :aspect-ratio="16 / 9"
             dark
             gradient="to top, rgba(25,32,72,.7), rgba(25,32,72,.0)"
             height="500px"
-            src="https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0"
+            :src= "item.src"
         >
           <v-card-text class="fill-height d-flex align-end">
             <v-row class="flex-column">
@@ -16,7 +22,7 @@
 <!--              </v-col>-->
               <v-col cols="12" lg="8" md="10" xl="7">
                 <h2 class="text-h3 py-3" style="line-height: 1.2">
-                  【只狼：影逝二度】苇茗一心打法分析
+                  {{item.text}}
                 </h2>
               </v-col>
               <v-col class="d-flex align-center">
@@ -24,11 +30,13 @@
 <!--&lt;!&ndash;                  <v-icon large>mdi-feather</v-icon>&ndash;&gt;-->
 <!--                </v-avatar>-->
 
-                <div class="text-h6 pl-2">机核网 · 22 July 2019</div>
+                <div class="text-h6 pl-2">{{item.source}}</div>
               </v-col>
             </v-row>
           </v-card-text>
         </v-img>
+          </v-carousel-item>
+      </v-carousel>
       </v-card>
     </div>
 
@@ -194,5 +202,30 @@ export default {
   components: {
     siderbar: () => import("@/components/details/sidebar"),
   },
+  data () {
+    return {
+      items : [
+        {
+          text: "【只狼：影逝二度】苇茗一心打法分析",
+          src: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0",
+          source: "机核网 · 22 July 2019",
+          detail:"/login"
+        } ,
+        {
+          text: "test",
+          src: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0",
+          source: "test",
+          detail:"/login"
+        }
+      ],
+
+    };
+  },
+  methods: {
+    goToDetailPage(routePath) {
+      // 使用编程式导航跳转到对应页面
+      this.$router.push(routePath);
+    }
+  }
 };
 </script>
