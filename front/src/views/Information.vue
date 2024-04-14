@@ -7,14 +7,16 @@
         <div>
           <div class="pt-16">
             <!-- <h2 class="text-h4 font-weight-bold pb-4">新闻       攻略       资讯</h2> -->
-            <v-btn-toggle v-model="selectedTab" class="mb-4">
-              <v-btn>新闻</v-btn>
-              <v-btn>攻略</v-btn>
-              <v-btn>资讯</v-btn>
-            </v-btn-toggle>
-            <div v-if="selectedTab === 0">
+            <el-button-group class="mb-4">
+                <el-button :type="selectedTab === '关注' ? 'primary' : 'default'" @click="selectedTab = '关注'" text style="font-size: 20px;">关注</el-button>
+                <el-button :type="selectedTab === '推荐' ? 'primary' : 'default'" @click="selectedTab = '推荐'" style="font-size: 20px;">推荐</el-button>
+                <el-button :type="selectedTab === '热榜' ? 'primary' : 'default'" @click="selectedTab = '热榜'" style="font-size: 20px;">热榜</el-button>
+                <el-button :type="selectedTab === '最新' ? 'primary' : 'default'" @click="selectedTab = '最新'" style="font-size: 20px;">最新</el-button>
+                <el-button :type="selectedTab === '其他' ? 'primary' : 'default'" @click="selectedTab = '其他'" style="font-size: 20px;">其他</el-button>
+            </el-button-group>
+            <div v-if="selectedTab === '关注'">
                 <v-row>
-                <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
+                <v-col v-for="i in 30" :key="i" cols="12" lg="4" md="6">
                     <v-hover
                         v-slot:default="{ hover }"
                         close-delay="50"
@@ -65,7 +67,7 @@
                 </v-col>
                 </v-row>
             </div>
-            <div v-else-if="selectedTab === 1">
+            <div v-else-if="selectedTab === '推荐'">
                 <v-row>
                 <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
                     <v-hover
@@ -118,8 +120,7 @@
                 </v-col>
                 </v-row>
             </div>
-
-            <div v-show="selectedTab === 2">
+            <div v-else-if="selectedTab === '热榜'">
                 <v-row>
                 <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
                     <v-hover
@@ -172,100 +173,121 @@
                 </v-col>
                 </v-row>
             </div>
-
-          </div>
-
-          <div class="pt-16">
-            <h2 class="text-h4 font-weight-bold pb-4">Featured</h2>
-
-            <v-row>
-              <v-col v-for="i in 3" :key="i" cols="6" lg="4">
-                <v-card dark flat>
-                  <v-img
-                      :aspect-ratio="16 / 9"
-                      class="elevation-2 fill-height"
-                      gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
-                      height="600px"
-                      src="https://cdn.pixabay.com/photo/2019/10/29/14/46/landscape-4587079_1280.jpg"
-                  >
-                    <div
-                        class="d-flex flex-column justify-space-between fill-height"
+            <div v-else-if="selectedTab === '最新'">
+                <v-row>
+                <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
+                    <v-hover
+                        v-slot:default="{ hover }"
+                        close-delay="50"
+                        open-delay="50"
                     >
-                      <v-card-text>
-                        <v-btn color="accent">ANIMALS</v-btn>
-                      </v-card-text>
-
-                      <v-card-text>
-                        <div
-                            class="text-h5 py-3 font-weight-bold"
-                            style="line-height: 1.2"
+                    <div>
+                        <v-card
+                            :color="hover ? 'white' : 'transparent'"
+                            :elevation="hover ? 12 : 0"
+                            flat
+                            hover
+                            to="/detail"
                         >
-                          15 things I have always wondered about birds
-                        </div>
+                        <v-img
+                            :aspect-ratio="16 / 9"
+                            class="elevation-2"
+                            gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
+                            height="200px"
+                            src="https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg"
+                            style="border-radius: 16px"
+                        >
+                            <v-card-text>
+                            <v-btn color="accent" to="category">新闻</v-btn>
+                            </v-card-text>
+                        </v-img>
 
-                        <div class="d-flex align-center">
-                          <v-avatar color="accent" size="36">
-                            <v-icon dark>mdi-feather</v-icon>
-                          </v-avatar>
+                        <v-card-text>
+                            <div class="text-h5 font-weight-bold primary--text">
+                            How to write an awesome blog post in 5 steps
+                            </div>
 
-                          <div class="pl-2">Yan Lee · 03 Jan 2019</div>
-                        </div>
-                      </v-card-text>
+                            <div class="text-body-1 py-4">
+                            Ultrices sagittis orci a scelerisque. Massa placerat
+                            duis ultricies lacus sed turpis
+                            </div>
+
+                            <div class="d-flex align-center">
+                            <v-avatar color="accent" size="36">
+                                <v-icon dark>mdi-feather</v-icon>
+                            </v-avatar>
+
+                            <div class="pl-2">Yan Lee · 22 July 2019</div>
+                            </div>
+                        </v-card-text>
+                        </v-card>
                     </div>
-                  </v-img>
-                </v-card>
-              </v-col>
-            </v-row>
-          </div>
-
-          <div class="pt-16">
-            <h2 class="text-h4 font-weight-bold">Latest Posts</h2>
-
-            <div>
-              <v-row v-for="i in 6" :key="i" class="py-4">
-                <v-col cols="12" md="4">
-                  <v-card flat height="100%">
-                    <v-img
-                        :aspect-ratio="16 / 9"
-                        height="100%"
-                        src="https://cdn.pixabay.com/photo/2021/01/27/06/54/nova-scotia-duck-tolling-retriever-5953883_1280.jpg"
-                    ></v-img>
-                  </v-card>
+                    </v-hover>
                 </v-col>
-
-                <v-col>
-                  <div>
-                    <v-btn color="accent" depressed>TRAVEL</v-btn>
-
-                    <h3 class="text-h4 font-weight-bold pt-3">
-                      Ut enim blandit volutpat maecenas volutpat blandit
-                    </h3>
-
-                    <p class="text-h6 font-weight-regular pt-3 text--secondary">
-                      Duis aute irure dolor in reprehenderit in voluptate velit
-                      esse cillum dolore eu fugiat nulla pariatur. Excepteur
-                      sint occaecat cupidatat non proident, sunt in culpa qui
-                      officia deserunt mollit anim id est laborum.
-                    </p>
-
-                    <div class="d-flex align-center">
-                      <v-avatar color="accent" size="36">
-                        <v-icon dark>mdi-feather</v-icon>
-                      </v-avatar>
-
-                      <div class="pl-2">Yan Lee · 03 Jan 2019</div>
-                    </div>
-                  </div>
-                </v-col>
-              </v-row>
+                </v-row>
             </div>
+            <div v-else-if="selectedTab === '其他'">
+                <v-row>
+                <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
+                    <v-hover
+                        v-slot:default="{ hover }"
+                        close-delay="50"
+                        open-delay="50"
+                    >
+                    <div>
+                        <v-card
+                            :color="hover ? 'white' : 'transparent'"
+                            :elevation="hover ? 12 : 0"
+                            flat
+                            hover
+                            to="/detail"
+                        >
+                        <v-img
+                            :aspect-ratio="16 / 9"
+                            class="elevation-2"
+                            gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
+                            height="200px"
+                            src="https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg"
+                            style="border-radius: 16px"
+                        >
+                            <v-card-text>
+                            <v-btn color="accent" to="category">新闻</v-btn>
+                            </v-card-text>
+                        </v-img>
+
+                        <v-card-text>
+                            <div class="text-h5 font-weight-bold primary--text">
+                            How to write an awesome blog post in 5 steps
+                            </div>
+
+                            <div class="text-body-1 py-4">
+                            Ultrices sagittis orci a scelerisque. Massa placerat
+                            duis ultricies lacus sed turpis
+                            </div>
+
+                            <div class="d-flex align-center">
+                            <v-avatar color="accent" size="36">
+                                <v-icon dark>mdi-feather</v-icon>
+                            </v-avatar>
+
+                            <div class="pl-2">Yan Lee · 22 July 2019</div>
+                            </div>
+                        </v-card-text>
+                        </v-card>
+                    </div>
+                    </v-hover>
+                </v-col>
+                </v-row>
+            </div>
+
           </div>
+
         </div>
       </v-col>
 
       <v-col>
         <div class="pt-16" style="position:sticky; top:0;">
-          <siderbar/>
+          <ccbar/>
         </div>
       </v-col>
     </v-row>
@@ -276,12 +298,47 @@
 export default {
   name: "Home",
   components: {
-    siderbar: () => import("@/components/details/sidebar"),
+    ccbar: () => import("@/components/details/createcenterbar.vue"),
   },
   data() {
     return {
-      selectedTab: 0,
+      selectedTab: "关注",
+      concern:[]
     };
+  },
+  methods: {
+    async fetchConcerns() {
+      try {
+        const response = await axios.get('/Info/GetPostOfConcern/', { params: { sign: '1' } });
+        this.posts = response.data;
+      } catch (error) {
+        console.error('There was an error fetching the posts:', error);
+      }
+    },
+  },
+  mounted() {
+    this.fetchConcerns(); // 当组件挂载到DOM上时调用fetchPosts方法
   },
 };
 </script>
+
+<style scoped>
+.text-button {
+  background-color: transparent;
+  color: #1a1a1a; /* Button text color */
+  border: none;
+  border-bottom: 2px solid transparent; /* Bottom border */
+  border-radius: 0;
+  font-weight: 500;
+}
+
+/* When button is active or on hover, the border color changes */
+.text-button--active,
+.text-button:hover {
+  border-bottom: 2px solid #0B5FFF; /* Active/Hover border color */
+}
+
+.v-btn--active {
+  background-color: transparent !important;
+}
+</style>
