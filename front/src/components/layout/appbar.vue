@@ -119,6 +119,10 @@ export default {
         to: "/",
       },
       {
+        title: "资讯",
+        to: "/information",
+      },
+      {
         title: "论坛",
         to: "/category",
       },
