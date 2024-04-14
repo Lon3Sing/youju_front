@@ -60,7 +60,7 @@
                 @click="$router.push('/')"
             >
               <img src="https://cdn.jsdelivr.net/gh/Lon3Sing/Youju-Pic/logo_text_new.png" alt="youjv" width="80" height="45" style="position:relative; top:3px">
-<!--              游桔-->
+                <!--              游桔-->
 <!--              <span class="accent&#45;&#45;text"></span>-->
             </v-toolbar-title>
           </v-col>
