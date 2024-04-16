@@ -241,12 +241,18 @@
                   <v-card outlined class="mb-3">
                     <v-card-text>
                       <div class="d-flex justify-space-between">
-                        <div>
-                          <div>{{ comment.user }}</div>
-                          <div>{{ comment.text }}</div>
+                        <div class="d-flex">
+                          <v-avatar size="32">
+                            <img :src="comment.avatar" alt="Avatar"> <!-- 显示用户头像 -->
+                          </v-avatar>
+                          <div class="ml-2">
+                            <div class="font-weight-bold text-subtitle-1">{{ comment.user }}</div>
+                            <div>{{ comment.text }}</div>
+                          </div>
+
                         </div>
                         <v-btn text icon @click="toggleReplyInput(comment.id)">
-                          <v-icon>mdi-reply</v-icon>
+                            <v-icon>mdi-reply</v-icon>
                         </v-btn>
                       </div>
 
@@ -269,12 +275,18 @@
                         <v-card outlined class="mb-2">
                           <v-card-text>
                             <div class="d-flex justify-space-between">
-                              <div>
-                                <div>{{ reply.user }}</div>
-                                <div>{{ reply.text }}</div>
+                              <div class="d-flex">
+                                <v-avatar size="32">
+                                  <img :src="reply.avatar" alt="Avatar"> <!-- 显示用户头像 -->
+                                </v-avatar>
+                                <div class="ml-2">
+                                  <div class="font-weight-bold text-subtitle-1">{{ reply.user }}</div>
+                                  <div>{{ reply.text }}</div>
+                                </div>
+
                               </div>
                               <v-btn text icon @click="toggleReplyInput(reply.id)">
-                                <v-icon>mdi-reply</v-icon>
+                                  <v-icon>mdi-reply</v-icon>
                               </v-btn>
                             </div>
                             <!-- 回复二级评论的输入框 -->
@@ -388,8 +400,6 @@
 </template>
 
 <script>
-
-
 export default {
   name: "ItemPage",
   components: {
