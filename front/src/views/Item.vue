@@ -380,7 +380,7 @@
 
       <v-col>
         <div>
-          <siderbar :itemId="1"/>
+          <siderbar :related_posts:"related_posts"/>
         </div>
       </v-col>
     </v-row>
@@ -395,6 +395,18 @@ export default {
   },
   data() {
     return {
+      related_posts: [
+        {
+          id: 1,
+          title: "Photos of Jeep models that will change your mood",
+          image: "https://cdn.pixabay.com/photo/2015/03/26/09/47/sky-690293_1280.jpg"
+        },
+        {
+          id: 2,
+          title: "What do I need to know to start learning JavaScript?",
+          image: "https://cdn.pixabay.com/photo/2019/11/01/11/08/landscape-4593909_1280.jpg"
+        }
+      ],
       isFavorite: false,
       isFollowing: false,
       hasLiked: false,
@@ -493,7 +505,7 @@ export default {
       }
       comment.replies.push(newReply);
       comment.newReply = ''; // 清空输入框
-      replyingToId = -1; // 关闭回复框
+      this.replyingToId = -1; // 关闭回复框
     },
     submitReplyToReply(parentComment, reply) {
       // 这里可以添加对二级评论的回复处理逻辑
