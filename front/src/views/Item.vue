@@ -174,10 +174,14 @@
                 <v-divider class="my-4"></v-divider>
 
                 <div class="d-flex align-center justify-space-around">
-                  <v-btn icon @click="showReportDialog = true">
-                    举报
-                    <v-icon>mdi-flag</v-icon>
-                  </v-btn>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn icon v-bind="attrs" v-on="on" @click="showReportDialog = true">
+                        <v-icon>mdi-flag</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>举报</span>
+                  </v-tooltip>
                   <!-- 举报对话框 -->
                   <v-dialog v-model="showReportDialog" max-width="500px">
                     <v-card>
@@ -196,19 +200,33 @@
                       </v-card-actions>
                     </v-card>
                   </v-dialog>
-                  <v-btn icon @click="onToggleFavorite">
-                    收藏
-                    <v-icon>{{ isFavorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
-                  </v-btn>
-                  <v-btn icon @click="onToggleFollow">
-                    关注作者
-                    <v-icon>{{ isFollowing ? 'mdi-account-check' : 'mdi-account-plus' }}</v-icon>
-                  </v-btn>
-                  <v-btn icon @click="onLike">
-                    点赞
-                    <v-icon>mdi-thumb-up</v-icon> {{ likesCount }}
-                  </v-btn>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn icon v-bind="attrs" v-on="on" @click="onToggleFavorite">
+                        <v-icon>{{ isFavorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>收藏</span>
+                  </v-tooltip>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn icon v-bind="attrs" v-on="on" @click="onToggleFollow">
+                        <v-icon>{{ isFollowing ? 'mdi-account-check' : 'mdi-account-plus' }}</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>关注作者</span>
+                  </v-tooltip>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn icon v-bind="attrs" v-on="on" @click="onLike">
+                        <v-icon>{{ hasLiked ? 'mdi-thumb-up' : 'mdi-thumb-up-outline' }}</v-icon>
+                      </v-btn>
+                    
+                    </template>
+                    <span>点赞</span>
+                  </v-tooltip>
                 </div>
+                
 
                 <div class="text-h4 py-2">评论</div>
 
@@ -217,17 +235,68 @@
                   <v-btn color="primary" @click="submitComment">Submit Comment</v-btn>
                 </div>
 
-                <v-divider class="my-4"></v-divider>
 
                 <!-- Comments Section -->
                 <div v-for="comment in comments" :key="comment.id" class="my-2">
-                  <v-card>
+                  <v-card outlined class="mb-3">
                     <v-card-text>
-                      <div>{{ comment.user }}</div>
-                      <div>{{ comment.text }}</div>
+                      <div class="d-flex justify-space-between">
+                        <div>
+                          <div>{{ comment.user }}</div>
+                          <div>{{ comment.text }}</div>
+                        </div>
+                        <v-btn text icon @click="toggleReplyInput(comment.id)">
+                          <v-icon>mdi-reply</v-icon>
+                        </v-btn>
+                      </div>
+
+                      <!-- 回复输入框 -->
+                      <v-row v-if="replyingToId === comment.id" class="mt-2">
+                        <v-col cols="12">
+                          <v-text-field
+                            label="Write a reply..."
+                            v-model="comment.newReply"
+                            dense
+                            outlined
+                            size="small"
+                          ></v-text-field>
+                          <v-btn small @click="submitReply(comment)">Reply</v-btn>
+                        </v-col>
+                      </v-row>
+
+                            <!-- 二级评论展示，使用递归组件或直接在这里渲染 -->
+                      <v-col cols="12" class="ml-4" v-for="reply in comment.replies" :key="reply.id">
+                        <v-card outlined class="mb-2">
+                          <v-card-text>
+                            <div class="d-flex justify-space-between">
+                              <div>
+                                <div>{{ reply.user }}</div>
+                                <div>{{ reply.text }}</div>
+                              </div>
+                              <v-btn text icon @click="toggleReplyInput(reply.id)">
+                                <v-icon>mdi-reply</v-icon>
+                              </v-btn>
+                            </div>
+                            <!-- 回复二级评论的输入框 -->
+                            <v-row v-if="replyingToId === reply.id" class="mt-2">
+                              <v-col cols="12">
+                                <v-text-field
+                                  label="Write a reply..."
+                                  v-model="reply.newReply"
+                                  dense
+                                  outlined
+                                  size="small"
+                                ></v-text-field>
+                                <v-btn small @click="submitReplyToReply(comment, reply)">Reply</v-btn>
+                              </v-col>
+                            </v-row>
+                          </v-card-text>
+                        </v-card>
+                      </v-col>
                     </v-card-text>
                   </v-card>
                 </div>
+
 
                 <v-divider class="my-8"></v-divider>
 
@@ -305,14 +374,13 @@
             
 
           </div>
-          
 
         </div>
       </v-col>
 
       <v-col>
         <div>
-          <siderbar />
+          <siderbar :itemId="1"/>
         </div>
       </v-col>
     </v-row>
@@ -330,17 +398,36 @@ export default {
       isFavorite: false,
       isFollowing: false,
       hasLiked: false,
+      replyingToId: null, // 控制哪个评论的回复输入框显示
       likesCount: 99,
       commentText: '',
       showReportDialog: false, // 控制对话框显示的状态
       reportContent: '', // 用户输入的举报内容
-      comments: [{
-        user: "John Doe",
-        text: "Great post!"
-      },{
-        user: "Jane Doe",
-        text: "I love this!"
-      }] // 假设这是从API加载的评论列表
+      comments: [
+        {
+          id: 1,
+          user: "John Doe",
+          text: "Great post!",
+          replies: [
+            {
+              id: 3,
+              user: "Jane Doe",
+              text: "@John Doe Thanks!",
+            },
+            {
+              id: 4,
+              user: "qqqqq",
+              text: "888888",
+            }
+          ]
+        },
+        {
+          id: 2,
+          user: "Jane Doe",
+          text: "I love this!",
+          replies: []
+        }
+      ] // 假设这是从API加载的评论列表
     }
   },
   methods: {
@@ -387,6 +474,30 @@ export default {
       console.log("举报内容:", this.reportContent);
       this.showReportDialog = false; // 提交后关闭对话框
       this.reportContent = ''; // 清空输入
+    },
+    toggleReplyInput(commentId) {
+      this.replyingToId = this.replyingToId === commentId ? null : commentId;
+    },
+    submitReply(comment) {
+      if (!comment.newReply || comment.newReply.trim() === '') {
+        alert("Please enter a reply.");
+        return;
+      }
+      const newReply = {
+        id: Date.now(),
+        user: "CurrentUser", // 这应该是实际的用户名称
+        text: comment.newReply,
+      };
+      if (!comment.replies) {
+        this.$set(comment, 'replies', []); // 确保replies数组存在
+      }
+      comment.replies.push(newReply);
+      comment.newReply = ''; // 清空输入框
+      replyingToId = -1; // 关闭回复框
+    },
+    submitReplyToReply(parentComment, reply) {
+      // 这里可以添加对二级评论的回复处理逻辑
+      // 逻辑类似于submitReply，但你可能需要调整以适应你的数据结构
     },
   },
   mounted() {
