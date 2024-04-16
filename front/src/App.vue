@@ -1,7 +1,7 @@
 <template>
   <v-app>
       <AppBar></AppBar>
-    <v-container class="mt-16">
+    <v-container class="custom-margin">
       <router-view></router-view>
     </v-container>
 
@@ -20,3 +20,9 @@ export default {
   data: () => ({}),
 };
 </script>
+
+<style>
+.custom-margin {
+  margin-top: 100px; /* 调整顶部间距的像素值 */
+}
+</style>

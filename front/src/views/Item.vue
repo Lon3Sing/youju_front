@@ -380,7 +380,7 @@
 
       <v-col>
         <div>
-          <siderbar :related_posts:"related_posts"/>
+          <re_bar :related_posts="related_posts"/>
         </div>
       </v-col>
     </v-row>
@@ -388,10 +388,12 @@
 </template>
 
 <script>
+
+
 export default {
   name: "ItemPage",
   components: {
-    siderbar: () => import("@/components/details/sidebar")
+    re_bar: () => import("@/components/details/relatedpostbar.vue")
   },
   data() {
     return {
@@ -399,12 +401,12 @@ export default {
         {
           id: 1,
           title: "Photos of Jeep models that will change your mood",
-          image: "https://cdn.pixabay.com/photo/2015/03/26/09/47/sky-690293_1280.jpg"
+          image: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0"
         },
         {
           id: 2,
           title: "What do I need to know to start learning JavaScript?",
-          image: "https://cdn.pixabay.com/photo/2019/11/01/11/08/landscape-4593909_1280.jpg"
+          image: "https://webstatic.mihoyo.com/upload/static-resource/2021/11/08/02959a0f179436853c244dfc8b88e4e4_5824090375749016325.jpg"
         }
       ],
       isFavorite: false,
