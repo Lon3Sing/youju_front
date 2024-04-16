@@ -49,6 +49,12 @@ const routes = [
         path: '/CreatingCenter',
         name: 'CreatingCenter',
         component: () => import("@/views/CreatingCenter.vue"),
+    },
+    {
+        path: '/item',
+        name: 'item',
+        component: () => import("@/views/Item.vue"),
+        props: true // 允许通过props将路由参数传递给组件
     }
 ]
 
