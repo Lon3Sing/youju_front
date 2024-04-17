@@ -6,7 +6,7 @@
           <div>
             <v-card flat color="transparent">
               <v-img
-                src="https://cdn.pixabay.com/photo/2020/02/07/20/32/cyprus-4828328_1280.jpg"
+                src="https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0"
                 :aspect-ratio="16 / 9"
                 gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
                 style="border-radius: 16px"
@@ -14,6 +14,7 @@
 
               <v-card-text>
                 <div>
+                  当前帖子id:{{$route.params.id}}
                   <v-btn color="accent">ANIMAL</v-btn>
                 </div>
 
@@ -415,16 +416,24 @@ export default {
   },
   data() {
     return {
+      title: "",
+      abstract : "",
+      image: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0",
+      time:"2024.1.1",
       related_posts: [
         {
-          id: 1,
-          title: "Photos of Jeep models that will change your mood",
-          image: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0"
+          id: 3,
+          title: "艾尔登法环",
+          abstract : "艾尔登法环艾尔登法环艾尔登法环艾尔登法环艾尔登法环",
+          image: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0",
+          time:"2024.1.1"
         },
         {
-          id: 2,
-          title: "What do I need to know to start learning JavaScript?",
-          image: "https://webstatic.mihoyo.com/upload/static-resource/2021/11/08/02959a0f179436853c244dfc8b88e4e4_5824090375749016325.jpg"
+          id: 4,
+          title: "傻逼原神",
+          abstract: "傻逼原神傻逼原神傻逼原神傻逼原神傻逼原神傻逼原神",
+          image: "https://webstatic.mihoyo.com/upload/static-resource/2021/11/08/02959a0f179436853c244dfc8b88e4e4_5824090375749016325.jpg",
+          time:"2024.1.1",
         }
       ],
       isFavorite: false,
@@ -562,3 +571,4 @@ export default {
   }
 };
 </script>
+
