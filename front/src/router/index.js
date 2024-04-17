@@ -55,6 +55,11 @@ const routes = [
         name: 'item',
         component: () => import("@/views/Item.vue"),
         props: true // 允许通过props将路由参数传递给组件
+    },
+    {
+        path: '/Game',
+        name: 'Game',
+        component: () => import("@/views/Game.vue"),
     }
 ]
 

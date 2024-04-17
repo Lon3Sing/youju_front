@@ -148,7 +148,7 @@ export default {
       },
       {
         title: "游戏",
-        to: "/detail",
+        to: "/Game",
       },
       {
         title: "我的",
