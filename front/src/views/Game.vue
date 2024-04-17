@@ -8,15 +8,13 @@
           <div class="pt-16">
             <!-- <h2 class="text-h4 font-weight-bold pb-4">新闻       攻略       资讯</h2> -->
             <el-button-group class="mb-4">
-                <el-button :type="selectedTab === 'PC' ? 'primary' : 'default'" @click="selectedTab = '关注'" text style="font-size: 20px;">关注</el-button>
-                <el-button :type="selectedTab === '推荐' ? 'primary' : 'default'" @click="selectedTab = '推荐'" style="font-size: 20px;">推荐</el-button>
-                <el-button :type="selectedTab === '热榜' ? 'primary' : 'default'" @click="selectedTab = '热榜'" style="font-size: 20px;">热榜</el-button>
-                <el-button :type="selectedTab === '最新' ? 'primary' : 'default'" @click="selectedTab = '最新'" style="font-size: 20px;">最新</el-button>
-                <el-button :type="selectedTab === '其他' ? 'primary' : 'default'" @click="selectedTab = '其他'" style="font-size: 20px;">其他</el-button>
+                <el-button :type="selectedTab === 'PC' ? 'primary' : 'default'" @click="selectedTab = 'PC'" text style="font-size: 20px;">PC</el-button>
+                <el-button :type="selectedTab === 'PS' ? 'primary' : 'default'" @click="selectedTab = 'PS'" style="font-size: 20px;">PS</el-button>
+                <el-button :type="selectedTab === 'NS' ? 'primary' : 'default'" @click="selectedTab = 'NS'" style="font-size: 20px;">NS</el-button>
             </el-button-group>
-            <div v-if="selectedTab === '关注'" class="d-flex align-center">
+            <div v-if="selectedTab === 'PC'" class="d-flex align-center">
               <v-row justify="center">
-                <v-col v-for="(game, index) in games" :key="index" cols="12" sm="6" md="4" lg="3" >
+                <v-col v-for="(game, index) in PCGames" :key="index" cols="12" sm="6" md="4" lg="3" >
                   <v-hover v-slot:default="{ hover }">
                     <div>
                       <v-card :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
@@ -40,217 +38,57 @@
                 </v-col>
               </v-row>
             </div>
-            <div v-else-if="selectedTab === '推荐'">
-                <v-row>
-                <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
-                    <v-hover
-                        v-slot:default="{ hover }"
-                        close-delay="50"
-                        open-delay="50"
-                    >
+            <div v-if="selectedTab === 'PS'" class="d-flex align-center">
+              <v-row justify="center">
+                <v-col v-for="(game, index) in PSGames" :key="index" cols="12" sm="6" md="4" lg="3" >
+                  <v-hover v-slot:default="{ hover }">
                     <div>
-                        <v-card
-                            :color="hover ? 'white' : 'transparent'"
-                            :elevation="hover ? 12 : 0"
-                            flat
-                            hover
-                            to="/detail"
-                        >
-                        <v-img
-                            :aspect-ratio="16 / 9"
-                            class="elevation-2"
-                            gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
-                            height="200px"
-                            src="https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg"
-                            style="border-radius: 16px"
-                        >
-                            <v-card-text>
-                            <v-btn color="accent" to="category">攻略</v-btn>
-                            </v-card-text>
+                      <v-card :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
+                        <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="500px">
+                          <v-chip color="info" text-color="white" small style="position: absolute; right: 10px; bottom: 10px;">
+                            {{ game.rating }}/10
+                          </v-chip>
+                          <v-card-text>
+                            <v-btn color="accent">游戏</v-btn>
+                          </v-card-text>
                         </v-img>
-
                         <v-card-text>
-                            <div class="text-h5 font-weight-bold primary--text">
-                            How to write an awesome blog post in 5 steps
-                            </div>
-
-                            <div class="text-body-1 py-4">
-                            Ultrices sagittis orci a scelerisque. Massa placerat
-                            duis ultricies lacus sed turpis
-                            </div>
-
-                            <div class="d-flex align-center">
-                            <v-avatar color="accent" size="36">
-                                <v-icon dark>mdi-feather</v-icon>
-                            </v-avatar>
-
-                            <div class="pl-2">Yan Lee · 22 July 2019</div>
-                            </div>
+                          <div class="text-h5 font-weight-bold primary--text">{{ game.name }}</div>
+                          <div class="text-body-1 py-4">{{ game.nameEn }}</div>
+                          <div>价格: {{ game.price }}</div>
+                          <div>评分: {{ game.rating }}/10</div>
                         </v-card-text>
-                        </v-card>
+                      </v-card>
                     </div>
-                    </v-hover>
+                  </v-hover>
                 </v-col>
-                </v-row>
+              </v-row>
             </div>
-            <div v-else-if="selectedTab === '热榜'">
-                <v-row>
-                <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
-                    <v-hover
-                        v-slot:default="{ hover }"
-                        close-delay="50"
-                        open-delay="50"
-                    >
+            <div v-if="selectedTab === 'NS'" class="d-flex align-center">
+              <v-row justify="center">
+                <v-col v-for="(game, index) in NSGames" :key="index" cols="12" sm="6" md="4" lg="3" >
+                  <v-hover v-slot:default="{ hover }">
                     <div>
-                        <v-card
-                            :color="hover ? 'white' : 'transparent'"
-                            :elevation="hover ? 12 : 0"
-                            flat
-                            hover
-                            to="/detail"
-                        >
-                        <v-img
-                            :aspect-ratio="16 / 9"
-                            class="elevation-2"
-                            gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
-                            height="200px"
-                            src="https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg"
-                            style="border-radius: 16px"
-                        >
-                            <v-card-text>
-                            <v-btn color="accent" to="category">资讯</v-btn>
-                            </v-card-text>
+                      <v-card :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
+                        <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="500px">
+                          <v-chip color="info" text-color="white" small style="position: absolute; right: 10px; bottom: 10px;">
+                            {{ game.rating }}/10
+                          </v-chip>
+                          <v-card-text>
+                            <v-btn color="accent">游戏</v-btn>
+                          </v-card-text>
                         </v-img>
-
                         <v-card-text>
-                            <div class="text-h5 font-weight-bold primary--text">
-                            How to write an awesome blog post in 5 steps
-                            </div>
-
-                            <div class="text-body-1 py-4">
-                            Ultrices sagittis orci a scelerisque. Massa placerat
-                            duis ultricies lacus sed turpis
-                            </div>
-
-                            <div class="d-flex align-center">
-                            <v-avatar color="accent" size="36">
-                                <v-icon dark>mdi-feather</v-icon>
-                            </v-avatar>
-
-                            <div class="pl-2">Yan Lee · 22 July 2019</div>
-                            </div>
+                          <div class="text-h5 font-weight-bold primary--text">{{ game.name }}</div>
+                          <div class="text-body-1 py-4">{{ game.nameEn }}</div>
+                          <div>价格: {{ game.price }}</div>
+                          <div>评分: {{ game.rating }}/10</div>
                         </v-card-text>
-                        </v-card>
+                      </v-card>
                     </div>
-                    </v-hover>
+                  </v-hover>
                 </v-col>
-                </v-row>
-            </div>
-            <div v-else-if="selectedTab === '最新'">
-                <v-row>
-                <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
-                    <v-hover
-                        v-slot:default="{ hover }"
-                        close-delay="50"
-                        open-delay="50"
-                    >
-                    <div>
-                        <v-card
-                            :color="hover ? 'white' : 'transparent'"
-                            :elevation="hover ? 12 : 0"
-                            flat
-                            hover
-                            to="/detail"
-                        >
-                        <v-img
-                            :aspect-ratio="16 / 9"
-                            class="elevation-2"
-                            gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
-                            height="200px"
-                            src="https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg"
-                            style="border-radius: 16px"
-                        >
-                            <v-card-text>
-                            <v-btn color="accent" to="category">新闻</v-btn>
-                            </v-card-text>
-                        </v-img>
-
-                        <v-card-text>
-                            <div class="text-h5 font-weight-bold primary--text">
-                            How to write an awesome blog post in 5 steps
-                            </div>
-
-                            <div class="text-body-1 py-4">
-                            Ultrices sagittis orci a scelerisque. Massa placerat
-                            duis ultricies lacus sed turpis
-                            </div>
-
-                            <div class="d-flex align-center">
-                            <v-avatar color="accent" size="36">
-                                <v-icon dark>mdi-feather</v-icon>
-                            </v-avatar>
-
-                            <div class="pl-2">Yan Lee · 22 July 2019</div>
-                            </div>
-                        </v-card-text>
-                        </v-card>
-                    </div>
-                    </v-hover>
-                </v-col>
-                </v-row>
-            </div>
-            <div v-else-if="selectedTab === '其他'">
-                <v-row>
-                <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
-                    <v-hover
-                        v-slot:default="{ hover }"
-                        close-delay="50"
-                        open-delay="50"
-                    >
-                    <div>
-                        <v-card
-                            :color="hover ? 'white' : 'transparent'"
-                            :elevation="hover ? 12 : 0"
-                            flat
-                            hover
-                            to="/detail"
-                        >
-                        <v-img
-                            :aspect-ratio="16 / 9"
-                            class="elevation-2"
-                            gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
-                            height="200px"
-                            src="https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg"
-                            style="border-radius: 16px"
-                        >
-                            <v-card-text>
-                            <v-btn color="accent" to="category">新闻</v-btn>
-                            </v-card-text>
-                        </v-img>
-
-                        <v-card-text>
-                            <div class="text-h5 font-weight-bold primary--text">
-                            How to write an awesome blog post in 5 steps
-                            </div>
-
-                            <div class="text-body-1 py-4">
-                            Ultrices sagittis orci a scelerisque. Massa placerat
-                            duis ultricies lacus sed turpis
-                            </div>
-
-                            <div class="d-flex align-center">
-                            <v-avatar color="accent" size="36">
-                                <v-icon dark>mdi-feather</v-icon>
-                            </v-avatar>
-
-                            <div class="pl-2">Yan Lee · 22 July 2019</div>
-                            </div>
-                        </v-card-text>
-                        </v-card>
-                    </div>
-                    </v-hover>
-                </v-col>
-                </v-row>
+              </v-row>
             </div>
 
           </div>
