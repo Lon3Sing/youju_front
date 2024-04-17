@@ -8,7 +8,7 @@
           <div class="pt-16">
             <!-- <h2 class="text-h4 font-weight-bold pb-4">新闻       攻略       资讯</h2> -->
             <el-button-group class="mb-4">
-                <el-button :type="selectedTab === '关注' ? 'primary' : 'default'" @click="selectedTab = '关注'" text style="font-size: 20px;">关注</el-button>
+                <el-button :type="selectedTab === 'PC' ? 'primary' : 'default'" @click="selectedTab = '关注'" text style="font-size: 20px;">关注</el-button>
                 <el-button :type="selectedTab === '推荐' ? 'primary' : 'default'" @click="selectedTab = '推荐'" style="font-size: 20px;">推荐</el-button>
                 <el-button :type="selectedTab === '热榜' ? 'primary' : 'default'" @click="selectedTab = '热榜'" style="font-size: 20px;">热榜</el-button>
                 <el-button :type="selectedTab === '最新' ? 'primary' : 'default'" @click="selectedTab = '最新'" style="font-size: 20px;">最新</el-button>
@@ -272,8 +272,84 @@ export default {
   },
   data() {
     return {
-      selectedTab: "关注",
-      games: [{
+      selectedTab: "PC",
+      PCGames: [{
+        name: '游戏1',
+        nameEn: 'Game 1',
+        price: 49.99,
+        rating: 8.5,
+        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
+      }, {
+        name: '游戏2',
+        nameEn: 'Game 2',
+        price: 59.99,
+        rating: 9.0,
+        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
+      }, {
+        name: '游戏3',
+        nameEn: 'Game 3',
+        price: 69.99,
+        rating: 9.5,
+        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
+      },
+        {
+        name: '游戏4',
+        nameEn: 'Game 1',
+        price: 49.99,
+        rating: 8.5,
+        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
+      }, {
+        name: '游戏5',
+        nameEn: 'Game 2',
+        price: 59.99,
+        rating: 9.0,
+        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
+      },{
+          name: '游戏6',
+          nameEn: 'Game 2',
+          price: 59.99,
+          rating: 9.0,
+          previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
+        },],
+      PSGames: [{
+        name: '游戏1',
+        nameEn: 'Game 1',
+        price: 49.99,
+        rating: 8.5,
+        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
+      }, {
+        name: '游戏2',
+        nameEn: 'Game 2',
+        price: 59.99,
+        rating: 9.0,
+        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
+      }, {
+        name: '游戏3',
+        nameEn: 'Game 3',
+        price: 69.99,
+        rating: 9.5,
+        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
+      },
+        {
+        name: '游戏4',
+        nameEn: 'Game 1',
+        price: 49.99,
+        rating: 8.5,
+        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
+      }, {
+        name: '游戏5',
+        nameEn: 'Game 2',
+        price: 59.99,
+        rating: 9.0,
+        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
+      },{
+          name: '游戏6',
+          nameEn: 'Game 2',
+          price: 59.99,
+          rating: 9.0,
+          previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
+        },],
+      NSGames: [{
         name: '游戏1',
         nameEn: 'Game 1',
         price: 49.99,
