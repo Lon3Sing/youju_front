@@ -242,12 +242,16 @@
                     <v-card-text>
                       <div class="d-flex justify-space-between">
                         <div class="d-flex">
-                          <v-avatar size="32">
-                            <img :src="comment.avatar" alt="Avatar"> <!-- 显示用户头像 -->
-                          </v-avatar>
+                          <router-link :to="`/user/${comment.id}`">
+                            <v-avatar size="64">
+                              <img :src="comment.avatar" alt="Avatar"> <!-- 显示用户头像 -->
+                            </v-avatar>
+                          </router-link>
                           <div class="ml-2">
-                            <div class="font-weight-bold text-subtitle-1">{{ comment.user }}</div>
-                            <div>{{ comment.text }}</div>
+                            <div class="font-weight-bold text-subtitle-1">
+                              <router-link :to="`/user/${comment.id}`"  style="text-decoration: none;">{{ comment.user }}</router-link>
+                            </div>
+                            <div v-html="linkify(comment.text, comment.id)">{{ comment.text }}</div>
                           </div>
 
                         </div>
@@ -276,16 +280,20 @@
                           <v-card-text>
                             <div class="d-flex justify-space-between">
                               <div class="d-flex">
-                                <v-avatar size="32">
-                                  <img :src="reply.avatar" alt="Avatar"> <!-- 显示用户头像 -->
-                                </v-avatar>
+                                <router-link :to="`/user/${reply.id}`">
+                                  <v-avatar size="32">
+                                    <img :src="reply.avatar" alt="Avatar"> <!-- 显示用户头像 -->
+                                  </v-avatar>
+                                </router-link>
                                 <div class="ml-2">
-                                  <div class="font-weight-bold text-subtitle-1">{{ reply.user }}</div>
-                                  <div>{{ reply.text }}</div>
+                                  <div class="font-weight-bold text-subtitle-1">
+                                    <router-link :to="`/user/${reply.id}`" style="text-decoration: none;">{{ reply.user }}</router-link>
+                                  </div>
+                                  <div v-html="linkify(reply.text, reply.id)">{{ reply.text }}</div>
                                 </div>
 
                               </div>
-                              <v-btn text icon @click="toggleReplyInput(reply.id)">
+                              <v-btn text icon @click="toggleReplyInput(reply.id, reply.user)">
                                   <v-icon>mdi-reply</v-icon>
                               </v-btn>
                             </div>
@@ -432,16 +440,22 @@ export default {
           id: 1,
           user: "John Doe",
           text: "Great post!",
+          newReply: "", // 初始化空字符串
+          avatar: "https://tse1-mm.cn.bing.net/th/id/OIP-C._YFRagbOM8FbGUSUJy-m6QAAAA?w=189&h=189&c=7&r=0&o=5&dpr=2&pid=1.7",
           replies: [
             {
               id: 3,
               user: "Jane Doe",
               text: "@John Doe Thanks!",
+              newReply: "", // 初始化空字符串
+              avatar: "https://tse1-mm.cn.bing.net/th/id/OIP-C.pL9aeO50HMujMSzGcOPhKwAAAA?w=189&h=189&c=7&r=0&o=5&dpr=2&pid=1.7",
             },
             {
               id: 4,
               user: "qqqqq",
               text: "888888",
+              newReply: "", // 初始化空字符串
+              avatar: "https://tse1-mm.cn.bing.net/th/id/OIP-C.m--751RSKkOTO8ZxoEK4WQAAAA?w=189&h=189&c=7&r=0&o=5&dpr=2&pid=1.7",
             }
           ]
         },
@@ -449,15 +463,16 @@ export default {
           id: 2,
           user: "Jane Doe",
           text: "I love this!",
+          newReply: "", // 初始化空字符串
+          avatar: "https://tse2-mm.cn.bing.net/th/id/OIP-C.qcssiqIxJl_5KTHne8ntWAAAAA?w=200&h=200&c=7&r=0&o=5&dpr=2&pid=1.7",
           replies: []
         }
       ] // 假设这是从API加载的评论列表
     }
   },
   methods: {
-    onReport() {
-      // 处理举报逻辑
-      alert("Reported");
+    linkify(commentText, userId) {
+      return commentText.replace(/@(\w+)/g, `<a href="/user/${userId}" style="text-decoration: none;">@$1</a>`);
     },
     onToggleFavorite() {
       this.isFavorite = !this.isFavorite;
@@ -499,8 +514,24 @@ export default {
       this.showReportDialog = false; // 提交后关闭对话框
       this.reportContent = ''; // 清空输入
     },
-    toggleReplyInput(commentId) {
+    toggleReplyInput(commentId, replyUserName = '') {
       this.replyingToId = this.replyingToId === commentId ? null : commentId;
+
+      if (replyUserName && this.replyingToId) {
+        this.$nextTick(() => { // 使用nextTick等待DOM更新
+          const comment = this.comments.find(c => c.id === commentId || (c.replies && c.replies.some(r => r.id === commentId)));
+          if (comment) {
+            if (comment.id === commentId) { // 一级评论的回复
+              comment.newReply = `@${replyUserName} : `;
+            } else { // 二级评论的回复
+              const reply = comment.replies.find(r => r.id === commentId);
+              if (reply) {
+                reply.newReply = `@${replyUserName} : `;
+              }
+            }
+          }
+        });
+      }
     },
     submitReply(comment) {
       if (!comment.newReply || comment.newReply.trim() === '') {
