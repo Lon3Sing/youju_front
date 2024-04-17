@@ -14,14 +14,13 @@
                 <el-button :type="selectedTab === '最新' ? 'primary' : 'default'" @click="selectedTab = '最新'" style="font-size: 20px;">最新</el-button>
                 <el-button :type="selectedTab === '其他' ? 'primary' : 'default'" @click="selectedTab = '其他'" style="font-size: 20px;">其他</el-button>
             </el-button-group>
-            <div v-if="selectedTab === '关注'">
-              <v-row>
-                <!-- Update: loop over games array -->
-                <v-col v-for="(game, index) in games" :key="index" cols="12" sm="6" md="4">
+            <div v-if="selectedTab === '关注'" class="d-flex align-center">
+              <v-row justify="center">
+                <v-col v-for="(game, index) in games" :key="index" cols="12" sm="6" md="4" lg="3" >
                   <v-hover v-slot:default="{ hover }">
                     <div>
                       <v-card :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
-                        <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="200px">
+                        <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="500px">
                           <v-chip color="info" text-color="white" small style="position: absolute; right: 10px; bottom: 10px;">
                             {{ game.rating }}/10
                           </v-chip>
@@ -292,7 +291,26 @@ export default {
         price: 69.99,
         rating: 9.5,
         previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
-      }],
+      },
+        {
+        name: '游戏4',
+        nameEn: 'Game 1',
+        price: 49.99,
+        rating: 8.5,
+        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
+      }, {
+        name: '游戏5',
+        nameEn: 'Game 2',
+        price: 59.99,
+        rating: 9.0,
+        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
+      },{
+          name: '游戏6',
+          nameEn: 'Game 2',
+          price: 59.99,
+          rating: 9.0,
+          previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
+        },],
     };
   },
   methods: {
