@@ -212,9 +212,9 @@ export default {
           detail:"/item/1"
         } ,
         {
-          text: "原神真是个傻逼游戏",
+          text: "原神为什么能够问鼎世界",
           src: "https://webstatic.mihoyo.com/upload/static-resource/2021/11/08/02959a0f179436853c244dfc8b88e4e4_5824090375749016325.jpg",
-          source: "谁玩原神谁傻逼",
+          source: "甘雨 · 18 Apr 2024",
           detail:"/item/2"
         }
       ],

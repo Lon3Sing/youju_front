@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     async signup() {
-        if (this.password != this.password_1) {
+        if (this.password !== this.password_1) {
             console.log('两次密码不一致');
             return;
         }

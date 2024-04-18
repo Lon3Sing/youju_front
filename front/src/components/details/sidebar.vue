@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <h3 class="text-h5 font-weight-medium pb-4">Popular Posts</h3>
+      <h3 class="text-h5 font-weight-medium pb-4">为你推荐</h3>
 
       <v-divider></v-divider>
 
@@ -10,7 +10,7 @@
           <v-col cols="12" md="6" lg="5">
             <v-card height="100%" flat>
               <v-img
-                src="https://cdn.pixabay.com/photo/2021/01/22/16/55/camera-5940588_1280.jpg"
+                src="https://th.bing.com/th/id/R.bd07f3c966c254f2d4f85494d8d00725?rik=cj5sRFi8N7J%2b6A&riu=http%3a%2f%2fwww.dianwanhezi.com%2fstatic%2fallimg%2f230502%2f14-230502145346.jpg&ehk=8%2fdgyhrMtmzEAhmCOr9FLoeNTg7Kl4%2fvpMopHqkHhlU%3d&risl=&pid=ImgRaw&r=0"
                 :aspect-ratio="16 / 9"
                 height="100%"
               ></v-img>
@@ -19,10 +19,10 @@
 
           <v-col>
             <div>
-              <v-btn depressed color="accent" small>TRAVEL</v-btn>
+              <v-btn depressed color="accent" small>主机游戏</v-btn>
 
               <h3 class="text-h6 font-weight-bold primary--text py-3">
-                What do | need to know to start learning JavaScript?
+                《塞尔达传说：王国之泪》中究极手的代码有多难写？
               </h3>
 
               <div class="d-flex align-center">
@@ -30,7 +30,7 @@
                   <v-icon dark small>mdi-feather</v-icon>
                 </v-avatar>
 
-                <div class="pl-2">Yan Lee · 03 Jan 2019</div>
+                <div class="pl-2">钟离 · 18 April 2024</div>
               </div>
             </div>
           </v-col>
