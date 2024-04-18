@@ -19,21 +19,26 @@
           </v-col>
 
           <v-col>
+            <router-link :to="`/item/${post.id}`" style="text-decoration: none;">
             <div>
 
 
-              <h3 class="text-h6 font-weight-bold primary--text">
+              <h3 class="text-h5 font-weight-bold primary--text">
                 {{post.title}}
               </h3>
               <h6  class="text-sm-body-1  primary--text">
                 {{post.abstract}}
               </h6>
-              <div class="d-flex align-center">
-                <v-btn depressed color="accent" small @click.native="goToDetailPage(post.id)">查看详情</v-btn>
+<!--              <div class="d-flex align-center">-->
+<!--                <v-btn depressed color="accent" small @click.native="goToDetailPage(post.id)">查看详情</v-btn>-->
 
-                <div class="pl-2">{{post.time}}</div>
-              </div>
+<!--                <div class="pl-2 py-3">{{post.time}}</div>-->
+<!--              </div>-->
+              <h3 class="text-sm-h6 font-weight-bold primary--text py-3">
+                发布时间:{{post.time}}
+              </h3>
             </div>
+            </router-link>
           </v-col>
         </v-row>
       </div>
