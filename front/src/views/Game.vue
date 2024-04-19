@@ -17,7 +17,7 @@
                 <v-col v-for="(game, index) in PCGames" :key="index" cols="12" sm="6" md="4" lg="3" >
                   <v-hover v-slot:default="{ hover }">
                     <div>
-                      <v-card :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
+                      <v-card @click="handleGameClick(game)" :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
                         <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="500px">
                           <v-chip color="info" text-color="white" small style="position: absolute; right: 10px; bottom: 10px;">
                             {{ game.rating }}/10
@@ -43,7 +43,7 @@
                 <v-col v-for="(game, index) in PSGames" :key="index" cols="12" sm="6" md="4" lg="3" >
                   <v-hover v-slot:default="{ hover }">
                     <div>
-                      <v-card :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
+                      <v-card @click="handleGameClick(game)" :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
                         <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="500px">
                           <v-chip color="info" text-color="white" small style="position: absolute; right: 10px; bottom: 10px;">
                             {{ game.rating }}/10
@@ -69,7 +69,7 @@
                 <v-col v-for="(game, index) in NSGames" :key="index" cols="12" sm="6" md="4" lg="3" >
                   <v-hover v-slot:default="{ hover }">
                     <div>
-                      <v-card :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
+                      <v-card @click="handleGameClick(game)" :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
                         <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="500px">
                           <v-chip color="info" text-color="white" small style="position: absolute; right: 10px; bottom: 10px;">
                             {{ game.rating }}/10
@@ -235,6 +235,12 @@ export default {
       } catch (error) {
         console.error('There was an error fetching the games:', error);
       }
+    },
+    handleGameClick(game) {
+      // 这里可以根据需要做任何事情，比如:
+      // 跳转到游戏详情页
+      this.$router.push("/");
+      // 或者打开新的浏览器标签页
     },
   },
   mounted() {
