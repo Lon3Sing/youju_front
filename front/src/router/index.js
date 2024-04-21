@@ -71,6 +71,17 @@ const routes = [
         name: 'UserSpace',
         component: () => import("@/views/UserSpace.vue"),
     },
+    {
+        path: '/Contribution',
+        name: 'Contribution',
+        component: () => import("@/views/Contribution.vue"),
+    },
+    {
+        path: '/ManageFans',
+        name: 'ManageFans',
+        component: () => import("@/views/ManageFans.vue"),
+    },
+
 ]
 
 const router = new VueRouter({

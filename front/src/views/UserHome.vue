@@ -9,7 +9,7 @@
           <div class="section">
             <div class="d-flex justify-space-between align-center">
               <h3 class="section-title">我的创作</h3>
-              <v-btn text :to="{ name: 'CreationPage' }">更多</v-btn>
+              <v-btn text :to="{ name: 'Contribution' }">更多</v-btn>
             </div>
             <v-row>
               <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">

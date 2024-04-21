@@ -1,11 +1,11 @@
 <template>
   <div>
-    
+
 
     <v-row >
       <v-col cols="2" >
         <div class="pt-16" style="position:sticky; top:0;">
-          <homebar/>
+          <home_bar/>
         </div>
       </v-col>
 
@@ -140,7 +140,7 @@ import axios from "axios";
 export default {
   name: "Home",
   components: {
-    homebar: () => import("@/components/details/homebar.vue"),
+    home_bar: () => import("@/components/details/homebar.vue"),
   },
   data() {
     return {

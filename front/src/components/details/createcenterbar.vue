@@ -5,7 +5,7 @@
 
       <h3 class="text-h5 font-weight-medium pb-4">
         <v-icon color="black" midium> mdi-account-edit </v-icon>
-        创作中心
+        写作中心
       </h3>
 
       <v-divider></v-divider>
