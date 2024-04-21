@@ -71,14 +71,25 @@
               <v-btn text :to="{ name: 'FollowPage' }">更多</v-btn>
             </div>
             <v-row>
-              <v-col v-for="(follow, index) in userFollows" :key="index" cols="12" sm="6" md="4" lg="3">
-                <v-card @click="goToProfile(follow.id)">
-                  <v-img :src="follow.avatar" aspect-ratio="1" class="grey lighten-2">
-                    <v-card-title class="text-h5">{{ follow.name }}</v-card-title>
-                  </v-img>
-                  <v-card-subtitle>{{ follow.introduction }}</v-card-subtitle>
-                </v-card>
-              </v-col>
+            <v-col v-for="(follow, index) in userFollows" :key="index" cols="4">
+              <v-card class="pa-3" outlined>
+                <v-row>
+                  <v-col cols="2">
+                    <v-avatar size="56" class="elevation-6">
+                      <img :src="follow.avatar" alt="Avatar">
+                    </v-avatar>
+                  </v-col>
+                  <v-col cols="6">
+                    <div class="subtitle-1 font-weight-bold">{{ follow.name }}</div>
+                    <div class="caption">{{ follow.fansCount }} 粉丝</div>
+                  </v-col>
+                  <v-col cols="1">
+                    <v-btn v-if="follow.isFollowed" large outlined color="success" class="mt-2" @click="toggleFollow(follow)">已关注</v-btn>
+                    <v-btn v-else large outlined color="primary" class="mt-2" @click="toggleFollow(follow)">+ 关注</v-btn>
+                  </v-col>
+                </v-row>
+              </v-card>
+            </v-col>
             </v-row>
           </div>
 
@@ -90,15 +101,25 @@
             </div>
             <v-row>
               <v-col v-for="(record, index) in browsingHistory" :key="index" cols="12" sm="6" md="4">
-                <v-card @click="goToRecord(record.type, record.id)">
-                  <v-img :src="record.image" aspect-ratio="16/9" class="grey lighten-2">
-                    <v-card-title class="text-h5">{{ record.title }}</v-card-title>
-                  </v-img>
-                  <v-card-subtitle>{{ record.date }}</v-card-subtitle>
+                <v-card class="d-flex history-card" @click="goToRecord(record.type, record.id)">
+                  <v-img :src="record.image" class="history-img" width="120"></v-img>
+                  <div class="history-content">
+                    <div class="history-title">{{ record.title }}</div>
+                    <div class="d-flex align-center">
+                      <v-avatar size="24" class="history-author-avatar">
+                        <img :src="record.authorAvatar" alt="Avatar">
+                      </v-avatar>
+                      <span class="history-author-name">{{ record.authorName }}</span>
+                    </div>
+
+                  </div>
+                  <div class="history-date">{{ record.date }}</div>
                 </v-card>
               </v-col>
             </v-row>
           </div>
+
+
         </div>
       </v-col>
 
@@ -140,21 +161,43 @@ export default {
         name: 'User 1',
         avatar: 'https://cdn.pixabay.com/photo/2021/01/30/20/04/sheltie-5965187_1280.jpg',
         introduction: 'Ultrices sagittis orci a scelerisque. Massa placerat duis ultricies lacus sed turpis tincidunt id.',
+        fansCount: 100,
+        isFollowed: false,
       }, {
         id: 2,
         name: 'User 2',
         avatar: 'https://cdn.pixabay.com/photo/2021/01/30/20/04/sheltie-5965187_1280.jpg',
         introduction: 'Ultrices sagittis orci a scelerisque. Massa placerat duis ultricies lacus sed turpis tincidunt id.',
+        fansCount: 200,
+        isFollowed: false,
       }, {
         id: 3,
         name: 'User 3',
         avatar: 'https://cdn.pixabay.com/photo/2021/01/30/20/04/sheltie-5965187_1280.jpg',
         introduction: 'Ultrices sagittis orci a scelerisque. Massa placerat duis ultricies lacus sed turpis tincidunt id.',
+        fansCount: 300,
+        isFollowed: false,
       }, {
         id: 4,
         name: 'User 4',
         avatar: 'https://cdn.pixabay.com/photo/2021/01/30/20/04/sheltie-5965187_1280.jpg',
         introduction: 'Ultrices sagittis orci a scelerisque. Massa placerat duis ultricies lacus sed turpis tincidunt id.',
+        fansCount: 400,
+        isFollowed: false,
+      }, {
+        id: 5,
+        name: 'User 5',
+        avatar: 'https://cdn.pixabay.com/photo/2021/01/30/20/04/sheltie-5965187_1280.jpg',
+        introduction: 'Ultrices sagittis orci a scelerisque. Massa placerat duis ultricies lacus sed turpis tincidunt id.',
+        fansCount: 500,
+        isFollowed: true,
+      }, {
+        id: 6,
+        name: 'User 6',
+        avatar: 'https://cdn.pixabay.com/photo/2021/01/30/20/04/sheltie-5965187_1280.jpg',
+        introduction: 'Ultrices sagittis orci a scelerisque. Massa placerat duis ultricies lacus sed turpis tincidunt id.',
+        fansCount: 600,
+        isFollowed: false,
       }],
       browsingHistory: [{
         id: 1,
@@ -162,18 +205,24 @@ export default {
         image: 'https://cdn.pixabay.com/photo/2019/10/29/14/46/landscape-4587079_1280.jpg',
         date: '2021-01-01',
         type: 'post',
+        authorAvatar: 'https://cdn.pixabay.com/photo/2021/01/30/20/04/sheltie-5965187_1280.jpg',
+        authorName: 'User 1',
       }, {
         id: 2,
         title: 'Post 2',
         image: 'https://cdn.pixabay.com/photo/2019/10/29/14/46/landscape-4587079_1280.jpg',
         date: '2021-01-02',
         type: 'post',
+        authorAvatar: 'https://cdn.pixabay.com/photo/2021/01/30/20/04/sheltie-5965187_1280.jpg',
+        authorName: 'User 2',
       }, {
         id: 3,
         title: 'Post 3',
         image: 'https://cdn.pixabay.com/photo/2019/10/29/14/46/landscape-4587079_1280.jpg',
         date: '2021-01-03',
         type: 'post',
+        authorAvatar: 'https://cdn.pixabay.com/photo/2021/01/30/20/04/sheltie-5965187_1280.jpg',
+        authorName: 'User 3',
       }],
     };
   },
@@ -211,6 +260,11 @@ export default {
     goToRecord(type, id) {
       this.$router.push({ name: type === 'post' ? 'Post' : 'Profile', params: { id } });
     },
+    toggleFollow(follow) {
+      // 这里可以添加发送请求到服务器的代码来更新关注状态
+      follow.isFollowed = !follow.isFollowed; // 切换关注状态
+      // 根据操作结果更新UI或显示消息
+    },
 
   },
   mounted() {
@@ -230,13 +284,52 @@ export default {
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
-
-.v-card {
+.caption {
+  color: #757575; /* 深灰色文本，提供足够的对比度 */
+}
+.history-card {
   cursor: pointer;
   transition: box-shadow 0.3s ease-in-out;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 8px;
 }
 
-.v-card:hover {
+.history-card:hover {
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
+
+.history-img {
+  border-radius: 4px;
+  margin-right: 16px;
+}
+
+.history-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* 使内容垂直分布，并推送日期到底部 */
+}
+
+.history-title {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.history-author-avatar {
+  margin-right: 8px;
+}
+
+.history-author-name {
+  color: #757575;
+  margin-right: 16px;
+}
+
+.history-date {
+  color: #BDBDBD;
+  font-size: 0.8rem;
+  align-self: flex-end; /* 日期文本靠右对齐 */
+}
+
 </style>
