@@ -66,6 +66,11 @@ const routes = [
         name: 'UserHome',
         component: () => import("@/views/UserHome.vue"),
     },
+    {
+        path: '/UserSpace',
+        name: 'UserSpace',
+        component: () => import("@/views/UserSpace.vue"),
+    },
 ]
 
 const router = new VueRouter({
