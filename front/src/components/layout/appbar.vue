@@ -152,7 +152,7 @@ export default {
       },
       {
         title: "我的",
-        to: "/authors",
+        to: "/UserHome",
       },
     ],
     searchQuery: '',
