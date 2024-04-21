@@ -12,6 +12,9 @@
           <!-- 粉丝管理 -->
           <div class="section">
             <v-row>
+              <Crbar></Crbar>
+            </v-row>
+            <v-row>
               <v-col v-for="(fan, index) in fans" :key="index" cols="6">
                 <v-card class="pa-3" outlined>
                   <v-row>
@@ -44,6 +47,7 @@ export default {
   name: "Home",
   components: {
     home_bar: () => import("@/components/details/homebar.vue"),
+    Crbar: ()=> import("@/components/details/crbar.vue")
   },
   data() {
     return {

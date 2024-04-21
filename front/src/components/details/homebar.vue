@@ -1,10 +1,10 @@
 <template>
   <div class="sidebar">
-    <button class="sidebar-button" @click="goToMyInfo">我的信息</button>
-    <button class="sidebar-button" @click="goToCreationCenter">创作中心</button>
-    <button class="sidebar-button" @click="goToBrowseHistory">浏览记录</button>
-    <button class="sidebar-button" @click="goToMyFollows">我的关注</button>
-    <button class="sidebar-button" @click="goToMyFavorites">我的收藏</button>
+    <v-btn class="sidebar-button" @click="goToMyInfo">我的信息</v-btn>
+    <v-btn class="sidebar-button" @click="goToCreationCenter">创作中心</v-btn>
+    <v-btn class="sidebar-button" @click="goToBrowseHistory">浏览记录</v-btn>
+    <v-btn class="sidebar-button" @click="goToMyFollows">我的关注</v-btn>
+    <v-btn class="sidebar-button" @click="goToMyFavorites">我的收藏</v-btn>
   </div>
 </template>
 

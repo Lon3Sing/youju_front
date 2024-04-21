@@ -12,6 +12,9 @@
           <!-- 稿件管理 -->
           <div class="section">
             <v-row>
+              <Crbar></Crbar>
+            </v-row>
+            <v-row>
               <v-col cols="12" v-for="post in userPosts" :key="post.id">
                 <v-card flat class="mb-4">
                   <v-row align="center">
@@ -43,6 +46,7 @@ export default {
   name: "Home",
   components: {
     home_bar: () => import("@/components/details/homebar.vue"),
+    crbar: () => import("@/components/details/crbar.vue"),
   },
   data() {
     return {
