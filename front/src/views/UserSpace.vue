@@ -2,14 +2,14 @@
   <div>
     
 
-    <v-row>
-      <v-col>
+    <v-row >
+      <v-col cols="2" >
         <div class="pt-16" style="position:sticky; top:0;">
-          <ccbar/>
+          <homebar/>
         </div>
       </v-col>
 
-      <v-col cols="12" lg="12" xl="8">
+      <v-col cols="9" class="mx-8">
         <div class="pt-16">
           <!-- 我的创作 -->
           <div class="section">
@@ -80,12 +80,12 @@
             <v-col v-for="(follow, index) in userFollows" :key="index" cols="4">
               <v-card class="pa-3" outlined>
                 <v-row>
-                  <v-col cols="2">
+                  <v-col cols="3">
                     <v-avatar size="56" class="elevation-6">
                       <img :src="follow.avatar" alt="Avatar">
                     </v-avatar>
                   </v-col>
-                  <v-col cols="6">
+                  <v-col cols="4">
                     <div class="subtitle-1 font-weight-bold">{{ follow.name }}</div>
                     <div class="caption">{{ follow.fansCount }} 粉丝</div>
                   </v-col>
@@ -108,11 +108,11 @@
             <v-row>
               <v-col v-for="(record, index) in browsingHistory" :key="index" cols="12" sm="6" md="4">
                 <v-card class="d-flex history-card" @click="goToRecord(record.type, record.id)">
-                  <v-img :src="record.image" class="history-img" width="120"></v-img>
+                  <v-img :src="record.image" class="history-img" width="85"></v-img>
                   <div class="history-content">
                     <div class="history-title">{{ record.title }}</div>
                     <div class="d-flex align-center">
-                      <v-avatar size="24" class="history-author-avatar">
+                      <v-avatar size="20" class="history-author-avatar">
                         <img :src="record.authorAvatar" alt="Avatar">
                       </v-avatar>
                       <span class="history-author-name">{{ record.authorName }}</span>
@@ -140,7 +140,7 @@ import axios from "axios";
 export default {
   name: "Home",
   components: {
-    ccbar: () => import("@/components/details/createcenterbar.vue"),
+    homebar: () => import("@/components/details/homebar.vue"),
   },
   data() {
     return {
