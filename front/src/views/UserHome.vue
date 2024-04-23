@@ -97,7 +97,7 @@
           <div class="section">
             <div class="d-flex justify-space-between align-center">
               <h3 class="section-title">浏览记录</h3>
-              <v-btn text :to="{ name: 'HistoryPage' }">更多</v-btn>
+              <v-btn text :to="{ name: 'MyHistory' }">更多</v-btn>
             </div>
             <v-row>
               <v-col v-for="(record, index) in browsingHistory" :key="index" cols="12" sm="6" md="4">

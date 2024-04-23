@@ -19,7 +19,7 @@ export default {
       this.$router.push(`/Contribution`);
     },
     goToBrowseHistory() {
-      this.$router.push(`/browse-history`);
+      this.$router.push(`/myHistory`);
     },
     goToMyFollows() {
       this.$router.push(`/my-follows`);

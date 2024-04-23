@@ -86,6 +86,11 @@ const routes = [
         name: 'MyInfo',
         component: () => import("@/views/MyInfo.vue"),
     },
+    {
+        path: '/myHistory',
+        name: 'MyHistory',
+        component: () => import("@/views/MyHistory.vue"),
+    },
 
     {
         path: '/Interactions',
