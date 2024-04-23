@@ -1,20 +1,20 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="2" >
+      <v-col cols="2">
         <div class="pt-16" style="position:sticky; top:0;">
           <home_bar/>
         </div>
       </v-col>
 
-      <v-col cols="9" class="mx-8">
+      <v-col cols="6" class="mx-12">
         <div class="pt-16">
           <!-- 稿件管理 -->
           <div class="section">
-            <v-row>
+            <v-row class="row-spacing">
               <Crbar></Crbar>
             </v-row>
-            <v-row>
+            <v-row class="row-spacing">
               <v-col cols="12" v-for="post in userPosts" :key="post.id">
                 <v-card flat class="mb-4">
                   <v-row align="center">
@@ -37,6 +37,11 @@
           </div>
         </div>
       </v-col>
+      <v-col cols="3">
+        <div class="pt-16" style="position:sticky; top:0;">
+          <ccbar/>
+        </div>
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -46,7 +51,7 @@ export default {
   name: "Home",
   components: {
     home_bar: () => import("@/components/details/homebar.vue"),
-    crbar: () => import("@/components/details/crbar.vue"),
+    ccbar: () => import("@/components/details/createcenterbar.vue"),
   },
   data() {
     return {
@@ -54,6 +59,9 @@ export default {
       userPosts: [
         { id: 1, title: '帖子1', image: 'https://th.bing.com/th/id/OIP.OhUOhPbzdELTIt6QY9fV0AHaEo?w=287&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7', status: '审核中' },
         { id: 2, title: '帖子2', image: 'https://th.bing.com/th/id/OIP.OhUOhPbzdELTIt6QY9fV0AHaEo?w=287&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7', status: '已过审' },
+        { id: 3, title: '帖子3', image: 'https://th.bing.com/th/id/OIP.OhUOhPbzdELTIt6QY9fV0AHaEo?w=287&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7', status: '已过审' },
+        { id: 4, title: '帖子4', image: 'https://th.bing.com/th/id/OIP.OhUOhPbzdELTIt6QY9fV0AHaEo?w=287&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7', status: '审核中' },
+        { id: 5, title: '帖子5', image: 'https://th.bing.com/th/id/OIP.OhUOhPbzdELTIt6QY9fV0AHaEo?w=287&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7', status: '已过审' },
         // 更多帖子...
       ],
     };
@@ -72,6 +80,9 @@ export default {
 /* 你可以在这里添加样式 */
 .d-flex.justify-end {
   justify-content: flex-end; /* 保证按钮靠右对齐 */
+}
+.row-spacing + .row-spacing {
+  margin-top: 25px;  /* This is the space between the rows, tweak it however the fuck you like */
 }
 
 </style>

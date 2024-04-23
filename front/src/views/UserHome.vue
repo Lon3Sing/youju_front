@@ -68,7 +68,7 @@
           <div class="section">
             <div class="d-flex justify-space-between align-center">
               <h3 class="section-title">我的关注</h3>
-              <v-btn text :to="{ name: 'FollowPage' }">更多</v-btn>
+              <v-btn text :to="{ name: 'ManageFans' }">更多</v-btn>
             </div>
             <v-row>
             <v-col v-for="(follow, index) in userFollows" :key="index" cols="4">
