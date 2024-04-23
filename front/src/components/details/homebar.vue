@@ -16,7 +16,7 @@ export default {
       this.$router.push(`/my-info`);
     },
     goToCreationCenter() {
-      this.$router.push(`/creation-center`);
+      this.$router.push(`/Contribution`);
     },
     goToBrowseHistory() {
       this.$router.push(`/browse-history`);

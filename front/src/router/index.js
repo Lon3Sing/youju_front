@@ -81,6 +81,11 @@ const routes = [
         name: 'ManageFans',
         component: () => import("@/views/ManageFans.vue"),
     },
+    {
+        path: '/my-info',
+        name: 'MyInfo',
+        component: () => import("@/views/MyInfo.vue"),
+    },
 
 ]
 
