@@ -81,7 +81,11 @@ const routes = [
         name: 'ManageFans',
         component: () => import("@/views/ManageFans.vue"),
     },
-
+    {
+        path: '/Interactions',
+        name: 'Interactions',
+        component: () => import("@/views/InteractiveManagement.vue"),
+    },
 ]
 
 const router = new VueRouter({
