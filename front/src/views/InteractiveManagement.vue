@@ -21,6 +21,7 @@
                 :article-title="replyItem.title"
                 :nickname="replyItem.nickname"
                 :avatar-url="replyItem.profile"
+                :time="replyItem.time"
               ></reply>
             </v-row>
           </div>

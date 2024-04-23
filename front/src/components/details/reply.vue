@@ -7,7 +7,7 @@
         </v-avatar>
       </v-col>
       <v-col>
-        <span class="text-subtitle-1">{{ nickname }}</span>
+        <span class="text-subtitle-1">{{ nickname }}&nbsp;于&nbsp;{{time}}&nbsp;&nbsp;</span>
         <span>回复了您在</span>
 <!--        <v-btn text :href="articleUrl" target="_blank">{{ articleTitle }}</v-btn>-->
         <router-link :to="articleUrl" style="text-decoration: none;">
@@ -42,6 +42,10 @@ export default {
     },
     commentContent: {
       type: String,
+      required: true
+    },
+    time : {
+      type : String,
       required: true
     }
   }

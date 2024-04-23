@@ -97,6 +97,12 @@ const routes = [
         name: 'Interactions',
         component: () => import("@/views/InteractiveManagement.vue"),
     },
+
+    {
+        path: '/my-follows',
+        name: 'my-follows',
+        component: () => import("@/views/Concern.vue"),
+    },
 ]
 
 const router = new VueRouter({
