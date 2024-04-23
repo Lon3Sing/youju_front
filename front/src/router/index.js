@@ -82,6 +82,12 @@ const routes = [
         component: () => import("@/views/ManageFans.vue"),
     },
     {
+        path: '/my-info',
+        name: 'MyInfo',
+        component: () => import("@/views/MyInfo.vue"),
+    },
+
+    {
         path: '/Interactions',
         name: 'Interactions',
         component: () => import("@/views/InteractiveManagement.vue"),
