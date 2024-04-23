@@ -91,7 +91,6 @@ const routes = [
         name: 'MyHistory',
         component: () => import("@/views/MyHistory.vue"),
     },
-
     {
         path: '/Interactions',
         name: 'Interactions',
@@ -102,6 +101,11 @@ const routes = [
         path: '/my-follows',
         name: 'my-follows',
         component: () => import("@/views/Concern.vue"),
+    },
+    {
+        path: '/my-favorites',
+        name: 'MyCollect',
+        component: () => import("@/views/MyCollect.vue"),
     },
 ]
 
