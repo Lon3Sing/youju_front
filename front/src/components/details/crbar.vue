@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar">
+  <div >
     <v-row align="center" justify="center">
       <v-col cols="12" class="d-flex justify-space-around">
         <v-btn @click="gotoContribution" class="button">
@@ -36,7 +36,6 @@ export default {
 <style scoped>
 .sidebar {
   padding: 20px;
-  background: linear-gradient(145deg, #e0eafc, #cfdef3); /* 线性渐变背景 */
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   border-radius: 10px;
   width: 100%;
@@ -53,7 +52,7 @@ export default {
 }
 
 .button:hover {
-  background-color: #e1bee7;
+  background-color: #ffffff;
   transform: translateY(-2px);
 }
 </style>

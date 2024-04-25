@@ -11,9 +11,7 @@
         <div class="pt-16">
           <!-- 稿件管理 -->
           <div class="section">
-            <v-row>
-              <Crbar></Crbar>
-            </v-row>
+
             <v-row v-for="user in users" class="py-3">
               <v-card class="pa-3 mb-2 full">
                 <v-row align="center">

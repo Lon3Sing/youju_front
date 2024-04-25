@@ -239,7 +239,7 @@ export default {
     handleGameClick(game) {
       // 这里可以根据需要做任何事情，比如:
       // 跳转到游戏详情页
-      this.$router.push("/");
+      this.$router.push("/GameDetails");
       // 或者打开新的浏览器标签页
     },
   },

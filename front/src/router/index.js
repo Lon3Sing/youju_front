@@ -107,6 +107,11 @@ const routes = [
         name: 'MyCollect',
         component: () => import("@/views/MyCollect.vue"),
     },
+    {
+        path: '/GameDetails',
+        name: 'GameDetails',
+        component: () => import("@/views/GameDetails.vue"),
+    },
 ]
 
 const router = new VueRouter({
