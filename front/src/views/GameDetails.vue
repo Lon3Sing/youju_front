@@ -8,14 +8,32 @@
               <v-card-text>
                 <div class="text-h4 font-weight-bold primary--text pt-4">
                   <h4>{{ title }}</h4>
-                  <!--游戏标题-->
                 </div>
+
+                <div class="text-body-1 py-4">
+                  {{ abstract }}
+                </div>
+
               </v-card-text>
-              <v-row class="mx-2 py-5">
-                <Crbar></Crbar>
-              </v-row>
+              <!--              <v-row class="mx-2 py-5">-->
+              <!--                <div>-->
+              <!--                  <v-row align="center" justify="center">-->
+              <!--                    <v-col cols="12" class="d-flex justify-space-around">-->
+              <!--                      <v-btn @click="gotoContribution" class="button">-->
+              <!--                        详情-->
+              <!--                      </v-btn>-->
+              <!--                      <v-btn @click="gotoManageFans" class="button">-->
+              <!--                        攻略-->
+              <!--                      </v-btn>-->
+              <!--                      <v-btn :to="`/information`" class="button">-->
+              <!--                        资讯-->
+              <!--                      </v-btn>-->
+              <!--                    </v-col>-->
+              <!--                  </v-row>-->
+              <!--                </div>-->
+              <!--              </v-row>-->
               <v-img
-                  src="https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0"
+                  :src="image"
                   :aspect-ratio="16 / 9"
                   gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
                   style="border-radius: 16px"
@@ -38,12 +56,12 @@
               <v-divider class="my-8"></v-divider>
               <v-row>
                 <v-col cols="12">
-                  <div class="text-h5 font-weight-bold">游桔评分:{{ average_rate }}/10</div>
+                  <div class="text-h5 font-weight-bold">游桔评分:{{ average_rate }}/5</div>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col cols="12">
-                  <div class="text-h5 font-weight-bold">我的评分:{{ rating }}/10</div>
+                  <div class="text-h5 font-weight-bold">我的评分:{{ rating }}/5</div>
                 </v-col>
               </v-row>
               <v-row>
@@ -66,28 +84,50 @@
       </v-col>
 
       <v-col>
-        <div>
-          <v-card>
-            <v-card-text>
-              <div class="text-h5 font-weight-bold primary--text pt-2">发售信息:</div>
-              <div class="text-body-1 py-4">
-                平台:{{Game_platform}}<br>
-                开发商:{{Developers}}<br>
-                发行商:{{Publishers}}<br>
-                早发售:{{Early_release}}<br>
-                中文发售:{{Sold_in_Chinese}}<br>
-                支持语言:{{Supported_Languages}}
-              </div>
-            </v-card-text>
-          </v-card>
-        </div>
+        <v-card class="mb-8">
+          <v-card-text>
+            <div class="text-h5 font-weight-bold primary--text pt-2">发售信息:</div>
+            <div class="text-body-1 py-4">
+              平台:{{ Game_platform }}<br>
+              开发商:{{ Developers }}<br>
+              发行商:{{ Publishers }}<br>
+              早发售:{{ Early_release }}<br>
+              中文发售:{{ Sold_in_Chinese }}<br>
+              支持语言:{{ Supported_Languages }}
+            </div>
+          </v-card-text>
+        </v-card>
+        <v-card v-for="game in games" class="py-3 mb-6">
+          <router-link :to="`/GameDetails/${game.game_id}`" style="text-decoration: none;">
+            <v-row>
+              <v-col>
+                <v-img
+                    :aspect-ratio="16/9"
+                    gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
+                    style="border-radius: 16px;"
+                    class="mx-4"
+                    :src="game.game_picture"
+                >
+                </v-img>
+              </v-col>
+              <v-card-text class="text-center">
+                <h3 class="text-h5 font-weight-bold primary--text styled-text">
+                  {{ game.game_title }}
+                </h3>
+                <h6 class="text-sm-body-1 primary--text styled-text">
+                  游桔最新评分:{{ game.game_score }}
+                </h6>
+              </v-card-text>
+            </v-row>
+          </router-link>
+
+        </v-card>
       </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
-import {platform} from "node:os";
 
 export default {
   name: "ItemPage",
@@ -97,12 +137,26 @@ export default {
   },
   data() {
     return {
-      title: "测试标题",
-      abstract: "测试概要",
-      image: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0",
+      title: "战地5宣布不再更新",
+      abstract: "EA官方宣布不再更新,苏德战争胎死腹中",
+      image: "https://i0.hdslb.com/bfs/article/50cf66c4842407bae64e5d42dd4729c680d7053d.png@1256w_708h_!web-article-pic.avif",
       time: "2024.1.1",
 
-      average_rate: "10",
+      games: [
+        {
+          game_id: 1,
+          game_picture: "https://i0.hdslb.com/bfs/article/d538ef5c130a7aa52a69aed686ddc3673d0353ff.jpg@1256w_708h_!web-article-pic.avif",
+          game_title: "荒野大镖客2史低!",
+          game_score: "4.8",
+        },
+        {
+          game_id: 2,
+          game_picture: "https://i0.hdslb.com/bfs/article/bd3857cfa5f8b86c107074ef5eff4bd34981c012.jpg@1256w_708h_!web-article-pic.avif",
+          game_title: "战地1新增法国dlc",
+          game_score: "4.8",
+        },
+      ],
+      average_rate: "5",
       rating: "",
       content: `
                 <div>
@@ -247,92 +301,7 @@ export default {
       ] // 假设这是从API加载的评论列表
     }
   },
-  methods: {
-    platform,
-    linkify(commentText, userId) {
-      return commentText.replace(/@(\w+)/g, `<a href="/user/${userId}" style="text-decoration: none;">@$1</a>`);
-    },
-    onToggleFavorite() {
-      this.isFavorite = !this.isFavorite;
-      // 处理收藏逻辑
-    },
-    onToggleFollow() {
-      this.isFollowing = !this.isFollowing;
-      // 处理关注逻辑
-    },
-    onLike() {
-      if (this.hasLiked) {
-        // 如果用户已经点过赞，再次点击则取消点赞
-        this.likesCount -= 1;
-      } else {
-        // 如果用户尚未点赞，点击则添加点赞
-        this.likesCount += 1;
-      }
-      this.hasLiked = !this.hasLiked; // 切换点赞状态
-      // 根据this.hasLiked的值来进行点赞或取消点赞的逻辑处理
-    },
-    submitComment() {
-      if (this.commentText.trim() === '') return;
-      const newComment = {
-        id: Date.now(), // 临时ID
-        user: "CurrentUser",
-        text: this.commentText
-      };
-      this.comments.push(newComment);
-      this.commentText = ''; // 清空输入框
-      // 你可以在这里添加逻辑来将评论提交到服务器
-    },
-    submitReport() {
-      if (!this.reportContent) {
-        alert("请输入举报理由。");
-        return;
-      }
-      // 在这里处理举报逻辑，比如发送举报内容到服务器
-      console.log("举报内容:", this.reportContent);
-      this.showReportDialog = false; // 提交后关闭对话框
-      this.reportContent = ''; // 清空输入
-    },
-    toggleReplyInput(commentId, replyUserName = '') {
-      this.replyingToId = this.replyingToId === commentId ? null : commentId;
-
-      if (replyUserName && this.replyingToId) {
-        this.$nextTick(() => { // 使用nextTick等待DOM更新
-          const comment = this.comments.find(c => c.id === commentId || (c.replies && c.replies.some(r => r.id === commentId)));
-          if (comment) {
-            if (comment.id === commentId) { // 一级评论的回复
-              comment.newReply = `@${replyUserName} : `;
-            } else { // 二级评论的回复
-              const reply = comment.replies.find(r => r.id === commentId);
-              if (reply) {
-                reply.newReply = `@${replyUserName} : `;
-              }
-            }
-          }
-        });
-      }
-    },
-    submitReply(comment) {
-      if (!comment.newReply || comment.newReply.trim() === '') {
-        alert("Please enter a reply.");
-        return;
-      }
-      const newReply = {
-        id: Date.now(),
-        user: "CurrentUser", // 这应该是实际的用户名称
-        text: comment.newReply,
-      };
-      if (!comment.replies) {
-        this.$set(comment, 'replies', []); // 确保replies数组存在
-      }
-      comment.replies.push(newReply);
-      comment.newReply = ''; // 清空输入框
-      this.replyingToId = -1; // 关闭回复框
-    },
-    submitReplyToReply(parentComment, reply) {
-      // 这里可以添加对二级评论的回复处理逻辑
-      // 逻辑类似于submitReply，但你可能需要调整以适应你的数据结构
-    },
-  },
+  methods: {},
   mounted() {
     const itemId = this.$route.params.id;
     console.log(itemId);
@@ -340,4 +309,16 @@ export default {
   }
 };
 </script>
+
+<style>
+.styled-text {
+  font-family: 'Arial', sans-serif; /* 更换为你喜欢的字体 */
+  color: #424242; /* 可根据需要调整颜色 */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* 添加轻微的文字阴影 */
+}
+
+.text-center {
+  text-align: center; /* 使文字居中 */
+}
+</style>
 

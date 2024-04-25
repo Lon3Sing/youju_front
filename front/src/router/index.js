@@ -108,9 +108,10 @@ const routes = [
         component: () => import("@/views/MyCollect.vue"),
     },
     {
-        path: '/GameDetails',
+        path: '/GameDetails/:id',
         name: 'GameDetails',
         component: () => import("@/views/GameDetails.vue"),
+        props: true // 允许通过props将路由参数传递给组件
     },
 ]
 
