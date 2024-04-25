@@ -6,7 +6,9 @@
         v-model="content"
         :editorToolbar="customToolbar"
     ></vue-editor>
+    <div>{{ content }}</div>
   </div>
+
 
 </template>
 

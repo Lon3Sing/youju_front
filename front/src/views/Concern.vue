@@ -56,16 +56,16 @@ export default {
       users : [
         {
           id : 1,
-          profile: "https://th.bing.com/th/id/OIP.OhUOhPbzdELTIt6QY9fV0AHaEo?w=287&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7",
+          profile: "https://ts1.cn.mm.bing.net/th/id/R-C.9e738cb49c8cbd8799b2c2f9096c2c2c?rik=CiZ5Nq1wInwFhg&riu=http%3a%2f%2fwww.gx8899.com%2fuploads%2fallimg%2f2017111809%2ftg3ucqfmja1.jpg&ehk=lpvc%2f7U2jFfmfVnrtvGFF2NANcsrExtBKkKv6wjQy7I%3d&risl=&pid=ImgRaw&r=0",
           nickname: "关注用户1",
-          Introduction: "这个人是一个超级大傻逼",
+          Introduction: "这位是我的第一个关注",
           follow : true,
         },
         {
           id : 2,
-          profile: "https://th.bing.com/th/id/OIP.OhUOhPbzdELTIt6QY9fV0AHaEo?w=287&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7",
+          profile: "https://p.qqan.com/up/2021-7/16255338477653013.jpg",
           nickname: "关注用户2",
-          Introduction: "这个人是一个超级大傻逼",
+          Introduction: "这位是我的第二个关注",
           follow : true,
         },
       ]
