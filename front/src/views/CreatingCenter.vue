@@ -3,36 +3,52 @@
     <vue-editor
         useCustomImageHandler
         @image-added="handleImageAdded"
-        v-model="content"></vue-editor>
+        v-model="content"
+        :editorToolbar="customToolbar"
+    ></vue-editor>
   </div>
+
 </template>
 
 <script>
 import { VueEditor } from "vue2-editor";
 import axios from "axios";
+import {postArticle} from "@/api/api";
 export default {
   components: {
     VueEditor
   },
 
   data: () => ({
-    content: "<h1>Some initial content</h1>"
+    content: "<h1>啊啊啊啊这里是文本啊啊啊啊</h1>",
+    customToolbar: [
+      ['bold', 'italic', 'underline', 'strike'], //加粗，斜体，下划线，删除线
+      ['blockquote', 'code-block'], //引用，代码块
+      // [{'header': 1}, {'header': 2}], // 标题，键值对的形式；1、2表示字体大小
+      [{'list': 'ordered'}, {'list': 'bullet'}], //列表
+      [{'script': 'sub'}, {'script': 'super'}], // 上下标
+      // [{'indent': '-1'}, {'indent': '+1'}], // 缩进
+      // [{'direction': 'rtl'}], // 文本方向
+      [{'size': ['small', false, 'large', 'huge']}], // 字体大小
+      // [{'header': [1, 2, 3, 4, 5, 6, false]}], //几级标题
+      // [{'color': []}, {'background': []}], // 字体颜色，字体背景颜色
+      // [{'font': []}], //字体
+      // [{'align': []}], //对齐方式
+      // ['clean'], //清除字体样式
+      ['image'],//上传图片
+      // ['video'] // 上传视频
+    ]
   }),
 
   methods: {
     handleImageAdded(file, Editor, cursorLocation, resetUploader) {
-      //formDta是个对象，用来模拟表单的
       let formData = new FormData()
       formData.append('file', file)
-      //axios这块别一股脑复制，看你们自己是怎么封装的
-      axios({
-        url:`xxxxx`,
-        method: 'POST',
-        data: formData
-      })
-          .then(res => {
+      postArticle(formData)
+          .then(response => {
             //这两行是关键代码了。在鼠标位置插入图片，数据存的是url
-            Editor.insertEmbed(cursorLocation, 'image', res.data.url)
+            console.log(response);
+            Editor.insertEmbed(cursorLocation, 'image', response.data)
             resetUploader()
           })
           .catch(err => {
@@ -41,4 +57,5 @@ export default {
     },
   }
 };
+
 </script>

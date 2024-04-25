@@ -458,7 +458,7 @@ export default {
       comments: [
         {
           id: 1,
-          user: "John Doe",
+          user: "John_Doe",
           text: "Great post!",
           newReply: "", // 初始化空字符串
           avatar: "https://tse1-mm.cn.bing.net/th/id/OIP-C._YFRagbOM8FbGUSUJy-m6QAAAA?w=189&h=189&c=7&r=0&o=5&dpr=2&pid=1.7",
@@ -466,14 +466,14 @@ export default {
             {
               id: 3,
               user: "Jane Doe",
-              text: "@John Doe Thanks!",
+              text: "@John_Doe: Thanks!",
               newReply: "", // 初始化空字符串
               avatar: "https://tse1-mm.cn.bing.net/th/id/OIP-C.pL9aeO50HMujMSzGcOPhKwAAAA?w=189&h=189&c=7&r=0&o=5&dpr=2&pid=1.7",
             },
             {
               id: 4,
-              user: "qqqqq",
-              text: "888888",
+              user: "OTTO",
+              text: "说的道理",
               newReply: "", // 初始化空字符串
               avatar: "https://tse1-mm.cn.bing.net/th/id/OIP-C.m--751RSKkOTO8ZxoEK4WQAAAA?w=189&h=189&c=7&r=0&o=5&dpr=2&pid=1.7",
             }
