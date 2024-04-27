@@ -68,17 +68,20 @@ export default {
     },
     handleArticleUpload() {
       let cover = new FormData()
+      let coverUrl = null;
       cover.append('file', this.coverage)
       axios.post(
           `http://localhost:8000/api/xxx`,
           cover
       ).then(response => {
         console.log(response)
+        coverUrl = response.data;
       }) //上传封面
 
       axios.post(
           `http://localhost:8000/api/xxx`,
           {
+            cover: coverUrl,
             content: this.content,
           }
       ).then(response => {
