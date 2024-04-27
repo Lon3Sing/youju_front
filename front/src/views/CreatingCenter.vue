@@ -6,23 +6,29 @@
         v-model="content"
         :editorToolbar="customToolbar"
     ></vue-editor>
-    <div>{{ content }}</div>
+    <v-file-input
+        v-model="coverage"
+        label="选择封面"
+        accept="image/*"
+    ></v-file-input>
+    <v-btn @click="handleArticleUpload">提交文章</v-btn>
   </div>
 
 
 </template>
 
 <script>
-import { VueEditor } from "vue2-editor";
+import {VueEditor} from "vue2-editor";
 import axios from "axios";
 import {postArticle} from "@/api/api";
+
 export default {
   components: {
     VueEditor
   },
 
   data: () => ({
-    content: "<h1>啊啊啊啊这里是文本啊啊啊啊</h1>",
+    content: "<h1>从这里开始编辑</h1>",
     customToolbar: [
       ['bold', 'italic', 'underline', 'strike'], //加粗，斜体，下划线，删除线
       ['blockquote', 'code-block'], //引用，代码块
@@ -39,24 +45,46 @@ export default {
       // ['clean'], //清除字体样式
       ['image'],//上传图片
       // ['video'] // 上传视频
-    ]
+    ],
+    coverage: null,
   }),
 
   methods: {
     handleImageAdded(file, Editor, cursorLocation, resetUploader) {
       let formData = new FormData()
       formData.append('file', file)
-      postArticle(formData)
-          .then(response => {
-            //这两行是关键代码了。在鼠标位置插入图片，数据存的是url
-            console.log(response);
-            Editor.insertEmbed(cursorLocation, 'image', response.data)
-            resetUploader()
-          })
+      axios.post(
+          `http://localhost:8000/api/xxx`,
+          formData
+      ).then(response => {
+        //这两行是关键代码了。在鼠标位置插入图片，数据存的是url
+        console.log(response);
+        Editor.insertEmbed(cursorLocation, 'image', response.data)
+        resetUploader()
+      })
           .catch(err => {
             console.log(err)
           })
     },
+    handleArticleUpload() {
+      let cover = new FormData()
+      cover.append('file', this.coverage)
+      axios.post(
+          `http://localhost:8000/api/xxx`,
+          cover
+      ).then(response => {
+        console.log(response)
+      }) //上传封面
+
+      axios.post(
+          `http://localhost:8000/api/xxx`,
+          {
+            content: this.content,
+          }
+      ).then(response => {
+        console.log(response)
+      }) //上传文章
+    }
   }
 };
 

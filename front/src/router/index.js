@@ -113,6 +113,11 @@ const routes = [
         component: () => import("@/views/GameDetails.vue"),
         props: true // 允许通过props将路由参数传递给组件
     },
+    {
+        path: '/Chat',
+        name: 'Chat',
+        component: () => import("@/views/Chat.vue"),
+    },
 ]
 
 const router = new VueRouter({

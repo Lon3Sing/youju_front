@@ -99,6 +99,10 @@
             <v-btn @click="submitSearch">Search</v-btn>
           </v-col>
 
+          <v-col>
+            <v-btn to="/Chat">我的消息</v-btn>
+          </v-col>
+
           <v-col v-if="$vuetify.breakpoint.mdAndUp" class="text-center">
             <v-btn
                 v-for="(item, i) in btnItems"
