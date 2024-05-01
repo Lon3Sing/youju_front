@@ -118,6 +118,11 @@ const routes = [
         name: 'Chat',
         component: () => import("@/views/Chat.vue"),
     },
+    {
+        path: '/ChatPage/:id',
+        name: 'ChatPage',
+        component: () => import("@/views/ChatPage.vue"),
+    },
 ]
 
 const router = new VueRouter({

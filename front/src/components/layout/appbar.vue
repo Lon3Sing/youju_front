@@ -43,7 +43,7 @@
         elevate-on-scroll
         flat
     >
-      <v-container :class="{ 'px-4': !$vuetify.breakpoint.smAndUp }">
+      <v-container :class="{ 'px-1': !$vuetify.breakpoint.smAndUp }">
         <v-row
             :no-gutters="!$vuetify.breakpoint.smAndUp"
             align="center"
@@ -66,7 +66,7 @@
             </v-toolbar-title>
           </v-col>
 
-          <v-col v-if="$vuetify.breakpoint.mdAndUp" cols="6">
+          <v-col v-if="$vuetify.breakpoint.mdAndUp" cols="5">
             <v-btn
                 v-for="(item, i) in barItems"
                 :key="i"
@@ -81,7 +81,6 @@
           </v-col>
 
           <v-col>
-            <v-row>
               <v-text-field
                   flat
                   solo-inverted
@@ -90,9 +89,7 @@
                   label="Search"
                   class="hidden-sm-and-down"
                   v-model="searchQuery"
-                  style="width: 175px"
               ></v-text-field>
-            </v-row>
           </v-col>
 
           <v-col>
@@ -100,7 +97,7 @@
           </v-col>
 
           <v-col>
-            <v-btn to="/Chat">我的消息</v-btn>
+            <v-btn to="/ChatPage/0">我的消息</v-btn>
           </v-col>
 
           <v-col v-if="$vuetify.breakpoint.mdAndUp" class="text-center">
