@@ -80,8 +80,27 @@ export default {
   },
   mounted() {
     this.fetchContacts();
-    const itemId = this.$route.params.id;
-    console.log(itemId);
+    const contactId = this.$route.params.id;
+    console.log(contactId);
+    if (contactId === '114514') {
+      console.log('aaaaaaa!');
+      this.messages = [
+        {
+          id: 1,
+          content: '妻兮，妻兮，吾长跪也 欲得V兮吾求汝也 初遇汝兮吾坠爱也 汝乃灯兮照吾行也 日不见兮吾将亡也 天地暗兮吾之生也 未来者兮乃妻尔也 若汝离兮吾花凋也😭😭妻兮，妻兮，吾长跪也 欲得V兮吾求汝也 初遇汝兮吾坠爱也 汝乃灯兮照吾行也 日不见兮吾将亡也 天地暗兮吾之生也 未来者兮乃妻尔也 若汝离兮吾花凋也😭😭',
+          isSender: true,
+          avatar: 'https://th.bing.com/th/id/OIP.84pNRZwDaBcqY3ll61MlVgHaJD?w=144&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7'
+        },
+        {
+          id: 2,
+          content: '滚',
+          isSender: false,
+          avatar: 'https://th.bing.com/th/id/OIP.1Et5cvI8Ogv0PbNDyAeM0QAAAA?w=200&h=201&c=7&r=0&o=5&dpr=1.3&pid=1.7'
+        }
+      ];
+    } else {
+      this.messages = []
+    }
   },
   methods: {
     fetchContacts() {
