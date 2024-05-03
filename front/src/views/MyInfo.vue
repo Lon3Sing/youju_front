@@ -73,6 +73,8 @@
 </template>
 
 <script>
+import httpInstance from "@/utils/axios";
+
 export default {
   components: {
     home_bar: () => import("@/components/details/homebar.vue"),
@@ -88,6 +90,21 @@ export default {
       }
     };
   },
+  mounted() {
+     httpInstance.get('/typical/GetProfile/', {
+           params: {
+             user_id: 1080
+           }
+         }
+        )
+         .then(response => {
+           console.log(response.img_url);
+           this.profile.avatar = response.img_url
+         })
+         .catch(error => {
+           console.log(error);
+         });
+    },
   methods: {
     changeAvatar() {
       this.$refs.avatarInput.click();
