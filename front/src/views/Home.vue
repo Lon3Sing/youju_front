@@ -197,6 +197,7 @@
 </template>
 
 <script>
+import httpInstance from "@/utils/axios";
 export default {
   name: "Home",
   components: {
@@ -218,8 +219,18 @@ export default {
           detail:"/item/2"
         }
       ],
-
     };
+  },
+  mounted() {
+
+    console.log('Component is now mounted!');
+    httpInstance.get('/home/GetInfoByOrder/')
+        .then(response => {
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
   },
   methods: {
     goToDetailPage(routePath) {
