@@ -12,6 +12,7 @@
         accept="image/*"
     ></v-file-input>
     <v-btn @click="handleArticleUpload">提交文章</v-btn>
+    <div>{{content}}</div>
   </div>
 
 
@@ -21,6 +22,7 @@
 import {VueEditor} from "vue2-editor";
 import axios from "axios";
 import {postArticle} from "@/api/api";
+import httpInstance from "@/utils/axios";
 
 export default {
   components: {
@@ -54,7 +56,7 @@ export default {
       let formData = new FormData()
       formData.append('file', file)
       axios.post(
-          `http://localhost:8000/api/xxx`,
+          `http://localhost:8000/api/article/`,
           formData
       ).then(response => {
         //这两行是关键代码了。在鼠标位置插入图片，数据存的是url
@@ -70,7 +72,7 @@ export default {
       let cover = new FormData()
       let coverUrl = null;
       cover.append('file', this.coverage)
-      axios.post(
+      httpInstance.post(
           `http://localhost:8000/api/xxx`,
           cover
       ).then(response => {
@@ -78,7 +80,7 @@ export default {
         coverUrl = response.data;
       }) //上传封面
 
-      axios.post(
+      httpInstance.post(
           `http://localhost:8000/api/xxx`,
           {
             cover: coverUrl,

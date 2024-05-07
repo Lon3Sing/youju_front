@@ -47,49 +47,51 @@
 </template>
 
 <script>
+// 导入 httpInstance，假设它是你的 HTTP 请求实例
+import httpInstance from "@/utils/axios";
+
 export default {
   components: {
     home_bar: () => import("@/components/details/homebar.vue"),
   },
   data() {
     return {
-      records: [
-        {
-          date: '2023-04-01',
-          postImage: 'https://th.bing.com/th/id/OIP.WlMqmm2_N_4MzUoLE4BpwwHaEK?w=259&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7',
-          postName: '帖子1',
-          authorAvatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C._YFRagbOM8FbGUSUJy-m6QAAAA?w=189&h=189&c=7&r=0&o=5&dpr=2&pid=1.7',
-          authorName: '作者1',
-          id: 1,
-          autherId: 1
-        },
-        {
-          date: '2023-04-02',
-          postImage: 'https://th.bing.com/th/id/OIP.WlMqmm2_N_4MzUoLE4BpwwHaEK?w=259&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7',
-          postName: '帖子2',
-          authorAvatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C._YFRagbOM8FbGUSUJy-m6QAAAA?w=189&h=189&c=7&r=0&o=5&dpr=2&pid=1.7',
-          authorName: '作者2',
-          id: 2,
-          autherId: 2
-        },
-        {
-          date: '2023-04-03',
-          postImage: 'https://th.bing.com/th/id/OIP.WlMqmm2_N_4MzUoLE4BpwwHaEK?w=259&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7',
-          postName: '帖子3',
-          authorAvatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C._YFRagbOM8FbGUSUJy-m6QAAAA?w=189&h=189&c=7&r=0&o=5&dpr=2&pid=1.7',
-          authorName: '作者3',
-          id: 3,
-          autherId: 3
-        }
-        // 更多记录...
-      ]
+      records: [],
     };
   },
+  created() {
+    // 页面创建时获取用户的浏览记录数据
+    this.getBrowseRecords();
+  },
   methods: {
-
-  }
+    getBrowseRecords() {
+      const userId = 1100; // 获取用户ID，你需要替换为实际的获取用户ID的方法
+      const apiUrl = `/people/GetBrowseList/?id=${userId}`; // 接口URL
+      httpInstance.get(apiUrl)
+          .then(response => {
+            this.records = [];
+            console.log(response);
+            response.forEach(record => {
+              this.records.push({
+                date: record.browse_time,
+                postImage: record.post.picture,
+                postName: record.post.post_title,
+                authorAvatar: record.post.user.profile.img_url,
+                authorName: record.post.user.user_nickName,
+                id: record.post.post_id,
+                autherId: record.post.user.user_id
+              });
+            });
+            console.log('Browse records:', this.records)
+          })
+          .catch(error => {
+            console.error('Error fetching browse records:', error);
+          });
+    },
+  },
 };
 </script>
+
 
 <style scoped>
 .link-no-underline {

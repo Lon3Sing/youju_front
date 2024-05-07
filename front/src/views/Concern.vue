@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import httpInstance from "@/utils/axios";
 export default {
   name: "Concern",
   components: {
@@ -52,34 +53,48 @@ export default {
   data() {
     return {
       users : [
-        {
-          id : 1,
-          profile: "https://ts1.cn.mm.bing.net/th/id/R-C.9e738cb49c8cbd8799b2c2f9096c2c2c?rik=CiZ5Nq1wInwFhg&riu=http%3a%2f%2fwww.gx8899.com%2fuploads%2fallimg%2f2017111809%2ftg3ucqfmja1.jpg&ehk=lpvc%2f7U2jFfmfVnrtvGFF2NANcsrExtBKkKv6wjQy7I%3d&risl=&pid=ImgRaw&r=0",
-          nickname: "关注用户1",
-          Introduction: "这位是我的第一个关注",
-          follow : true,
-        },
-        {
-          id : 2,
-          profile: "https://p.qqan.com/up/2021-7/16255338477653013.jpg",
-          nickname: "关注用户2",
-          Introduction: "这位是我的第二个关注",
-          follow : true,
-        },
       ]
     };
   },
+  mounted() {
+    // 页面加载时获取用户的关注列表数据
+    this.getConcerns();
+  },
   methods: {
-    goToEdit(postId) {
-      // 根据帖子ID跳转到编辑页面的逻辑
-      console.log('跳转到帖子编辑页面，帖子ID:', postId);
-      // 例如: this.$router.push({ name: 'EditPost', params: { id: postId } });
+    toggleFollow(fan) {
+      // 发送关注/取消关注请求
+      const userId = 1100; // 获取用户id
+      const requestData = {
+        target_id: fan.id, // 被关注/取关的id
+        user_id: userId
+      };
+      // httpInstance.post('/typical/FollowOrCancel/', requestData)
+      httpInstance.post('/typical/FollowOrCancel/?target_id='+fan.id+'&user_id='+userId)
+          .then(() => {
+            // 切换关注状态
+            fan.follow = !fan.follow;
+            // 在此处可以根据操作结果更新UI或显示消息
+          })
+          .catch(error => {
+            console.error('Error toggling follow:', error);
+          });
     },
-    toggleFollow(user) {
-      // 这里可以添加发送请求到服务器的代码来更新关注状态
-      user.follow = !user.follow; // 切换关注状态
-      // 根据操作结果更新UI或显示消息
-    },
+    getConcerns() {
+      httpInstance.get('/people/GetConcernList/?id=1100')
+        .then(response => {
+          response.forEach(user => {
+            this.users.push({
+              id: user.user_id,
+              profile: user.profile.img_url,
+              nickname: user.user_nickName,
+              follow: true
+            });
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching concerns data:', error);
+        });
+    }
   },
 };
 </script>

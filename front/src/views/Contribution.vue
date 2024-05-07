@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import httpInstance from "@/utils/axios";
+
 export default {
   name: "Home",
   components: {
@@ -56,21 +58,34 @@ export default {
   data() {
     return {
       // 示例数据，你应该从后端获取这些数据
-      userPosts: [
-        { id: 1, title: '帖子1', image: 'https://th.bing.com/th/id/OIP.OhUOhPbzdELTIt6QY9fV0AHaEo?w=287&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7', status: '审核中' },
-        { id: 2, title: '帖子2', image: 'https://th.bing.com/th/id/OIP.OhUOhPbzdELTIt6QY9fV0AHaEo?w=287&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7', status: '已过审' },
-        { id: 3, title: '帖子3', image: 'https://th.bing.com/th/id/OIP.OhUOhPbzdELTIt6QY9fV0AHaEo?w=287&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7', status: '已过审' },
-        { id: 4, title: '帖子4', image: 'https://th.bing.com/th/id/OIP.OhUOhPbzdELTIt6QY9fV0AHaEo?w=287&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7', status: '审核中' },
-        { id: 5, title: '帖子5', image: 'https://th.bing.com/th/id/OIP.OhUOhPbzdELTIt6QY9fV0AHaEo?w=287&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7', status: '已过审' },
-        // 更多帖子...
-      ],
+      userPosts: [],
     };
+  },
+  mounted() {
+    // 页面加载时获取用户的帖子列表数据
+    this.getPosts();
   },
   methods: {
     goToEdit(postId) {
       // 根据帖子ID跳转到编辑页面的逻辑
       console.log('跳转到帖子编辑页面，帖子ID:', postId);
       // 例如: this.$router.push({ name: 'EditPost', params: { id: postId } });
+    },
+    getPosts() {
+      httpInstance.get('/people/ArticleManage/?id=1100')
+        .then(response => {
+          response.forEach(post => {
+            this.userPosts.push({
+              id: post.post_id,
+              title: post.post_title,
+              image: post.picture.img_url,
+              status: post.post_seccess ? '已过审' : '审核中'
+            });
+          });
+        })
+        .catch(error => {
+          console.error('获取用户帖子列表失败:', error);
+        });
     },
   },
 };
