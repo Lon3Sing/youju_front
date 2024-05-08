@@ -3,7 +3,8 @@ import router from '@/router/index';
 // import store from '@/store'; // 假设你有 Vuex 存储状态
 
 const httpInstance = axios.create({
-    baseURL: 'http://114.116.197.62:80/api/',
+    // baseURL: 'http://114.116.197.62:80/api/',
+    baseURL: 'http://127.0.0.1:8000/api/',
     headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
     }

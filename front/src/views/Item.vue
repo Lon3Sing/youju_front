@@ -6,7 +6,7 @@
           <div>
             <v-card flat color="transparent">
               <v-img
-                  src="https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0"
+                  :src="image"
                   :aspect-ratio="16 / 9"
                   gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
                   style="border-radius: 16px"
@@ -495,9 +495,19 @@ export default {
   },
   mounted() {
     console.log('Component is now mounted!');
-    httpInstance.get('/home/GetInfoByOrder/')
-        .then(response => {
-          console.log(response.data);
+    httpInstance.get('/forum/GetPostInfo/',{
+      params: {
+        post_id: this.$route.params.id
+      }
+    }).then(response => {
+          console.log(response);
+          this.title = response.post_title;
+          this.abstract = response.post_abstract;
+          this.image = response.picture.img_url;
+          this.time = response.post_time;
+          this.content = response.post_content;
+          this.likesCount = response.post_like;
+
         })
         .catch(error => {
           console.log(error);

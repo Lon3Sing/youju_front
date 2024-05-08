@@ -212,12 +212,6 @@ export default {
           author: "机核网 ",
           post_id:1,
         } ,
-        {
-          title: "原神为什么能够问鼎世界",
-          img_url:  "https://webstatic.mihoyo.com/upload/static-resource/2021/11/08/02959a0f179436853c244dfc8b88e4e4_5824090375749016325.jpg",
-          author:  "甘雨",
-          post_id:2
-        }
       ],
     };
   },
