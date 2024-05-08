@@ -73,7 +73,6 @@
 
 <script>
 import httpInstance from "@/utils/axios";
-import {config} from "yarn/lib/cli";
 
 export default {
   components: {
@@ -94,7 +93,7 @@ export default {
   mounted() {
     httpInstance.get('/people/MyInfoPage/', {
           params: {
-            user_id: 1080,
+            user_id: 1180,
             //将来要改为根据用户cookie，现在写死了用户id
           }
         }
@@ -127,8 +126,10 @@ export default {
       alert("信息已保存!");
       // 创建 FormData 对象并添加图像文件
       const formData = new FormData();
-      formData.append('profile', this.file,"aaaa")
-      formData.append('user_id', 1080)
+      if (this.file != null) {
+         formData.append('profile', this.file,)
+      }
+      formData.append('user_id', 1180)
       formData.append('user_nickname',this.profile.nickname)
       formData.append('email',this.profile.email)
       formData.append('user_info',this.profile.bio)
