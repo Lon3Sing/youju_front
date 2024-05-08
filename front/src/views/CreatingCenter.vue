@@ -1,30 +1,53 @@
 <template>
   <div id="app">
-    <vue-editor
-        useCustomImageHandler
-        @image-added="handleImageAdded"
-        v-model="content"
-        :editorToolbar="customToolbar"
-    ></vue-editor>
+    <!-- 封面上传区域 -->
     <v-file-input
         v-model="coverage"
         label="点击上传封面"
         accept="image/*"
     ></v-file-input>
+    <!-- 标题编辑区域 -->
+    <v-text-field
+        v-model="articleTitle"
+        label="编辑文章标题"
+        solo
+        placeholder="请输入文章标题"
+        class="mb-3"
+    ></v-text-field>
+    <!-- 摘要编辑区域 -->
+    <v-textarea
+        v-model="articleAbstract"
+        label="编辑文章摘要"
+        solo
+        placeholder="请输入文章摘要"
+        class="mb-3"
+        rows="3"
+        no-resize
+    ></v-textarea>
+    <vue-editor
+        useCustomImageHandler
+        @image-added="handleImageAdded"
+        v-model="content"
+        label="编辑文章摘要"
+        :editorToolbar="customToolbar"
+    ></vue-editor>
+    <p></p>
+    <v-divider></v-divider>
+    <p></p>
     <!-- firstLevelTag:选择是[帖子]还是[资讯] -->
     <v-select
         v-model="firstLevelTag"
         :items="tagOptions"
-        label="选择文章标签"
+        label="选择发布类型"
         solo
         outlined
         @change="openDialog"
     ></v-select>
-    <v-dialog v-model="dialog" persistent max-width="1000px">
+    <v-dialog v-model="dialog" persistent width="100%" max-width="800px">
       <v-card>
         <v-card-title class="d-flex justify-space-between align-center">
           <span>选择标签</span>
-          <v-btn icon @click="dialog = false">
+          <v-btn icon @click="closeWithoutSaving">
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-card-title>
@@ -41,7 +64,7 @@
               {{ tag }}
             </v-chip>
             <v-chip
-                v-for="tag in selectedPredefinedTags"
+                v-for="tag in selectedPreDefinedTags"
                 :key="tag"
                 class="ma-1"
                 color="blue"
@@ -53,68 +76,81 @@
           <v-divider></v-divider>
           <div class="my-2">
             <span class="subtitle-1">游戏名标签:</span>
-            <v-chip-group
-                v-model="selectedGameNameTags"
-                multiple
-                class="chip-group-wrap"
+            <v-chip
+                v-for="tag in gameNameTags"
+                :key="tag.name"
+                :value="tag.name"
+                :color="tag.selected ? 'blue' : 'grey'"
+                class="ma-1"
+                @click="toggleGameNameTag(tag)"
+                text-color="white"
             >
-              <v-chip
-                  v-for="tag in gameNameTags"
-                  :key="tag.name"
-                  :value="tag.name"
-                  :color="tag.selected ? 'blue' : 'grey'"
-                  class="ma-1"
-                  @click="toggleGameNameTag(tag)"
-                  text-color="white"
-              >
-                {{ tag.name }}
-              </v-chip>
-            </v-chip-group>
+              {{ tag.name }}
+            </v-chip>
           </div>
           <v-divider></v-divider>
           <div class="my-2">
             <span class="subtitle-1">固定的标签1:</span>
-            <v-chip-group
-                v-model="selectedPredefinedTags"
-                multiple
-                class="chip-group-wrap"
+            <!--            <v-chip-group-->
+            <!--                v-model="selectedPredefinedTags"-->
+            <!--                multiple-->
+            <!--            >-->
+            <v-chip
+                v-for="tag in preDefinedTags"
+                :key="tag.name"
+                :value="tag.name"
+                :color="tag.selected ? 'blue' : 'grey'"
+                class="ma-1"
+                @click="togglePredefinedTag(tag)"
+                text-color="white"
             >
-              <v-chip
-                  v-for="tag in predefinedTags"
-                  :key="tag.name"
-                  :value="tag.name"
-                  :color="tag.selected ? 'blue' : 'grey'"
-                  class="ma-1"
-                  @click="togglePredefinedTag(tag)"
-                  text-color="white"
-              >
-                {{ tag.name }}
-              </v-chip>
-            </v-chip-group>
+              {{ tag.name }}
+            </v-chip>
+            <!--            </v-chip-group>-->
           </div>
+          <v-divider></v-divider>
+          <div>
+            <span class="subtitle-1">已添加的自定义标签:</span>
+            <v-chip
+                v-for="tag in selectedSelfDefinedTags"
+                :key="tag"
+                class="ma-1"
+                color="purple"
+                text-color="white"
+                @click="removeSelfDefinedTag(tag)"
+            >
+              {{ tag }}
+            </v-chip>
+          </div>
+          <div class="my-2">
+            <v-text-field
+                v-model="newTag"
+                label="添加自定义标签"
+                solo
+                dense
+                hide-details
+                append-icon="mdi-plus"
+                @click:append="addSelfDefinedTag"
+                @keyup.enter="addSelfDefinedTag"
+            ></v-text-field>
+          </div>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text @click="dialog = false">确认添加</v-btn>
+          </v-card-actions>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="dialog = false">确认</v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
-    <div v-if="firstLevelTag === '帖子'" class="d-flex align-center">
-
-    </div>
-    <div v-if="firstLevelTag === '资讯'" class="d-flex align-center">
-      <v-icon dark>mdi-feather</v-icon>
-    </div>
 
     <v-btn @click="handleArticleUpload">提交文章</v-btn>
     <div>{{ content }}</div>
+    <div>{{ selectedGameNameTags }}{{ selectedPreDefinedTags }}{{ selectedSelfDefinedTags }}</div>
   </div>
 </template>
 
 <script>
 import {VueEditor} from "vue2-editor";
-import axios from "axios";
-import {postArticle} from "@/api/api";
 import httpInstance from "@/utils/axios";
 
 export default {
@@ -124,7 +160,9 @@ export default {
 
   data: () => ({
     dialog: false,
-    content: "<h1>此处编辑文章内容</h1>",
+    content: "<h1></h1>",
+    articleTitle: '',  // 文章标题
+    articleAbstract: '',  // 文章摘要
     customToolbar: [
       ['bold', 'italic', 'underline', 'strike'], //加粗，斜体，下划线，删除线
       ['blockquote', 'code-block'], //引用，代码块
@@ -144,7 +182,7 @@ export default {
     ],
     coverage: null,
     firstLevelTag: null,  // Tag selected by the user
-    tagOptions: ['资讯', '帖子'],  // Initial options for tags
+    tagOptions: ['发布资讯', '发布帖子'],  // Initial options for tags
     gameNameTags: [
       {name: '艾尔登法环', selected: false},
       {name: '马里奥', selected: false},
@@ -189,7 +227,7 @@ export default {
       {name: '巫师', selected: false},
 
     ],
-    predefinedTags: [
+    preDefinedTags: [
       {name: 'PS4', selected: false},
       {name: 'PS5', selected: false},
       {name: 'Xbox', selected: false},
@@ -199,15 +237,18 @@ export default {
 
     ],
     selectedGameNameTags: [],
-    selectedPredefinedTags: [],
+    selectedPreDefinedTags: [],
+    newTag: '',  // 新标签输入
+    selectedSelfDefinedTags: [],  // 已添加的自定义标签
   }),
 
   methods: {
     handleImageAdded(file, Editor, cursorLocation, resetUploader) {
+      //TODO 上传回显图片
       let formData = new FormData()
       formData.append('file', file)
       httpInstance.post(
-          `http://localhost:8000/api/article/`,
+          `http://localhost:8000/api/xxx`,
           formData
       ).then(response => {
         //这两行是关键代码了。在鼠标位置插入图片，数据存的是url
@@ -220,22 +261,30 @@ export default {
           })
     },
     handleArticleUpload() {
-      let cover = new FormData()
-      let coverUrl = null;
-      cover.append('picture', this.coverage)
+      //TODO 上传文章
+      let formData = new FormData()
+      formData.append('picture', this.coverage);
+      //TODO 未解决superuser添加标签的情况
+      formData.append('PostTypeTag', this.firstLevelTag);
+      this.selectedGameNameTags.forEach(tag => {
+        formData.append('GameNameTag', tag);
+      });
+      this.selectedPreDefinedTags.forEach(tag => {
+        formData.append('PreDefinedTag', tag);
+      });
+      this.selectedSelfDefinedTags.forEach(tag => {
+        formData.append('SelfDefinedTag', tag);
+      });
+      formData.append('post_title', this.articleTitle);
+      formData.append('post_abstract', this.articleAbstract);
+      formData.append('post_content', this.content);
       httpInstance.post(
-          `http://localhost:8000/api/xxx`,
-          cover
-      ).then(response => {
-        console.log(response)
-        coverUrl = response.data;
-      }) //上传封面
-
-      httpInstance.post(
-          `http://localhost:8000/api/xxx`,
+          `/forum/AssignOrEditPost/`,
+          formData,
           {
-            cover: coverUrl,
-            content: this.content,
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
           }
       ).then(response => {
         console.log(response)
@@ -246,27 +295,43 @@ export default {
         this.dialog = true;
       }
     },
-    toggleGameNameTag(tag) { //点击标签的逻辑
-      tag.selected = !tag.selected;  // Toggle the 'selected' property
-      this.selectedGameNameTags = this.tags.filter(t => t.selected).map(t => t.name);
+    closeWithoutSaving() {
+      this.dialog = false;
+      this.firstLevelTag = null;
+      this.selectedGameNameTags = [];
+      this.selectedPreDefinedTags = [];
+      this.selectedSelfDefinedTags = [];
+    },
+    toggleGameNameTag(tag) {
+      // 如果当前标签已被选中，则取消选择
+      if (tag.selected) {
+        tag.selected = false;
+        this.selectedGameNameTags = [];
+      } else {
+        // 取消所有标签的选中状态
+        this.gameNameTags.forEach(t => {
+          t.selected = false;
+        });
+        // 选中当前标签
+        tag.selected = true;
+        // 更新selectedGameNameTags数组
+        this.selectedGameNameTags = [tag.name];
+      }
     },
     togglePredefinedTag(tag) { //点击标签的逻辑
       tag.selected = !tag.selected;  // Toggle the 'selected' property
-      this.selectedGameNameTags = this.tags.filter(t => t.selected).map(t => t.name);
+      this.selectedPreDefinedTags = this.preDefinedTags.filter(t => t.selected).map(t => t.name);
+    },
+    addSelfDefinedTag() {
+      if (this.newTag.trim() !== '' && !this.selectedSelfDefinedTags.includes(this.newTag.trim())) {
+        this.selectedSelfDefinedTags.push(this.newTag.trim());
+        this.newTag = '';  // 清空输入框
+      }
+    },
+    removeSelfDefinedTag(tag) {
+      this.selectedSelfDefinedTags = this.selectedSelfDefinedTags.filter(t => t !== tag);
     }
   }
 };
 
 </script>
-
-<style scoped>
-.chip-group-wrap .v-chip-group {
-  flex-wrap: wrap !important; /* 强制换行 */
-  overflow: hidden !important; /* 防止滚动条出现 */
-  width: 100%; /* 确保占满可用宽度 */
-}
-
-.chip-group-wrap .v-chip {
-  margin: 4px !important; /* 确保标签之间有间隔 */
-}
-</style>
