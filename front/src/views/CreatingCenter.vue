@@ -36,7 +36,7 @@
     <p></p>
     <!-- firstLevelTag:选择是[帖子]还是[资讯] -->
     <v-select
-        v-model="firstLevelTag"
+        v-model="postTypeTag"
         :items="tagOptions"
         label="选择发布类型"
         solo
@@ -137,9 +137,20 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text @click="dialog = false">确认添加</v-btn>
+            <v-btn color="green darken-1" text @click="ensureAddTags">确认添加</v-btn>
           </v-card-actions>
         </v-card-text>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="alertNoGameTag" persistent max-width="300px">
+      <v-card>
+        <v-card-title class="text-h5">提示</v-card-title>
+        <v-card-text>选择“资讯”或“攻略”时必须选择一个游戏名标签。</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="alertNoGameTag = false">关闭</v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
 
@@ -160,6 +171,7 @@ export default {
 
   data: () => ({
     dialog: false,
+    alertNoGameTag : false,
     content: "<h1></h1>",
     articleTitle: '',  // 文章标题
     articleAbstract: '',  // 文章摘要
@@ -181,8 +193,8 @@ export default {
       // ['video'] // 上传视频
     ],
     coverage: null,
-    firstLevelTag: null,  // Tag selected by the user
-    tagOptions: ['发布资讯', '发布帖子'],  // Initial options for tags
+    postTypeTag: null,  // Tag selected by the user
+    tagOptions: ['资讯', '帖子', '新闻', '攻略'],  // Initial options for tags
     gameNameTags: [
       {name: '艾尔登法环', selected: false},
       {name: '马里奥', selected: false},
@@ -265,7 +277,7 @@ export default {
       let formData = new FormData()
       formData.append('picture', this.coverage);
       //TODO 未解决superuser添加标签的情况
-      formData.append('PostTypeTag', this.firstLevelTag);
+      formData.append('PostTypeTag', this.postTypeTag);
       this.selectedGameNameTags.forEach(tag => {
         formData.append('GameNameTag', tag);
       });
@@ -278,6 +290,11 @@ export default {
       formData.append('post_title', this.articleTitle);
       formData.append('post_abstract', this.articleAbstract);
       formData.append('post_content', this.content);
+      if(this.postTypeTag === '帖子') {
+        formData.append('post_type', 0);
+      } else { //发布文章的类型是资讯、新闻或攻略
+        formData.append('post_type', 1);
+      }
       httpInstance.post(
           `/forum/AssignOrEditPost/`,
           formData,
@@ -291,16 +308,25 @@ export default {
       }) //上传文章
     },
     openDialog() { //点开标签选择窗口的逻辑
-      if (this.firstLevelTag) {
+      if (this.postTypeTag) {
         this.dialog = true;
       }
     },
     closeWithoutSaving() {
       this.dialog = false;
-      this.firstLevelTag = null;
+      this.postTypeTag = null;
       this.selectedGameNameTags = [];
       this.selectedPreDefinedTags = [];
       this.selectedSelfDefinedTags = [];
+    },
+    ensureAddTags() {
+      if (this.postTypeTag === '资讯' || this.postTypeTag === '攻略') {
+        if (this.selectedGameNameTags.length === 0) {
+          this.alertNoGameTag = true;
+          return;
+        }
+      }
+      this.dialog = false;
     },
     toggleGameNameTag(tag) {
       // 如果当前标签已被选中，则取消选择
