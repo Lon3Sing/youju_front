@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="2">
-      <home_bar />
+      <home_bar/>
     </v-col>
     <v-col cols="10">
       <v-container>
@@ -9,7 +9,6 @@
           <v-row align="center" justify="center">
             <v-avatar size="120" class="mb-4">
               <v-img :src="profile.avatar" aspect-ratio="1"></v-img>
-
             </v-avatar>
             <input type="file" ref="avatarInput" hidden @change="previewAvatar" accept="image/*">
             <v-btn icon color="primary" @click="changeAvatar" class="ma-2 white--text">
@@ -87,32 +86,37 @@ export default {
         nickname: '用户名',
         bio: '这里是个人简介..\nsjjsjsajas..',
         email: '1092199590@qq.com'
-      }
+      },
+      file: ''
     };
   },
   mounted() {
-     httpInstance.get('/typical/GetProfile/', {
-           params: {
-             user_id: 1080
-           }
-         }
-        )
-         .then(response => {
-           console.log(response.img_url);
-           this.profile.avatar = response.img_url
-         })
-         .catch(error => {
-           console.log(error);
-         });
-    },
+    httpInstance.get('/people/MyInfoPage/', {
+          params: {
+            user_id: 1180,
+            //将来要改为根据用户cookie，现在写死了用户id
+          }
+        }
+    )
+        .then(response => {
+          console.log(response.img_url);
+          this.profile.avatar = response.profile.img_url
+          this.profile.nickname = response.user_nickName
+          this.profile.email = response.email
+          this.profile.bio = response.user_info
+        })
+        .catch(error => {
+          console.log(error);
+        });
+  },
   methods: {
     changeAvatar() {
       this.$refs.avatarInput.click();
     },
     previewAvatar(event) {
-      const file = event.target.files[0];
-      if (file) {
-        this.profile.avatar = URL.createObjectURL(file);
+      this.file = event.target.files[0];
+      if (this.file) {
+        this.profile.avatar = URL.createObjectURL(this.file);
       }
     },
     saveProfile() {
@@ -120,6 +124,23 @@ export default {
       // 在这里添加与后端交互的逻辑
       this.editMode = false;
       alert("信息已保存!");
+      // 创建 FormData 对象并添加图像文件
+      const formData = new FormData();
+      if (this.file != null) {
+         formData.append('profile', this.file,)
+      }
+      formData.append('user_id', 1180)
+      formData.append('user_nickname',this.profile.nickname)
+      formData.append('email',this.profile.email)
+      formData.append('user_info',this.profile.bio)
+      for (let [key, value] of formData.entries()) { console.log(`${key}: ${value}`); }
+      httpInstance.post('/people/EditPersonalInfo/',formData)
+          .then(response => {
+            console.log(response.data)
+          })
+          .catch(error => {
+            console.log(error);
+          });
     }
   }
 };

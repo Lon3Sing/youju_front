@@ -327,7 +327,7 @@
       </v-col>
 
       <v-col>
-        <div>
+        <div class="pt-16" style="position:sticky; top:0;">
           <re_bar :related_posts="related_posts"/>
         </div>
       </v-col>
@@ -336,6 +336,8 @@
 </template>
 
 <script>
+import httpInstance from "@/utils/axios";
+
 export default {
   name: "ItemPage",
   components: {
@@ -384,7 +386,7 @@ export default {
                     <v-col cols="6">
                       <v-card>
                         <v-img
-                          src="https://cdn.pixabay.com/photo/2015/03/26/09/47/sky-690293_1280.jpg"
+                          src="https://th.bing.com/th/id/R.208cf4ebcad01f1716c41f15cafedbba?rik=2p4aXm7g7Oaihw&riu=http%3a%2f%2fi1.073img.com%2f220224%2f17598537_110535_1.jpg&ehk=0RsAEwIBcl8eTiXkvzpcFalefO2k4bAIsf3CJrquvww%3d&risl=&pid=ImgRaw&r=0"
                           :aspect-ratio="16 / 9"
                           gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
                         ></v-img>
@@ -394,7 +396,7 @@ export default {
                     <v-col cols="6">
                       <v-card>
                         <v-img
-                          src="https://cdn.pixabay.com/photo/2019/11/01/11/08/landscape-4593909_1280.jpg"
+                          src="https://th.bing.com/th/id/R.208cf4ebcad01f1716c41f15cafedbba?rik=2p4aXm7g7Oaihw&riu=http%3a%2f%2fi1.073img.com%2f220224%2f17598537_110535_1.jpg&ehk=0RsAEwIBcl8eTiXkvzpcFalefO2k4bAIsf3CJrquvww%3d&risl=&pid=ImgRaw&r=0"
                           :aspect-ratio="16 / 9"
                           gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
                         ></v-img>
@@ -429,6 +431,7 @@ export default {
                       porttitor.
                     </p>
                   </div>
+                  <img src="https://youju-1316987049.cos.ap-beijing.myqcloud.com/20240507143459065-f1bea4157c5d4914c62524bd73d97c7b01613389.jpg">
                 </div>
                     `,
       related_posts: [
@@ -489,6 +492,16 @@ export default {
         }
       ] // 假设这是从API加载的评论列表
     }
+  },
+  mounted() {
+    console.log('Component is now mounted!');
+    httpInstance.get('/home/GetInfoByOrder/')
+        .then(response => {
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
   },
   methods: {
     linkify(commentText, userId) {
@@ -575,11 +588,6 @@ export default {
       // 逻辑类似于submitReply，但你可能需要调整以适应你的数据结构
     },
   },
-  mounted() {
-    const itemId = this.$route.params.id;
-    console.log(itemId);
-    // 使用itemId来获取数据或执行其他操作
-  }
 };
 </script>
 

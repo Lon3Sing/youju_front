@@ -3,9 +3,9 @@
     <div>
       <v-card>
         <v-carousel cycle>
-        <v-carousel-item v-for="(item, i) in items"
+        <v-carousel-item v-for="(item, i) in carousel_items"
                          :key="i"
-                         @click.native="goToDetailPage(item.detail)"
+                         @click.native="goToDetailPage(item.post_id)"
                          style="cursor: pointer"
         >
           <v-img
@@ -13,7 +13,7 @@
             dark
             gradient="to top, rgba(25,32,72,.7), rgba(25,32,72,.0)"
             height="500px"
-            :src= "item.src"
+            :src= "item.img_url"
         >
           <v-card-text class="fill-height d-flex align-end">
             <v-row class="flex-column">
@@ -21,8 +21,8 @@
 <!--                <v-btn color="accent" to="category">Travel</v-btn>-->
 <!--              </v-col>-->
               <v-col cols="12" lg="8" md="10" xl="7">
-                <h2 class="text-h3 py-3" style="line-height: 1.2">
-                  {{item.text}}
+                <h2 class="text-h4 py-3" style="line-height: 1.2">
+                  {{item.title}}
                 </h2>
               </v-col>
               <v-col class="d-flex align-center">
@@ -30,7 +30,7 @@
 <!--&lt;!&ndash;                  <v-icon large>mdi-feather</v-icon>&ndash;&gt;-->
 <!--                </v-avatar>-->
 
-                <div class="text-h6 pl-2">{{item.source}}</div>
+                <div class="text-h6 pl-2">{{item.author}}</div>
               </v-col>
             </v-row>
           </v-card-text>
@@ -205,18 +205,18 @@ export default {
   },
   data () {
     return {
-      items : [
+      carousel_items: [
         {
-          text: "【只狼：影逝二度】苇茗一心打法分析",
-          src: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0",
-          source: "机核网 · 22 July 2019",
-          detail:"/item/1"
+          title: "【只狼：影逝二度】苇茗一心打法分析",
+          img_url: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0",
+          author: "机核网 ",
+          post_id:1,
         } ,
         {
-          text: "原神为什么能够问鼎世界",
-          src: "https://webstatic.mihoyo.com/upload/static-resource/2021/11/08/02959a0f179436853c244dfc8b88e4e4_5824090375749016325.jpg",
-          source: "甘雨 · 18 Apr 2024",
-          detail:"/item/2"
+          title: "原神为什么能够问鼎世界",
+          img_url:  "https://webstatic.mihoyo.com/upload/static-resource/2021/11/08/02959a0f179436853c244dfc8b88e4e4_5824090375749016325.jpg",
+          author:  "甘雨",
+          post_id:2
         }
       ],
     };
@@ -226,7 +226,16 @@ export default {
     console.log('Component is now mounted!');
     httpInstance.get('/home/GetInfoByOrder/')
         .then(response => {
-          console.log(response.data);
+          console.log(response);
+          this.carousel_items=response.map(
+              post => ({
+                img_url: post.picture.img_url,
+                post_id: post.post_id,
+                title: post.post_title,
+                author: post.user.user_nickName,
+              })
+          )
+          console.log(this.carousel_items)
         })
         .catch(error => {
           console.log(error);
@@ -235,6 +244,7 @@ export default {
   methods: {
     goToDetailPage(routePath) {
       // 使用编程式导航跳转到对应页面
+      routePath = "/item/"+routePath
       this.$router.push(routePath);
     }
   }

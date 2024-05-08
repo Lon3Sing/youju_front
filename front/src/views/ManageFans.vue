@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import httpInstance from "@/utils/axios";
 export default {
   name: "Home",
   components: {
@@ -51,66 +52,51 @@ export default {
   },
   data() {
     return {
-      // 示例数据，你应该从后端获取这些数据
-      fans: [{
-        id: 1,
-        name: 'User 1',
-        avatar: 'https://cdn.pixabay.com/photo/2021/01/30/20/04/sheltie-5965187_1280.jpg',
-        introduction: 'Ultrices sagittis orci a scelerisque. Massa placerat duis ultricies lacus sed turpis tincidunt id.',
-        fansCount: 100,
-        isFollowed: false,
-      }, {
-        id: 2,
-        name: 'User 2',
-        avatar: 'https://cdn.pixabay.com/photo/2021/01/30/20/04/sheltie-5965187_1280.jpg',
-        introduction: 'Ultrices sagittis orci a scelerisque. Massa placerat duis ultricies lacus sed turpis tincidunt id.',
-        fansCount: 200,
-        isFollowed: false,
-      }, {
-        id: 3,
-        name: 'User 3',
-        avatar: 'https://cdn.pixabay.com/photo/2021/01/30/20/04/sheltie-5965187_1280.jpg',
-        introduction: 'Ultrices sagittis orci a scelerisque. Massa placerat duis ultricies lacus sed turpis tincidunt id.',
-        fansCount: 300,
-        isFollowed: false,
-      }, {
-        id: 4,
-        name: 'User 4',
-        avatar: 'https://cdn.pixabay.com/photo/2021/01/30/20/04/sheltie-5965187_1280.jpg',
-        introduction: 'Ultrices sagittis orci a scelerisque. Massa placerat duis ultricies lacus sed turpis tincidunt id.',
-        fansCount: 400,
-        isFollowed: false,
-      }, {
-        id: 5,
-        name: 'User 5',
-        avatar: 'https://cdn.pixabay.com/photo/2021/01/30/20/04/sheltie-5965187_1280.jpg',
-        introduction: 'Ultrices sagittis orci a scelerisque. Massa placerat duis ultricies lacus sed turpis tincidunt id.',
-        fansCount: 500,
-        isFollowed: true,
-      }, {
-        id: 6,
-        name: 'User 6',
-        avatar: 'https://cdn.pixabay.com/photo/2021/01/30/20/04/sheltie-5965187_1280.jpg',
-        introduction: 'Ultrices sagittis orci a scelerisque. Massa placerat duis ultricies lacus sed turpis tincidunt id.',
-        fansCount: 600,
-        isFollowed: false,
-      }],
+      fans: [], // 初始化为空，等待数据加载
     };
   },
+  mounted() {
+    // 页面加载时获取用户的粉丝列表数据
+    this.getFansData();
+  },
   methods: {
-    toggleFollow(follow) {
-      // 这里可以添加发送请求到服务器的代码来更新关注状态
-      follow.isFollowed = !follow.isFollowed; // 切换关注状态
-      // 根据操作结果更新UI或显示消息
+    getFansData() {
+      // 发送请求获取用户的粉丝列表数据
+      const userId = 1100; // 你需要获取用户的id，这里假设有一个函数可以获取用户id
+      const apiUrl = `http://114.116.197.62/api/people/FansManager/?id=${userId}`;
+      fetch(apiUrl)
+          .then(response => response.json())
+          .then(data => {
+            this.fans = data.map(item => ({
+              id: item.user_id,
+              name: item.user_nickName,
+              avatar: item.img_url,
+              isFollowed: false // 假设初始状态都未关注
+            }));
+          })
+          .catch(error => {
+            console.error('Error fetching fans data:', error);
+          });
+    },
+    toggleFollow(fan) {
+      // 发送关注/取消关注请求
+      const userId = 1100; // 获取用户id
+      const requestData = {
+          target_id: fan.id, // 被关注/取关的id
+          user_id: userId
+      };
+      // httpInstance.post('/typical/FollowOrCancel/', requestData)
+      httpInstance.post('/typical/FollowOrCancel/?target_id='+fan.id+'&user_id='+userId)
+          .then(() => {
+            // 切换关注状态
+            fan.isFollowed = !fan.isFollowed;
+            // 在此处可以根据操作结果更新UI或显示消息
+          })
+          .catch(error => {
+            console.error('Error toggling follow:', error);
+          });
     },
   },
 };
 </script>
 
-<style scoped>
-/* 你可以在这里添加样式 */
-.d-flex.justify-end {
-  justify-content: flex-end; /* 保证按钮靠右对齐 */
-}
-
-</style>

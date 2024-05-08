@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import httpInstance from "@/utils/axios";
 export default {
   name: "IM",
   components: {
@@ -43,81 +44,12 @@ export default {
     return {
       // 示例数据，你应该从后端获取这些数据
       replys: [
-        {
-          nickname : "测试回复用户1" + "  ",
-          profile : "https://th.bing.com/th/id/OIP.OhUOhPbzdELTIt6QY9fV0AHaEo?w=287&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7",
-          user_id: 1,
-          title: "测试帖子1",
-          time : "2024.1.1",
-          post_url : "/item/1",
-          content : "我是个原神玩家",
-        },
-        {
-          nickname : "测试回复用户2" + "  ",
-          profile : "https://th.bing.com/th/id/OIP.OhUOhPbzdELTIt6QY9fV0AHaEo?w=287&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7",
-          user_id: 2,
-          title: "测试帖子2",
-          time : "2024.1.2",
-          post_url : "/item/2",
-          content : "我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家",
-        },
-          {
-          nickname : "测试回复用户1" + "  ",
-          profile : "https://th.bing.com/th/id/OIP.OhUOhPbzdELTIt6QY9fV0AHaEo?w=287&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7",
-          user_id: 1,
-          title: "测试帖子1",
-          time : "2024.1.1",
-          post_url : "/item/1",
-          content : "我是个原神玩家",
-        },
-        {
-          nickname : "测试回复用户2" + "  ",
-          profile : "https://th.bing.com/th/id/OIP.OhUOhPbzdELTIt6QY9fV0AHaEo?w=287&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7",
-          user_id: 2,
-          title: "测试帖子2",
-          time : "2024.1.2",
-          post_url : "/item/2",
-          content : "我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家",
-        },
-          {
-          nickname : "测试回复用户1" + "  ",
-          profile : "https://th.bing.com/th/id/OIP.OhUOhPbzdELTIt6QY9fV0AHaEo?w=287&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7",
-          user_id: 1,
-          title: "测试帖子1",
-          time : "2024.1.1",
-          post_url : "/item/1",
-          content : "我是个原神玩家",
-        },
-        {
-          nickname : "测试回复用户2" + "  ",
-          profile : "https://th.bing.com/th/id/OIP.OhUOhPbzdELTIt6QY9fV0AHaEo?w=287&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7",
-          user_id: 2,
-          title: "测试帖子2",
-          time : "2024.1.2",
-          post_url : "/item/2",
-          content : "我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家",
-        },
-          {
-          nickname : "测试回复用户1" + "  ",
-          profile : "https://th.bing.com/th/id/OIP.OhUOhPbzdELTIt6QY9fV0AHaEo?w=287&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7",
-          user_id: 1,
-          title: "测试帖子1",
-          time : "2024.1.1",
-          post_url : "/item/1",
-          content : "我是个原神玩家",
-        },
-        {
-          nickname : "测试回复用户2" + "  ",
-          profile : "https://th.bing.com/th/id/OIP.OhUOhPbzdELTIt6QY9fV0AHaEo?w=287&h=180&c=7&r=0&o=5&dpr=2.2&pid=1.7",
-          user_id: 2,
-          title: "测试帖子2",
-          time : "2024.1.2",
-          post_url : "/item/2",
-          content : "我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家我是个原神玩家",
-        },
-        // 更多帖子...
       ],
     };
+  },
+  mounted() {
+    // 页面加载时获取用户的帖子列表数据
+    this.getReplys();
   },
   methods: {
     goToEdit(postId) {
@@ -125,6 +57,26 @@ export default {
       console.log('跳转到帖子编辑页面，帖子ID:', postId);
       // 例如: this.$router.push({ name: 'EditPost', params: { id: postId } });
     },
+    getReplys() {
+      httpInstance.get('/people/InteractionManage/?id=1020')
+        .then(response => {
+          response.forEach(reply => {
+            this.replys.push({
+              nickname : reply.user.user_nickName,
+              profile : reply.user.profile.img_url,
+              user_id: reply.user.user_id,
+              title: reply.post_title,
+              time : reply.comment_time,
+              post_url : "/item/"+reply.post.post_id,
+              content :reply.content
+            });
+          });
+        })
+        .catch(error => {
+          console.error('获取用户帖子列表失败:', error);
+        });
+    },
+
   },
 };
 </script>

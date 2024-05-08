@@ -66,6 +66,7 @@
 </template>
 
 <script>
+import httpInstance from "@/utils/axios";
 export default {
   components: {
     home_bar: () => import("@/components/details/homebar.vue"),
@@ -74,23 +75,6 @@ export default {
     return {
       search: '',
       favorites: [
-        {
-          id: 1,
-          postImage: 'https://media.9game.cn/gamebase/ieu-gdc-pre-process/images/20230306/15/31/09afaac946b53598d3c6631aae42da7d.jpg',
-          postName: '塞尔达传说·王国之泪为什么是神',
-          authorAvatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C._YFRagbOM8FbGUSUJy-m6QAAAA?w=189&h=189&c=7&r=0&o=5&dpr=2&pid=1.7',
-          authorName: '原批头子',
-          date: '2023-04-01'
-        },
-        {
-          id: 2,
-          postImage: 'https://tse3-mm.cn.bing.net/th/id/OIP-C.0EJnAN-haHi8MRzuW2euNgHaEK?rs=1&pid=ImgDetMain',
-          postName: '博德之门为什么是塞尔达杀手',
-          authorAvatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C._YFRagbOM8FbGUSUJy-m6QAAAA?w=189&h=189&c=7&r=0&o=5&dpr=2&pid=1.7',
-          authorName: '我爱林克',
-          date: '2023-04-02'
-        },
-        // 更多收藏...
       ]
     };
   },
@@ -99,6 +83,30 @@ export default {
       return this.favorites.filter(item =>
           item.postName.toLowerCase().includes(this.search.toLowerCase())
       );
+    }
+  },
+  mounted() {
+    // 页面加载时获取用户的收藏列表数据
+    this.getCollect();
+  },
+  methods: {
+    getCollect() {
+      httpInstance.get('/home/GetInfoByOrder/')
+          .then(response => {
+            response.forEach(collect => {
+              this.favorites.push({
+                id: collect.post_id,
+                postImage: collect.picture,
+                postName: collect.post_title,
+                authorAvatar: collect.user.profile.img_url,
+                authorName: collect.user.user_nickName,
+                date: collect.post_time
+              });
+            });
+          })
+          .catch(error => {
+            console.log(error);
+          });
     }
   }
 };
