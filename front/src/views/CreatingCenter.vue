@@ -290,6 +290,7 @@ export default {
       formData.append('post_title', this.articleTitle);
       formData.append('post_abstract', this.articleAbstract);
       formData.append('post_content', this.content);
+
       if(this.postTypeTag === '帖子') {
         formData.append('post_type', 0);
       } else { //发布文章的类型是资讯、新闻或攻略
