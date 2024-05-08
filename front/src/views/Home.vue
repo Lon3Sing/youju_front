@@ -44,8 +44,11 @@
       <v-col cols="12" lg="8" xl="8">
         <div>
           <div class="pt-16">
-            <h2 class="text-h4 font-weight-bold pb-4">新闻       攻略       资讯</h2>
-
+            <el-button-group class="mb-4">
+                <el-button :type="tag === '新闻' ? 'primary' : 'default'" @click="tag = '新闻'" text style="font-size: 20px;">新闻</el-button>
+                <el-button :type="tag === '攻略' ? 'primary' : 'default'" @click="tag = '攻略'" style="font-size: 20px;">攻略</el-button>
+                <el-button :type="tag === '咨询' ? 'primary' : 'default'" @click="tag = '咨询'" style="font-size: 20px;">咨询</el-button>
+            </el-button-group>
             <v-row>
               <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
                 <v-hover
@@ -70,7 +73,7 @@
                           style="border-radius: 16px"
                       >
                         <v-card-text>
-                          <v-btn color="accent" to="category">新闻</v-btn>
+                          <v-btn color="accent" to="category">{{tag}}</v-btn>
                         </v-card-text>
                       </v-img>
 
@@ -205,20 +208,29 @@ export default {
   },
   data () {
     return {
+      tag : "新闻",
       carousel_items: [
-        {
-          title: "【只狼：影逝二度】苇茗一心打法分析",
-          img_url: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0",
-          author: "机核网 ",
-          post_id:1,
-        } ,
+        // {
+        //   title: "【只狼：影逝二度】苇茗一心打法分析",
+        //   img_url: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0",
+        //   author: "机核网 ",
+        //   post_id:1,
+        // } ,
       ],
+      newsLists : [],
+      StrategyLists : [],
+      consultLists : [],
     };
   },
   mounted() {
 
     console.log('Component is now mounted!');
-    httpInstance.get('/home/GetInfoByOrder/')
+    httpInstance.get('/home/GetInfoByOrder/',{
+      params : {
+        opt : 0,
+        k : 6
+      }
+    })
         .then(response => {
           console.log(response);
           this.carousel_items=response.map(

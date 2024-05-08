@@ -52,6 +52,7 @@ export default {
   },
   data() {
     return {
+      user_id : 3,//修改
       users : [
       ]
     };
@@ -63,13 +64,12 @@ export default {
   methods: {
     toggleFollow(fan) {
       // 发送关注/取消关注请求
-      const userId = 1100; // 获取用户id
       const requestData = {
         target_id: fan.id, // 被关注/取关的id
-        user_id: userId
+        user_id: this.user_id
       };
       // httpInstance.post('/typical/FollowOrCancel/', requestData)
-      httpInstance.post('/typical/FollowOrCancel/?target_id='+fan.id+'&user_id='+userId)
+      httpInstance.post('/typical/FollowOrCancel/',requestData)
           .then(() => {
             // 切换关注状态
             fan.follow = !fan.follow;
@@ -80,7 +80,11 @@ export default {
           });
     },
     getConcerns() {
-      httpInstance.get('/people/GetConcernList/?id=1100')
+      httpInstance.get(`/people/GetConcernList/`,{
+        params : {
+            id : this.user_id,
+        }
+      })
         .then(response => {
           response.forEach(user => {
             this.users.push({

@@ -7,11 +7,11 @@
             <v-card flat color="transparent">
               <v-card-text>
                 <div class="text-h4 font-weight-bold primary--text pt-4">
-                  <h4>{{ title }}</h4>
+                  <h4>{{ game_cn_name }}</h4>
                 </div>
 
                 <div class="text-body-1 py-4">
-                  {{ abstract }}
+                  {{ game_en_name }}
                 </div>
 
               </v-card-text>
@@ -40,19 +40,22 @@
                   class="mx-4"
               ></v-img>
               <v-row class="py-6 mx-2">
-                <v-col class="flex-shrink-0" cols="auto">
-                  <v-chip color="accent">#Animalis</v-chip>
-                </v-col>
+                    <v-col v-for="tag in tags.GameTagList" class="flex-shrink-0" cols="auto">
+                        <v-chip color="accent">{{ tag.content }}</v-chip>
+                    </v-col>
+<!--                <v-col class="flex-shrink-0" cols="auto">-->
+<!--                  <v-chip color="accent">#Animalis</v-chip>-->
+<!--                </v-col>-->
 
-                <v-col class="flex-shrink-0" cols="auto">
-                  <v-chip color="accent">#Travel</v-chip>
-                </v-col>
+<!--                <v-col class="flex-shrink-0" cols="auto">-->
+<!--                  <v-chip color="accent">#Travel</v-chip>-->
+<!--                </v-col>-->
 
-                <v-col class="flex-shrink-0" cols="auto">
-                  <v-chip color="accent">#Birds</v-chip>
-                </v-col>
+<!--                <v-col class="flex-shrink-0" cols="auto">-->
+<!--                  <v-chip color="accent">#Birds</v-chip>-->
+<!--                </v-col>-->
               </v-row>
-              <v-row class="mx-2" v-html="content"/>
+              <v-row class="mx-2 pt-2" v-html="content"/>
               <v-divider class="my-8"></v-divider>
               <v-row>
                 <v-col cols="12">
@@ -73,9 +76,14 @@
                       half-increments
                       length="5"
                       size="30"
-                      @click="submitRating"
+                      @click.native="submitRating"
                       character="favorite"
                   ></v-rating>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12">
+                  <div class="text-h5 font-weight-bold">打分人数:{{ score_people }}</div>
                 </v-col>
               </v-row>
             </v-card>
@@ -85,20 +93,14 @@
 
       <v-col>
         <v-card class="mb-8">
-          <v-card-text>
-            <div class="text-h5 font-weight-bold primary--text pt-2">发售信息:</div>
-            <div class="text-body-1 py-4">
-              平台:{{ Game_platform }}<br>
-              开发商:{{ Developers }}<br>
-              发行商:{{ Publishers }}<br>
-              早发售:{{ Early_release }}<br>
-              中文发售:{{ Sold_in_Chinese }}<br>
-              支持语言:{{ Supported_Languages }}
-            </div>
+          <div class="text-h5 font-weight-bold primary--text pt-2 mx-5">发售信息:</div>
+          <v-card-text v-html="sale_info">
           </v-card-text>
         </v-card>
-        <v-card v-for="game in games" class="py-3 mb-6">
-          <router-link :to="`/GameDetails/${game.game_id}`" style="text-decoration: none;">
+        <h3 class="text-h5 font-weight-bold primary--text styled-text">
+          相关游戏:
+        </h3>
+        <v-card v-for="(game,index) in games" :key="game.game_id" class="mt-5 py-3" @click=handleGameClick(game)>
             <v-row>
               <v-col>
                 <v-img
@@ -111,16 +113,17 @@
                 </v-img>
               </v-col>
               <v-card-text class="text-center">
-                <h3 class="text-h5 font-weight-bold primary--text styled-text">
-                  {{ game.game_title }}
-                </h3>
+<!--                <h3 class="text-h5 font-weight-bold primary&#45;&#45;text styled-text">-->
+
+<!--                </h3>-->
                 <h6 class="text-sm-body-1 primary--text styled-text">
-                  游桔最新评分:{{ game.game_score }}
+                    {{ game.game_cn_name }}
+                </h6>
+                <h6 class="text-sm-body-1 primary--text styled-text">
+                    当前价格:{{ game.game_price }}
                 </h6>
               </v-card-text>
             </v-row>
-          </router-link>
-
         </v-card>
       </v-col>
     </v-row>
@@ -128,6 +131,8 @@
 </template>
 
 <script>
+import httpInstance from "@/utils/axios";
+import game from "@/views/Game.vue";
 
 export default {
   name: "ItemPage",
@@ -137,26 +142,27 @@ export default {
   },
   data() {
     return {
-      title: "战地5宣布不再更新",
-      abstract: "EA官方宣布不再更新,苏德战争胎死腹中",
+      user_id : 2,
+      //游戏基本信息
+      game_id : '',
+      game_cn_name : "战地5宣布不再更新",
+      game_en_name : "",
+      price : "",
+      // abstract: "EA官方宣布不再更新,苏德战争胎死腹中",
       image: "https://i0.hdslb.com/bfs/article/50cf66c4842407bae64e5d42dd4729c680d7053d.png@1256w_708h_!web-article-pic.avif",
-      time: "2024.1.1",
-
-      games: [
-        {
-          game_id: 1,
-          game_picture: "https://i0.hdslb.com/bfs/article/d538ef5c130a7aa52a69aed686ddc3673d0353ff.jpg@1256w_708h_!web-article-pic.avif",
-          game_title: "荒野大镖客2史低!",
-          game_score: "4.8",
-        },
-        {
-          game_id: 2,
-          game_picture: "https://i0.hdslb.com/bfs/article/bd3857cfa5f8b86c107074ef5eff4bd34981c012.jpg@1256w_708h_!web-article-pic.avif",
-          game_title: "战地1新增法国dlc",
-          game_score: "4.8",
-        },
-      ],
+      //image picture
+      sale_info : "",
+      //time: "2024.1.1",
+      tags : {
+         "TypeTagList": [],
+         "GameNameTagList": [],
+         "GameTagList": [],
+         "PreDefinedTagList": [],
+         "SelfDefinedTagList": []
+      },
       average_rate: "5",
+      score_people : '',
+      hot : "",
       rating: "",
       content: `
                 <div>
@@ -242,71 +248,122 @@ export default {
                   </div>
                 </div>
                     `,
-      related_posts: [
-        {
-          id: 3,
-          title: "艾尔登法环",
-          abstract: "艾尔登法环艾尔登法环艾尔登法环艾尔登法环艾尔登法环",
-          image: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0",
-          time: "2024.1.1"
-        },
-        {
-          id: 4,
-          title: "傻逼原神",
-          abstract: "傻逼原神傻逼原神傻逼原神傻逼原神傻逼原神傻逼原神",
-          image: "https://webstatic.mihoyo.com/upload/static-resource/2021/11/08/02959a0f179436853c244dfc8b88e4e4_5824090375749016325.jpg",
-          time: "2024.1.1",
-        }
+      games: [
+        // {
+        //   game_id: 1,
+        //   game_cn_name : '',
+        //   game_en_name : '',
+        //   game_picture: "https://i0.hdslb.com/bfs/article/d538ef5c130a7aa52a69aed686ddc3673d0353ff.jpg@1256w_708h_!web-article-pic.avif",
+        //   game_price : '',
+        //
+        //   game_title: "荒野大镖客2史低!",
+        //   game_score: "4.8",
+        // },
+        // {
+        //   game_id: 2,
+        //   game_picture: "https://i0.hdslb.com/bfs/article/bd3857cfa5f8b86c107074ef5eff4bd34981c012.jpg@1256w_708h_!web-article-pic.avif",
+        //   game_title: "战地1新增法国dlc",
+        //   game_score: "4.8",
+        // },
       ],
-      isFavorite: false,
-      isFollowing: false,
-      hasLiked: false,
-      replyingToId: null, // 控制哪个评论的回复输入框显示
-      likesCount: 99,
-      commentText: '',
-      showReportDialog: false, // 控制对话框显示的状态
-      reportContent: '', // 用户输入的举报内容
-      comments: [
-        {
-          id: 1,
-          user: "John Doe",
-          text: "Great post!",
-          newReply: "", // 初始化空字符串
-          avatar: "https://tse1-mm.cn.bing.net/th/id/OIP-C._YFRagbOM8FbGUSUJy-m6QAAAA?w=189&h=189&c=7&r=0&o=5&dpr=2&pid=1.7",
-          replies: [
-            {
-              id: 3,
-              user: "Jane Doe",
-              text: "@John Doe Thanks!",
-              newReply: "", // 初始化空字符串
-              avatar: "https://tse1-mm.cn.bing.net/th/id/OIP-C.pL9aeO50HMujMSzGcOPhKwAAAA?w=189&h=189&c=7&r=0&o=5&dpr=2&pid=1.7",
-            },
-            {
-              id: 4,
-              user: "qqqqq",
-              text: "888888",
-              newReply: "", // 初始化空字符串
-              avatar: "https://tse1-mm.cn.bing.net/th/id/OIP-C.m--751RSKkOTO8ZxoEK4WQAAAA?w=189&h=189&c=7&r=0&o=5&dpr=2&pid=1.7",
-            }
-          ]
-        },
-        {
-          id: 2,
-          user: "Jane Doe",
-          text: "I love this!",
-          newReply: "", // 初始化空字符串
-          avatar: "https://tse2-mm.cn.bing.net/th/id/OIP-C.qcssiqIxJl_5KTHne8ntWAAAAA?w=200&h=200&c=7&r=0&o=5&dpr=2&pid=1.7",
-          replies: []
-        }
-      ] // 假设这是从API加载的评论列表
+      related_posts: [
+        // {
+        //   id: 3,
+        //   title: "艾尔登法环",
+        //   abstract: "艾尔登法环艾尔登法环艾尔登法环艾尔登法环艾尔登法环",
+        //   image: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0",
+        //   time: "2024.1.1"
+        // },
+        // {
+        //   id: 4,
+        //   title: "傻逼原神",
+        //   abstract: "傻逼原神傻逼原神傻逼原神傻逼原神傻逼原神傻逼原神",
+        //   image: "https://webstatic.mihoyo.com/upload/static-resource/2021/11/08/02959a0f179436853c244dfc8b88e4e4_5824090375749016325.jpg",
+        //   time: "2024.1.1",
+        // }
+      ],
     }
   },
-  methods: {},
+  methods: {
+    submitRating() {
+      const formData = new FormData()
+      formData.append("rating",this.rating)
+      formData.append("user_id",this.user_id)
+      formData.append("game_id",this.game_id)
+      httpInstance.post('/game/SubmitRating/',formData)
+          .then(response => {
+            console.log(response)
+            this.average_rate = response.averageRating
+          })
+          .catch(error => {
+            console.log(error)
+          });
+    },
+    handleGameClick(game) {
+      console.log(game)
+      this.$router.push(`/GameDetails/${game.game_id}`)
+    },
+    loadGameMessage() {
+        httpInstance.get('/game/GetGameDetails/', {
+            params: {
+              game_id : this.game_id,
+            }
+          }
+      )
+          .then(
+              response => {
+                this.game_id = response.game_id
+                this.image = response.picture.img_url
+                this.tags = response.tags
+                this.game_cn_name = response.game_cn_name
+                this.game_en_name = response.game_en_name
+                this.price = response.price
+                this.content = response.introduce
+                this.average_rate = response.score
+                this.score_people = response.score_people
+                this.hot = response.hot
+                this.sale_info = response.sale_info
+              }
+          )
+          .catch(
+              error => {
+                console.log(error);
+              }
+          );
+      httpInstance.get('/game/GetSimilarGames/',{
+        params:{
+          game_id : this.game_id,
+        }
+      }).then(response=>{
+        this.games = response.map(
+            game => ({
+              game_id : game.game_id,
+              game_cn_name : game.game_cn_name,
+              game_en_name : game.game_en_name,
+              game_price : game.price,
+              game_picture : game.picture.img_url
+            })
+        )
+        console.log(response)
+      }).catch(error=>{
+        console.log(error)
+      });
+    }
+  },
   mounted() {
-    const itemId = this.$route.params.id;
-    console.log(itemId);
-    // 使用itemId来获取数据或执行其他操作
-  }
+    this.game_id = this.$route.params.id;
+    console.log(this.game_id);
+    this.loadGameMessage()
+  },
+  watch: {
+    '$route'(to, from) {
+      // 当路由发生变化，更新 gameId
+      if (to.params.id !== from.params.id) {
+        this.game_id = to.params.id;
+        this.loadGameMessage();
+      }
+    }
+  },
 };
 </script>
 

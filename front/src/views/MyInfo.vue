@@ -80,6 +80,7 @@ export default {
   },
   data() {
     return {
+      user_id : 2,
       editMode: false,
       profile: {
         avatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C._YFRagbOM8FbGUSUJy-m6QAAAA?w=189&h=189&c=7&r=0&o=5&dpr=2&pid=1.7',
@@ -93,7 +94,7 @@ export default {
   mounted() {
     httpInstance.get('/people/MyInfoPage/', {
           params: {
-            user_id: 1180,
+            user_id: this.user_id,
             //将来要改为根据用户cookie，现在写死了用户id
           }
         }
@@ -129,11 +130,11 @@ export default {
       if (this.file != null) {
          formData.append('profile', this.file,)
       }
-      formData.append('user_id', 1180)
+      formData.append('user_id', this.user_id)
       formData.append('user_nickname',this.profile.nickname)
       formData.append('email',this.profile.email)
       formData.append('user_info',this.profile.bio)
-      for (let [key, value] of formData.entries()) { console.log(`${key}: ${value}`); }
+      // for (let [key, value] of formData.entries()) { console.log(`${key}: ${value}`); }
       httpInstance.post('/people/EditPersonalInfo/',formData)
           .then(response => {
             console.log(response.data)

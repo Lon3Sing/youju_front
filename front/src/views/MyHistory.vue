@@ -18,17 +18,17 @@
                   <v-row>
                     <v-col cols="3">
                       <router-link :to="{ name: 'item', params: { id: record.id }}" class="link-no-underline">
-                        <v-img :src="record.postImage" height="100px" contain></v-img>
+                        <v-img :src="record.postImage" contain></v-img>
                       </router-link>
                     </v-col>
-                    <v-col cols="6">
+                    <v-col cols="2">
                       <router-link :to="{ name: 'item', params: { id: record.id }}" class="link-no-underline">
                         <div>{{ record.postName }}</div>
                       </router-link>
                     </v-col>
-                    <v-col cols="3" class="d-flex align-center">
+                    <v-col cols="7">
                       <router-link :to="{ name: 'UserHome', params: { id: record.autherId }}" class="link-no-underline">
-                        <v-avatar size="36" class="mr-2">
+                        <v-avatar>
                           <v-img :src="record.authorAvatar"></v-img>
                         </v-avatar>
                       </router-link>
@@ -56,17 +56,17 @@ export default {
   },
   data() {
     return {
+      user_id : 2,
       records: [],
     };
   },
-  created() {
+  mounted() {
     // 页面创建时获取用户的浏览记录数据
     this.getBrowseRecords();
   },
   methods: {
     getBrowseRecords() {
-      const userId = 1100; // 获取用户ID，你需要替换为实际的获取用户ID的方法
-      const apiUrl = `/people/GetBrowseList/?id=${userId}`; // 接口URL
+      const apiUrl = `/people/GetBrowseList/?id=${this.user_id}`; // 接口URL
       httpInstance.get(apiUrl)
           .then(response => {
             this.records = [];
@@ -74,7 +74,7 @@ export default {
             response.forEach(record => {
               this.records.push({
                 date: record.browse_time,
-                postImage: record.post.picture,
+                postImage: record.post.picture.img_url,
                 postName: record.post.post_title,
                 authorAvatar: record.post.user.profile.img_url,
                 authorName: record.post.user.user_nickName,

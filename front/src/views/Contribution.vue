@@ -58,6 +58,7 @@ export default {
   data() {
     return {
       // 示例数据，你应该从后端获取这些数据
+      user_id : 2,
       userPosts: [],
     };
   },
@@ -72,7 +73,11 @@ export default {
       // 例如: this.$router.push({ name: 'EditPost', params: { id: postId } });
     },
     getPosts() {
-      httpInstance.get('/people/ArticleManage/?id=1100')
+      httpInstance.get('/people/ArticleManage/',{
+        params : {
+          id : this.user_id
+        }
+      })
         .then(response => {
           response.forEach(post => {
             this.userPosts.push({
