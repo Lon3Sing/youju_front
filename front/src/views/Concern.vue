@@ -63,7 +63,7 @@ export default {
   methods: {
     toggleFollow(fan) {
       // 发送关注/取消关注请求
-      const userId = 1100; // 获取用户id
+      const userId = 1170; // 获取用户id
       const requestData = {
         target_id: fan.id, // 被关注/取关的id
         user_id: userId
@@ -80,7 +80,7 @@ export default {
           });
     },
     getConcerns() {
-      httpInstance.get('/people/GetConcernList/?id=1100')
+      httpInstance.get('/people/GetConcernList/?id=1170')
         .then(response => {
           response.forEach(user => {
             this.users.push({

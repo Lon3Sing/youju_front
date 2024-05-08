@@ -12,56 +12,34 @@
               <v-btn text :to="{ name: 'Contribution' }">更多</v-btn>
             </div>
             <v-row>
-              <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
-                <v-hover
-                    v-slot:default="{ hover }"
-                    close-delay="50"
-                    open-delay="50"
-                >
-                  <div>
-                    <v-card
-                        :color="hover ? 'white' : 'transparent'"
-                        :elevation="hover ? 12 : 0"
-                        flat
-                        hover
-                        to="/item/1"
-                    >
-                      <v-img
-                          :aspect-ratio="16 / 9"
-                          class="elevation-2"
-                          gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
-                          height="200px"
-                          src="https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg"
-                          style="border-radius: 16px"
-                      >
+              <v-col v-for="post in userPosts" :key="post.id" cols="12" lg="4" md="6">
+                <router-link :to="'/item/' + post.id" class="link-no-underline">
+                  <v-hover v-slot:default="{ hover }" close-delay="50" open-delay="50">
+                    <div>
+                      <v-card :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
+                        <v-img :aspect-ratio="16 / 9" class="elevation-2" gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
+                               height="200px" :src="post.image" style="border-radius: 16px">
+                          <v-card-text>
+                            <v-btn color="accent" to="category">帖子</v-btn>
+                          </v-card-text>
+                        </v-img>
+
                         <v-card-text>
-                          <v-btn color="accent" to="category">新闻</v-btn>
+                          <div class="text-h5 font-weight-bold primary--text">{{ post.title }}</div>
+
+                          <div class="text-body-1 py-4">{{ post.abstract }}</div>
+
+                          <div class="d-flex align-center">
+                            <div class="pl-2">{{ post.date }}</div>
+                          </div>
                         </v-card-text>
-                      </v-img>
-
-                      <v-card-text>
-                        <div class="text-h5 font-weight-bold primary--text">
-                          How to write an awesome blog post in 5 steps
-                        </div>
-
-                        <div class="text-body-1 py-4">
-                          Ultrices sagittis orci a scelerisque. Massa placerat
-                          duis ultricies lacus sed turpis
-                        </div>
-
-                        <div class="d-flex align-center">
-                          <v-avatar color="accent" size="36">
-                            <v-icon dark>mdi-feather</v-icon>
-                          </v-avatar>
-
-                          <div class="pl-2">Yan Lee · 22 July 2019</div>
-                        </div>
-                      </v-card-text>
-                    </v-card>
-                  </div>
-                </v-hover>
+                      </v-card>
+                    </div>
+                  </v-hover>
+                </router-link>
               </v-col>
             </v-row>
+
           </div>
 
           <!-- 我的关注 -->
@@ -134,6 +112,7 @@
 
 <script>
 import axios from "axios";
+import httpInstance from "@/utils/axios";
 
 export default {
   name: "Home",
@@ -147,14 +126,8 @@ export default {
         id: 1,
         title: 'Post 1',
         date: '2021-01-01',
-      }, {
-        id: 2,
-        title: 'Post 2',
-        date: '2021-01-02',
-      }, {
-        id: 3,
-        title: 'Post 3',
-        date: '2021-01-03',
+        image: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
+        abstract: 'Lorem ipsum dolor sit amet, co'
       }],
       userFollows: [{
         id: 1,
@@ -227,29 +200,43 @@ export default {
     };
   },
   methods: {
-    async fetchUserPosts() {
-      try {
-        const response = await axios.get('/Info/GetPostOfConcern/', { params: { sign: '1' } });
-        this.posts = response.data;
-      } catch (error) {
-        console.error('There was an error fetching the posts:', error);
-      }
-    },
-    async fetchUserFollows() {
-      try {
-        const response = await axios.get('/Info/GetPostOfConcern/', { params: { sign: '1' } });
-        this.posts = response.data;
-      } catch (error) {
-        console.error('There was an error fetching the posts:', error);
-      }
-    },
-    async fetchBrowsingHistory() {
-      try {
-        const response = await axios.get('/Info/GetPostOfConcern/', { params: { sign: '1' } });
-        this.posts = response.data;
-      } catch (error) {
-        console.error('There was an error fetching the posts:', error);
-      }
+    async fetchUserHome() {
+      httpInstance.get('/people/PeopleHome/?id=1170&i=6&j=6&k=6&l=6')
+          .then(response => {
+            response.create.forEach(post => {
+              this.userPosts.push({
+                id: post.post_id,
+                title: post.post_title,
+                date: post.post_time,
+                image: post.picture.img_url,
+                abstract: post.post_abstract,
+              });
+            });
+            response.concern.forEach(follow => {
+              this.userFollows.push({
+                id: follow.user_id,
+                name: follow.user_nickName,
+                avatar: follow.img_url,
+                introduction: 'Ultrices sagittis orci a scelerisque. Massa placerat duis ultricies lacus sed turpis tincidunt id.',
+                fansCount: 100,
+                isFollowed: true,
+              });
+            });
+            response.browse.forEach(record => {
+              this.browsingHistory.push({
+                id: record.post.post_id,
+                title: record.post.post_title,
+                image: record.post.picture.img_url,
+                date: record.browse_time,
+                type: record.post.post_type,
+                authorAvatar: record.post.user.profile.img_url,
+                authorName: record.post.user.user_nickName,
+              });
+            });
+          })
+          .catch(error => {
+            console.error('There was an error fetching the posts:', error);
+          });
     },
     goToPost(postId) {
       this.$router.push({ name: 'Post', params: { id: postId } });
@@ -261,16 +248,26 @@ export default {
       this.$router.push({ name: type === 'post' ? 'Post' : 'Profile', params: { id } });
     },
     toggleFollow(follow) {
-      // 这里可以添加发送请求到服务器的代码来更新关注状态
-      follow.isFollowed = !follow.isFollowed; // 切换关注状态
-      // 根据操作结果更新UI或显示消息
+      const userId = 1170; // 获取用户id
+      const requestData = {
+        target_id: follow.id, // 被关注/取关的id
+        user_id: userId
+      };
+      // httpInstance.post('/typical/FollowOrCancel/', requestData)
+      httpInstance.post('/typical/FollowOrCancel/?target_id='+follow.id+'&user_id='+userId)
+          .then(() => {
+            // 切换关注状态
+            follow.isFollowed = !follow.isFollowed;
+            // 在此处可以根据操作结果更新UI或显示消息
+          })
+          .catch(error => {
+            console.error('Error toggling follow:', error);
+          });
     },
 
   },
   mounted() {
-    this.fetchUserPosts(); // 当组件挂载到DOM上时调用fetchPosts方法
-    this.fetchUserFollows();
-    this.fetchBrowsingHistory();
+    this.fetchUserHome();
   },
 };
 </script>
@@ -331,5 +328,10 @@ export default {
   font-size: 0.8rem;
   align-self: flex-end; /* 日期文本靠右对齐 */
 }
+.link-no-underline {
+  text-decoration: none; /* 去掉下划线 */
+  color: inherit; /* 保持链接文字的颜色与其他文本一致 */
+}
+
 
 </style>

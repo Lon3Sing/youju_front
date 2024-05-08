@@ -62,7 +62,7 @@ export default {
   methods: {
     getFansData() {
       // 发送请求获取用户的粉丝列表数据
-      const userId = 1100; // 你需要获取用户的id，这里假设有一个函数可以获取用户id
+      const userId = 1180; // 你需要获取用户的id，这里假设有一个函数可以获取用户id
       const apiUrl = `http://114.116.197.62/api/people/FansManager/?id=${userId}`;
       fetch(apiUrl)
           .then(response => response.json())
@@ -80,7 +80,7 @@ export default {
     },
     toggleFollow(fan) {
       // 发送关注/取消关注请求
-      const userId = 1100; // 获取用户id
+      const userId = 1180; // 获取用户id
       const requestData = {
           target_id: fan.id, // 被关注/取关的id
           user_id: userId

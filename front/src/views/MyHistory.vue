@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     getBrowseRecords() {
-      const userId = 1100; // 获取用户ID，你需要替换为实际的获取用户ID的方法
+      const userId = 1180; // 获取用户ID，你需要替换为实际的获取用户ID的方法
       const apiUrl = `/people/GetBrowseList/?id=${userId}`; // 接口URL
       httpInstance.get(apiUrl)
           .then(response => {

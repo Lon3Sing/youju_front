@@ -72,7 +72,7 @@ export default {
       // 例如: this.$router.push({ name: 'EditPost', params: { id: postId } });
     },
     getPosts() {
-      httpInstance.get('/people/ArticleManage/?id=1100')
+      httpInstance.get('/people/ArticleManage/?id=1180')
         .then(response => {
           response.forEach(post => {
             this.userPosts.push({

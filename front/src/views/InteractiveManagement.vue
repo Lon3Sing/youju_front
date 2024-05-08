@@ -58,7 +58,7 @@ export default {
       // 例如: this.$router.push({ name: 'EditPost', params: { id: postId } });
     },
     getReplys() {
-      httpInstance.get('/people/InteractionManage/?id=1020')
+      httpInstance.get('/people/InteractionManage/?id=1180')
         .then(response => {
           response.forEach(reply => {
             this.replys.push({

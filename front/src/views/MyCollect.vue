@@ -91,12 +91,12 @@ export default {
   },
   methods: {
     getCollect() {
-      httpInstance.get('/home/GetInfoByOrder/')
+      httpInstance.get('/people/FavList/?id=1180')
           .then(response => {
             response.forEach(collect => {
               this.favorites.push({
                 id: collect.post_id,
-                postImage: collect.picture,
+                postImage: collect.picture.img_url,
                 postName: collect.post_title,
                 authorAvatar: collect.user.profile.img_url,
                 authorName: collect.user.user_nickName,
