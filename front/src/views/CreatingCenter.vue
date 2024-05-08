@@ -295,6 +295,7 @@ export default {
       } else { //发布文章的类型是资讯、新闻或攻略
         formData.append('post_type', 1);
       }
+
       httpInstance.post(
           `/forum/AssignOrEditPost/`,
           formData,
