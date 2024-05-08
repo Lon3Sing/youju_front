@@ -259,8 +259,14 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
 .chip-group-wrap .v-chip-group {
-  flex-wrap: wrap;
+  flex-wrap: wrap !important; /* 强制换行 */
+  overflow: hidden !important; /* 防止滚动条出现 */
+  width: 100%; /* 确保占满可用宽度 */
+}
+
+.chip-group-wrap .v-chip {
+  margin: 4px !important; /* 确保标签之间有间隔 */
 }
 </style>
