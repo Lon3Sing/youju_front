@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@vue/composition-api": "^1.7.2",
+    "pinia": "^2.1.7",
+    "pinia-plugin-persistedstate": "^3.2.1",
+    "vuex": "^3.6.2"
+  }
+}
