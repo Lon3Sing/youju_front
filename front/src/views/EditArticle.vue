@@ -167,6 +167,7 @@
 import {VueEditor} from "vue2-editor";
 import httpInstance from "@/utils/axios";
 
+
 export default {
   components: {
     VueEditor
