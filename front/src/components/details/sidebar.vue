@@ -116,6 +116,7 @@
 
 <script>
 import httpInstance from "@/utils/axios";
+import {userStore} from "@/utils/userStore";
 
 export default {
   name: "sidebar",
@@ -123,7 +124,7 @@ export default {
     return {
       post_list: [],
       taglist: [],
-      user_id: 2,
+      user_id: userStore.state.userInfo.userid,
     }
   },
   mounted() {

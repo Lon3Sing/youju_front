@@ -102,17 +102,29 @@
 
           <v-col v-if="$vuetify.breakpoint.mdAndUp" class="text-center">
             <v-btn
-                v-for="(item, i) in btnItems"
-                :key="i"
-                :color="item.color"
-                :href="item.href"
-                :outlined="item.outlined"
-                :target="item.target"
-                :to="item.to"
+                v-if="!this.user_stage"
+                :color="btn1.color"
+                :href="btn1.href"
+                :outlined="btn1.outlined"
+                :target="btn1.target"
+                :to="btn1.to"
                 class="ml-3 text-capitalize"
             >
-              <v-icon middle>{{ item.icon }}</v-icon>
-              {{ item.text }}
+              <v-icon middle>{{ btn1.icon }}</v-icon>
+              {{ btn1.text }}
+            </v-btn>
+
+            <v-btn
+                v-else
+                :color="btn2.color"
+                :href="btn2.href"
+                :outlined="btn2.outlined"
+                :target="btn2.target"
+                :to="btn2.to"
+                class="ml-3 text-capitalize"
+            >
+              <v-icon middle>{{ btn2.icon }}</v-icon>
+              {{ btn2.text }}
             </v-btn>
           </v-col>
         </v-row>
@@ -121,17 +133,42 @@
   </div>
 </template>
 
+import httpInstance from "@/utils/axios";
+import {userStore} from "@/utils/userStore";
+
 <script>
+import {userStore} from "@/utils/userStore";
+import {eventBus} from "@/main";
+
 export default {
   data: () => ({
     drawer: false,
-    btnItems: [
-      {
-        text: "注册/登录",
-        // href: "https://github.com/AGDholo/giraffe",
+    user_id :'',
+    user_stage : false,
+    btn1 : {
+      text: "注册/登录",
         to: "/login",
         target: "_black",
         color: "primary",
+    },
+    btn2 : {
+      text: "已登录",
+        to: "/UserHome",
+        target: "_black",
+        color: "green",
+    },
+    btnItems: [
+      {
+        text: "注册/登录",
+        to: "/login",
+        target: "_black",
+        color: "primary",
+      },
+      {
+        text: "已登录",
+        to: "/UserHome",
+        target: "_black",
+        color: "green",
       },
     ],
     barItems: [
@@ -160,7 +197,13 @@ export default {
   }),
   methods: {
     submitSearch() {}
-  }
+  },
+  mounted() {
+    eventBus.$on('login-success', () => {
+      this.user_id = userStore.state.userInfo.userid
+      this.user_stage = userStore.state.userInfo.user_stage
+    });
+  },
 };
 </script>
 

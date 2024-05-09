@@ -18,16 +18,16 @@
               <v-col cols="12" v-for="post in userPosts" :key="post.id">
                 <v-card flat class="mb-4">
                   <v-row align="center">
-                    <v-col cols="2">
+                    <v-col cols="3">
                       <v-img :src="post.image" height="100px" width="100%" contain></v-img>
                     </v-col>
-                    <v-col cols="3">
-                      <div class="text-h5">{{ post.title }}</div>
+                    <v-col cols="4">
+                      <div class="text-sm-body-1">{{ post.title }}</div>
                     </v-col>
-                    <v-col cols="3">
-                      <div class="text-h5">{{ post.status }}</div>
+                    <v-col cols="2">
+                      <div class="text-lg-body-1">{{ post.status }}</div>
                     </v-col>
-                    <v-col cols="4" class="d-flex justify-end pr-10">
+                    <v-col cols="3" class="d-flex justify-end pr-10">
                       <v-btn color="primary" @click="goToEdit(post.id)" large>编辑</v-btn>
                     </v-col>
                   </v-row>
@@ -48,22 +48,24 @@
 
 <script>
 import httpInstance from "@/utils/axios";
-
+import {userStore} from "@/utils/userStore";
+import Crbar from "@/components/details/crbar.vue";
 export default {
   name: "Home",
   components: {
+    Crbar : () => import("@/components/details/crbar.vue"),
     home_bar: () => import("@/components/details/homebar.vue"),
     ccbar: () => import("@/components/details/createcenterbar.vue"),
   },
   data() {
     return {
       // 示例数据，你应该从后端获取这些数据
-      //TODO user_id
-      user_id : 5,
+      user_id : '',
       userPosts: [],
     };
   },
   mounted() {
+    this.user_id = userStore.state.userInfo.userid
     // 页面加载时获取用户的帖子列表数据
     this.getPosts();
   },

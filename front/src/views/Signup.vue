@@ -4,7 +4,7 @@
       <v-card class="py-6">
         <v-card-title class="d-flex justify-center">
           <div class="text-h4">
-            登录
+            注册
           </div>
         </v-card-title>
         <v-card-text>
@@ -37,6 +37,7 @@ export default {
     async signup() {
         if (this.password !== this.password_1) {
             console.log('两次密码不一致');
+            alert('两次密码长度不一致')
             return;
         }
       try {
@@ -46,9 +47,11 @@ export default {
           password: this.password
         });
         console.log('注册成功', response.data);
-        this.$router.push('/login');
+        alert('注册成功')
+        await this.$router.push('/login');
       } catch (error) {
         console.error('注册失败', error);
+        alert('注册失败！')
       }
     }
   }

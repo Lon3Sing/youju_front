@@ -132,7 +132,7 @@
 
 <script>
 import httpInstance from "@/utils/axios";
-import game from "@/views/Game.vue";
+import {userStore} from "@/utils/userStore";
 
 export default {
   name: "ItemPage",
@@ -142,7 +142,7 @@ export default {
   },
   data() {
     return {
-      user_id : 2,
+      user_id : '',
       //游戏基本信息
       game_id : '',
       game_cn_name : "战地5宣布不再更新",
@@ -351,6 +351,7 @@ export default {
     }
   },
   mounted() {
+    this.user_id = userStore.state.userInfo.userid
     this.game_id = this.$route.params.id;
     console.log(this.game_id);
     this.loadGameMessage()

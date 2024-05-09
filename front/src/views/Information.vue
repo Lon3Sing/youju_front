@@ -82,7 +82,7 @@
 
 <script>
 import httpInstance from "@/utils/axios";
-
+import {userStore} from "@/utils/userStore";
 export default {
   name: "Home",
   components: {
@@ -90,7 +90,7 @@ export default {
   },
   data() {
     return {
-      user_id : 2,
+      user_id : '',
       selectedTab: "关注",
       concernList: [],
       recommendList: [],
@@ -103,6 +103,7 @@ export default {
 
   },
   mounted() {
+    this.user_id = userStore.state.userInfo.userid
     httpInstance.get('/forum/GetPostOfConcern/',{
       params : {
         sign : 1,

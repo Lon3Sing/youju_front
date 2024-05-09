@@ -327,7 +327,7 @@
 
 <script>
 import httpInstance from "@/utils/axios";
-
+import {userStore} from "@/utils/userStore";
 export default {
   name: "ItemPage",
   components: {
@@ -335,114 +335,15 @@ export default {
   },
   data() {
     return {
-      //TODO user_id & post_id
-      user_id: 2,
+      post_id: '',
+      user_id: '',
       user_name: "John Doe",
       title: "测试标题",
       abstract: "测试概要",
       image: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0",
       time: "2024.1.1",
-      content: `
-                <div>
-                  <p class="text-subtitle-1 primary--text font-weight-medium">
-                    Dignissim cras tincidunt lobortis feugiat vivamus at. Amet luctus venenatis lectus magna fringilla. Nibh tellus molestie nunc non blandit.
-                    Et magnis dis parturient montes nascetur ridiculus mus mauris vitae. Amet massa vitae tortor condimentum lacinia quis vel eros. Eros
-                    in cursus turpis massa tincidunt dui ut ornare. Est ante in nibh mauris cursus mattis molestie. Nec ullamcorper sit amet risus nullam
-                    eget felis eget. Tincidunt praesent semper feugiat nibh sed. Et leo duis ut diam quam nulla pottitor massa id. Convallis convallis tellus id
-                    interdum velit laoreet id. Enim ut sem viverra aliquet eget sit. Mollis aliquam ut porttitor leo a diam. Eleifend donec pretium vulputate
-                    sapien nec sagittis aliquam. Velit egestas dui id ornares.
-                  </p>
-                </div>
-
-                <div class="py-4">
-                  <v-alert
-                    class="font-italic text-h6 text-center"
-                    border="left"
-                    colored-border
-                    color="accent"
-                  >
-                    Srem Ipsum is simply dummy text of the printing and typesetting industry. Lorem lpsum has been
-                    the industry's standard dummy text ever since the 1500s. Lorem Ipsum is simply .
-                  </v-alert>
-                </div>
-          <div class="text-h5 primary--text font-weight-bold">
-                  Ultricies mi quis hendrerit dolor
-                  <p class="text-subtitle-1 primary--text font-weight-medium mt-5">
-                    Quam adipiscing vitae proin sagittis nisl rhoncus. Integer vitae justo eget magna fermentum iaculis eu non. Vitae congue mauris
-                    rhoncus aenean vel elit. Nibh mauris cursus mattis molestie. Etiam sit amet nisl purus. At auctor urna nunc id cursus metus. Diam in arcu
-                    cursus euismod quis viverra nibh cras.
-                  </p>
-                </div>
-
-                <div class="my-4">
-                  <v-row>
-                    <v-col cols="6">
-                      <v-card>
-                        <v-img
-                          src="https://th.bing.com/th/id/R.208cf4ebcad01f1716c41f15cafedbba?rik=2p4aXm7g7Oaihw&riu=http%3a%2f%2fi1.073img.com%2f220224%2f17598537_110535_1.jpg&ehk=0RsAEwIBcl8eTiXkvzpcFalefO2k4bAIsf3CJrquvww%3d&risl=&pid=ImgRaw&r=0"
-                          :aspect-ratio="16 / 9"
-                          gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
-                        ></v-img>
-                      </v-card>
-                    </v-col>
-
-                    <v-col cols="6">
-                      <v-card>
-                        <v-img
-                          src="https://th.bing.com/th/id/R.208cf4ebcad01f1716c41f15cafedbba?rik=2p4aXm7g7Oaihw&riu=http%3a%2f%2fi1.073img.com%2f220224%2f17598537_110535_1.jpg&ehk=0RsAEwIBcl8eTiXkvzpcFalefO2k4bAIsf3CJrquvww%3d&risl=&pid=ImgRaw&r=0"
-                          :aspect-ratio="16 / 9"
-                          gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
-                        ></v-img>
-                      </v-card>
-                    </v-col>
-                  </v-row>
-                </div>
-
-                <div class="text-h5 primary--text font-weight-bold">
-                  Nibh tellus molestie nunc non blandit massa enim
-                  <div class="text-subtitle-1 primary--text font-weight-medium mt-5">
-                    <ul>
-                      <li class="my-2">
-                        Aliquam purus sit amet luctus venenatis lectus magna fringilla urna. Malesuada bibendum arcu vitae elementum curabitur vitae
-                        nunc sed. Urna porttitor rhoncus dolor purus non enim praesent elementum facilisis.
-                      </li>
-
-                      <li class="my-2">
-                        Proin libero nunc consequat interdum varius. Amet luctus venenatis lectus magna fringillal urna porttitor. Enim tortor at auctor
-                        urna nunc id cursus.
-                      </li>
-
-                      <li class="my-2">
-                        Volutpat maecenas volutpat blandit aliquam. Adipiscing enim eu turpis egestas pretium aenean pharetra magna Morbi leo
-                        urna molestie at elementum eu.
-                      </li>
-                    </ul>
-
-                    <p>
-                      Venenatis a condimentum vitae sapien pellentesque habitant morbi tristique senectus. Semper auctor neque vitae tempus. Magnis dis
-                      parturient montes nascetur ridiculus mus. A condimentum vitae sapien pellentesque habitant morbi tristique. Duis ut diam quam nulla
-                      porttitor.
-                    </p>
-                  </div>
-                  <img src="https://youju-1316987049.cos.ap-beijing.myqcloud.com/20240507143459065-f1bea4157c5d4914c62524bd73d97c7b01613389.jpg">
-                </div>
-                    `,
-      related_posts: [
-        {
-          id: 3,
-          title: "艾尔登法环",
-          abstract: "艾尔登法环艾尔登法环艾尔登法环艾尔登法环艾尔登法环",
-          image: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0",
-          time: "2024.1.1"
-        },
-        {
-          id: 4,
-          title: "傻逼原神",
-          abstract: "傻逼原神傻逼原神傻逼原神傻逼原神傻逼原神傻逼原神",
-          image: "https://webstatic.mihoyo.com/upload/static-resource/2021/11/08/02959a0f179436853c244dfc8b88e4e4_5824090375749016325.jpg",
-          time: "2024.1.1",
-        }
-      ],
+      content: '',
+      related_posts: [],
       isFavorite: false,
       isFollowing: false,
       hasLiked: false,
@@ -501,6 +402,8 @@ export default {
     }
   },
   mounted() {
+    this.user_id = userStore.state.userInfo.userid
+    this.post_id = this.$route.params.id
     console.log('Component is now mounted!');
     httpInstance.get('/forum/GetAllComments/', {
       params: {
@@ -625,6 +528,16 @@ export default {
     },
     onToggleFavorite() {
       this.isFavorite = !this.isFavorite;
+      const formData = new FormData()
+      formData.append('post_id',this.post_id)
+      formData.append('user_id',this.user_id)
+      httpInstance.post('/typical/FavOrUnFav/',formData)
+          .then(response=>{
+            alert(response.sign)
+          })
+          .catch(error=>{
+            console.log(error)
+          })
       // 处理收藏逻辑
     },
     onToggleFollow() {

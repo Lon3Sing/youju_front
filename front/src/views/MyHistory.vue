@@ -49,18 +49,19 @@
 <script>
 // 导入 httpInstance，假设它是你的 HTTP 请求实例
 import httpInstance from "@/utils/axios";
-
+import {userStore} from "@/utils/userStore";
 export default {
   components: {
     home_bar: () => import("@/components/details/homebar.vue"),
   },
   data() {
     return {
-      user_id : 2,
+      user_id : '',
       records: [],
     };
   },
   mounted() {
+    this.user_id = userStore.state.userInfo.userid
     // 页面创建时获取用户的浏览记录数据
     this.getBrowseRecords();
   },

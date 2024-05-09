@@ -44,6 +44,7 @@
 
 <script>
 import httpInstance from "@/utils/axios";
+import {userStore} from "@/utils/userStore";
 export default {
   name: "Home",
   components: {
@@ -52,18 +53,19 @@ export default {
   },
   data() {
     return {
+      user_id: '',
       fans: [], // 初始化为空，等待数据加载
     };
   },
   mounted() {
+    this.user_id = userStore.state.userInfo.userid
     // 页面加载时获取用户的粉丝列表数据
     this.getFansData();
   },
   methods: {
     getFansData() {
       // 发送请求获取用户的粉丝列表数据
-      const userId = 1180; // 你需要获取用户的id，这里假设有一个函数可以获取用户id
-      const apiUrl = `http://114.116.197.62/api/people/FansManager/?id=${userId}`;
+      const apiUrl = `http://114.116.197.62/api/people/FansManager/?id=${this.user_id}`;
       fetch(apiUrl)
           .then(response => response.json())
           .then(data => {
@@ -79,14 +81,10 @@ export default {
           });
     },
     toggleFollow(fan) {
-      // 发送关注/取消关注请求
-      const userId = 1180; // 获取用户id
-      const requestData = {
-          target_id: fan.id, // 被关注/取关的id
-          user_id: userId
-      };
-      // httpInstance.post('/typical/FollowOrCancel/', requestData)
-      httpInstance.post('/typical/FollowOrCancel/?target_id='+fan.id+'&user_id='+userId)
+      const formData = new FormData()
+      formData.append('target_id',fan.id)
+      formData.append('user_id',this.user_id)
+      httpInstance.post('/typical/FollowOrCancel/',formData)
           .then(() => {
             // 切换关注状态
             fan.isFollowed = !fan.isFollowed;

@@ -44,6 +44,7 @@
 
 <script>
 import httpInstance from "@/utils/axios";
+import {userStore} from "@/utils/userStore";
 export default {
   name: "Concern",
   components: {
@@ -52,12 +53,13 @@ export default {
   },
   data() {
     return {
-      user_id : 3,//修改
+      user_id : '',
       users : [
       ]
     };
   },
   mounted() {
+    this.user_id = userStore.state.userInfo.userid
     // 页面加载时获取用户的关注列表数据
     this.getConcerns();
   },

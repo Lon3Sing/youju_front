@@ -78,14 +78,14 @@
 
 <script>
 import httpInstance from "@/utils/axios";
-
+import {userStore} from "@/utils/userStore";
 export default {
   components: {
     home_bar: () => import("@/components/details/homebar.vue"),
   },
   data() {
     return {
-      user_id : 2,
+      user_id : '',
       search: '',
       favorites: [
       ]
@@ -100,6 +100,7 @@ export default {
   },
   mounted() {
     // 页面加载时获取用户的收藏列表数据
+    this.user_id = userStore.state.userInfo.userid
     this.getCollect();
   },
   methods: {
@@ -113,7 +114,7 @@ export default {
             response.forEach(collect => {
               this.favorites.push({
                 id: collect.post_id,
-                postImage: collect.picture,
+                postImage: collect.picture.img_url,
                 postName: collect.post_title,
                 authorAvatar: collect.user.profile.img_url,
                 authorName: collect.user.user_nickName,

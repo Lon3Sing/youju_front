@@ -167,15 +167,14 @@
 import {VueEditor} from "vue2-editor";
 import httpInstance from "@/utils/axios";
 
-
+import {userStore} from "@/utils/userStore";
 export default {
   components: {
     VueEditor
   },
 
   data: () => ({
-    //TODO user_id
-    user_id : 5,
+    user_id : '',
     post_id : null,
     isLoading: false,
     dialog: false,
@@ -223,6 +222,7 @@ export default {
   }),
 
   mounted() {
+    this.user_id = userStore.state.userInfo.userid
     this.fetchTags();  // 页面加载时获取标签
     this.fetchPostDetails();  // 获取帖子详情
   },

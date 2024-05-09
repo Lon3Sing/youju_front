@@ -10,7 +10,8 @@ export const userStore = new Vuex.Store({
             userid: '',
             username: '',
             token: '',
-            image: ''
+            image: '',
+            user_stage : false
         }
     },
     mutations: {

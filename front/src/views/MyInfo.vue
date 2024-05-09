@@ -73,15 +73,14 @@
 
 <script>
 import httpInstance from "@/utils/axios";
-
+import {userStore} from "@/utils/userStore";
 export default {
   components: {
     home_bar: () => import("@/components/details/homebar.vue"),
   },
   data() {
     return {
-      //TODO user_id
-      user_id: 2,
+      user_id : '',
       editMode: false,
       profile: {
         avatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C._YFRagbOM8FbGUSUJy-m6QAAAA?w=189&h=189&c=7&r=0&o=5&dpr=2&pid=1.7',
@@ -93,21 +92,24 @@ export default {
     };
   },
   mounted() {
+    this.user_id = userStore.state.userInfo.userid
     httpInstance.get('/people/MyInfoPage/', {
           params: {
             user_id: this.user_id,
             //将来要改为根据用户cookie，现在写死了用户id
           }
         }
-    ).then(response => {
-      console.log(response.img_url);
-      this.profile.avatar = response.profile.img_url
-      this.profile.nickname = response.user_nickName
-      this.profile.email = response.email
-      this.profile.bio = response.user_info
-    }).catch(error => {
-      console.log(error);
-    });
+    )
+        .then(response => {
+          console.log(response.img_url);
+          this.profile.avatar = response.profile.img_url
+          this.profile.nickname = response.user_nickName
+          this.profile.email = response.email
+          this.profile.bio = response.user_info
+        })
+        .catch(error => {
+          console.log(error);
+        });
   },
   methods: {
     changeAvatar() {
@@ -127,14 +129,14 @@ export default {
       // 创建 FormData 对象并添加图像文件
       const formData = new FormData();
       if (this.file != null) {
-        formData.append('profile', this.file,)
+         formData.append('profile', this.file,)
       }
       formData.append('user_id', this.user_id)
-      formData.append('user_nickname', this.profile.nickname)
-      formData.append('email', this.profile.email)
-      formData.append('user_info', this.profile.bio)
+      formData.append('user_nickname',this.profile.nickname)
+      formData.append('email',this.profile.email)
+      formData.append('user_info',this.profile.bio)
       // for (let [key, value] of formData.entries()) { console.log(`${key}: ${value}`); }
-      httpInstance.post('/people/EditPersonalInfo/', formData)
+      httpInstance.post('/people/EditPersonalInfo/',formData)
           .then(response => {
             console.log(response.data)
           })

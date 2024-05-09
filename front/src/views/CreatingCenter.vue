@@ -163,15 +163,14 @@
 <script>
 import {VueEditor} from "vue2-editor";
 import httpInstance from "@/utils/axios";
-
+import {userStore} from "@/utils/userStore";
 export default {
   components: {
     VueEditor
   },
 
   data: () => ({
-    //TODO user_id
-    user_id : 5,
+    user_id : '',
     dialog: false,
     alertNoGameTag : false,
     content: "<h1></h1>",
@@ -233,6 +232,7 @@ export default {
   }),
 
   mounted() {
+    this.user_id = userStore.state.userInfo.userid
     this.fetchTags();  // 页面加载时获取标签
   },
 
