@@ -36,7 +36,7 @@
                             class="elevation-2"
                             gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
                             height="200px"
-                            :src="post.picture"
+                            :src="post.post_picture"
                             style="border-radius: 16px"
                         >
                             <v-card-text>
@@ -116,7 +116,7 @@ export default {
             post_collect_Num : post.post_collect_Num,
             post_comNum : post.post_comNum,
             post_is_crawled : post.post_is_crawled,
-            post_picture: post.picture.img_url,
+            post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
             post_abstract : post.post_abstract,
             post_id : post.post_id,
             post_like : post.post_like,

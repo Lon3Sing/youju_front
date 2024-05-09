@@ -155,6 +155,7 @@
     </v-dialog>
 
     <v-btn @click="handleArticleUpload">提交文章</v-btn>
+    <div>{{ user_id }}</div>
     <div>{{ content }}</div>
     <div>{{ selectedGameNameTags }}{{ selectedPreDefinedTags }}{{ selectedSelfDefinedTags }}</div>
   </div>

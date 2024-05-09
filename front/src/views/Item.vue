@@ -328,6 +328,7 @@
 <script>
 import httpInstance from "@/utils/axios";
 import {userStore} from "@/utils/userStore";
+
 export default {
   name: "ItemPage",
   components: {
@@ -440,9 +441,9 @@ export default {
       this.content = response.post_content;
       this.likesCount = response.post_like;
       this.showTags = [
-        ...response.tags.PreDefinedTagList.map(tag => ({ id: tag.tag_id, name: tag.content })),
-        ...response.tags.GameNameTagList.map(tag => ({ id: tag.tag_id, name: tag.content })),
-        ...response.tags.SelfDefinedTagList.map(tag => ({ id: tag.tag_id, name: tag.content }))
+        ...response.tags.PreDefinedTagList.map(tag => ({id: tag.tag_id, name: tag.content})),
+        ...response.tags.GameNameTagList.map(tag => ({id: tag.tag_id, name: tag.content})),
+        ...response.tags.SelfDefinedTagList.map(tag => ({id: tag.tag_id, name: tag.content}))
       ];
     }).catch(error => {
       console.log(error);
@@ -461,7 +462,7 @@ export default {
     });
   },
   watch: {
-    '$route' (to, from) {
+    '$route'(to, from) {
       // 当路由变化时调用
       if (to.params.id !== from.params.id) {
         httpInstance.get('/forum/GetAllComments/', {
@@ -499,9 +500,9 @@ export default {
           this.content = response.post_content;
           this.likesCount = response.post_like;
           this.showTags = [
-            ...response.tags.PreDefinedTagList.map(tag => ({ id: tag.tag_id, name: tag.content })),
-            ...response.tags.GameNameTagList.map(tag => ({ id: tag.tag_id, name: tag.content })),
-            ...response.tags.SelfDefinedTagList.map(tag => ({ id: tag.tag_id, name: tag.content }))
+            ...response.tags.PreDefinedTagList.map(tag => ({id: tag.tag_id, name: tag.content})),
+            ...response.tags.GameNameTagList.map(tag => ({id: tag.tag_id, name: tag.content})),
+            ...response.tags.SelfDefinedTagList.map(tag => ({id: tag.tag_id, name: tag.content}))
           ];
         }).catch(error => {
           console.log(error);
@@ -529,13 +530,13 @@ export default {
     onToggleFavorite() {
       this.isFavorite = !this.isFavorite;
       const formData = new FormData()
-      formData.append('post_id',this.post_id)
-      formData.append('user_id',this.user_id)
-      httpInstance.post('/typical/FavOrUnFav/',formData)
-          .then(response=>{
+      formData.append('post_id', this.post_id)
+      formData.append('user_id', this.user_id)
+      httpInstance.post('/typical/FavOrUnFav/', formData)
+          .then(response => {
             alert(response.sign)
           })
-          .catch(error=>{
+          .catch(error => {
             console.log(error)
           })
       // 处理收藏逻辑
@@ -556,7 +557,7 @@ export default {
         console.error('Error liking:', error);
       });
       this.hasLiked = (sign === 1); // 切换点赞状态
-      if(this.hasLiked) {
+      if (this.hasLiked) {
         this.likesCount += 1;
       } else {
         this.likesCount -= 1;
@@ -570,23 +571,25 @@ export default {
       httpInstance.post('/forum/AssignL1Comment/', {
         post_id: this.$route.params.id,
         user_id: this.user_id,
-        content: newComment.text
+        content: this.commentText
       }).then(response => {
         console.log('Comment posted:', response);
-        newCommentId = response.comment_id;
+        const newCommentId = response.comment_id; // 确保这里的响应体结构与服务器实际返回的结构一致
+
+        // 构建新评论对象
+        let newComment = {
+          id: newCommentId,
+          user: this.user_name,
+          text: this.commentText
+          //TODO: avatar
+        };
+        console.log(newComment);
+        // 添加评论到本地数组
+        this.comments.push(newComment);
+        this.commentText = ''; // 清空输入框
       }).catch(error => {
         console.error('Error posting comment:', error);
       });
-      const newComment = {
-        //TODO user_id
-        id: newCommentId,
-        user: this.user_name,
-        text: this.commentText
-        //TODO avatar
-      };
-      this.comments.push(newComment);
-      this.commentText = ''; // 清空输入框
-
     },
     submitReport() {
       if (!this.reportContent) {
@@ -625,23 +628,24 @@ export default {
         ori_content_id: comment.id,
       }).then(response => {
         console.log('Reply posted:', response);
-        replyId = response.comment_id;
+        const replyId = response.comment_id;
+        const newReply = {
+          id: replyId,
+          user: this.user_name, // 这应该是实际的用户名称
+          text: comment.newReply,
+          newReply: "",
+          //TODO avatar
+        };
+        if (!comment.replies) {
+          this.$set(comment, 'replies', []); // 确保replies数组存在
+        }
+        comment.replies.push(newReply);
+        comment.newReply = ''; // 清空输入框
+        this.replyingToId = -1; // 关闭回复框
       }).catch(error => {
         console.error('Error posting reply:', error);
       });
-      const newReply = {
-        id: replyId,
-        user: this.user_name, // 这应该是实际的用户名称
-        text: comment.newReply,
-        newReply: "",
-        //TODO avatar
-      };
-      if (!comment.replies) {
-        this.$set(comment, 'replies', []); // 确保replies数组存在
-      }
-      comment.replies.push(newReply);
-      comment.newReply = ''; // 清空输入框
-      this.replyingToId = -1; // 关闭回复框
+
     },
     submitReplyToReply(comment, reply) {
       // 这里可以添加对二级评论的回复处理逻辑
@@ -658,22 +662,23 @@ export default {
       }).then(response => {
         console.log('Reply posted:', response);
         replyId = response.comment_id;
+        const newReply = {
+          id: replyId,
+          user: this.user_name, // 这应该是实际的用户名称
+          text: reply.newReply,
+          newReply: "",
+          //TODO avatar
+        };
+        if (!comment.replies) {
+          this.$set(comment, 'replies', []); // 确保replies数组存在
+        }
+        comment.replies.push(newReply);
+        reply.newReply = ''; // 清空输入框
+        this.replyingToId = -1; // 关闭回复框
       }).catch(error => {
         console.error('Error posting reply:', error);
       });
-      const newReply = {
-        id: replyId,
-        user: this.user_name, // 这应该是实际的用户名称
-        text: reply.newReply,
-        newReply: "",
-        //TODO avatar
-      };
-      if (!comment.replies) {
-        this.$set(comment, 'replies', []); // 确保replies数组存在
-      }
-      comment.replies.push(newReply);
-      reply.newReply = ''; // 清空输入框
-      this.replyingToId = -1; // 关闭回复框
+
     },
   },
 };
@@ -697,6 +702,18 @@ export default {
 }
 
 .we-article-cont-img img {
+  width: 100%; /* 图片宽度自适应容器 */
+  height: auto; /* 高度自动，保持图片原有比例 */
+  display: block; /* 去除图片下方的空白间隙 */
+}
+
+.vjs-tech {
+  width: 100%; /* 图片宽度自适应容器 */
+  height: auto; /* 高度自动，保持图片原有比例 */
+  display: block; /* 去除图片下方的空白间隙 */
+}
+
+.widget-article-banner {
   width: 100%; /* 图片宽度自适应容器 */
   height: auto; /* 高度自动，保持图片原有比例 */
   display: block; /* 去除图片下方的空白间隙 */

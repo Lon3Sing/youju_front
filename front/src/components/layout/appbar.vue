@@ -196,7 +196,17 @@ export default {
     searchQuery: '',
   }),
   methods: {
-    submitSearch() {}
+    submitSearch() {
+      // 使用router的push方法导航到searchResult页面，并传递searchQuery作为keyword参数
+      if (this.searchQuery.trim()) { // 确保搜索框不为空或只包含空格
+        this.$router.push({
+          name: 'SearchResult',
+          params: { keyword: this.searchQuery.trim() }
+        });
+      } else {
+        console.warn('Search query is empty'); // 搜索查询为空时，可以选择提示用户
+      }
+    }
   },
   mounted() {
     eventBus.$on('login-success', () => {
