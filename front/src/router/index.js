@@ -123,6 +123,11 @@ const routes = [
         name: 'ChatPage',
         component: () => import("@/views/ChatPage.vue"),
     },
+    {
+        path: '/EditArticle/:id',
+        name: 'EditArticle',
+        component: () => import("@/views/EditArticle.vue"),
+    },
 ]
 
 const router = new VueRouter({
