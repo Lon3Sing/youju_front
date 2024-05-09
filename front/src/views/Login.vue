@@ -41,8 +41,9 @@ export default {
           password: this.password
         });
         // 处理登录成功的逻辑，比如保存token到localStorage，跳转到其他页面等
-        console.log('登录成功', response.data);
-        userStore.userInfo.user_id = response.data.user_id;
+        console.log('登录成功', response);
+        userStore.state.userInfo.user_id = response.user_id;
+        await this.$router.push('/');
       } catch (error) {
         // 处理登录失败的逻辑，比如显示错误信息等
         console.error('登录失败', error);
