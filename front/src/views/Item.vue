@@ -215,7 +215,7 @@
                                       }}
                                     </router-link>
                                   </div>
-                                  <div v-html="linkify(reply.text, reply.id)">{{ reply.text }}</div>
+                                  <div v-html="linkify(reply.text, reply.id)">{{ reply.text }} class="rich-text-images-box"</div>
                                 </div>
 
                               </div>
@@ -512,6 +512,18 @@ export default {
         .catch(error => {
           console.log(error);
         });
+    this.$nextTick(() => {
+      // 找到所有的图片
+      const images = document.querySelectorAll('img');
+
+      // 遍历所有图片并设置样式
+      images.forEach(img => {
+        img.style.maxWidth = '50%'; // 设置最大宽度
+        img.style.height = 'auto';   // 保持宽高比
+        // 可以继续添加其他样式，如border-radius
+        img.style.borderRadius = '8px';
+      });
+    });
   },
   methods: {
     linkify(commentText, userId) {
@@ -601,3 +613,26 @@ export default {
 };
 </script>
 
+<style>
+.rich-text-images-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.we-article-cont-img-single {
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+  border-radius: 8px;
+  overflow: hidden; /* 确保图片不会溢出容器 */
+}
+
+.we-article-cont-img img {
+  width: 100%; /* 图片宽度自适应容器 */
+  height: auto; /* 高度自动，保持图片原有比例 */
+  display: block; /* 去除图片下方的空白间隙 */
+}
+</style>
