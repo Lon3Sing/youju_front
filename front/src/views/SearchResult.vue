@@ -104,9 +104,154 @@ export default {
     };
   },
   methods: {},
+  watch: {
+    '$route'(to, from) {
+      if (to.params.keyword !== from.params.keyword) {
+        this.user_id = userStore.state.userInfo.userid;
+        httpInstance.get('/typical/SearchPost/', {
+          params: {
+            sign: 0,
+            content: this.$route.params.keyword,
+            user_id: this.user_id,
+          }
+        }).then(response => {
+          this.globalSearchList = response.map(
+              post => ({
+                post_collect_Num: post.collectNum,
+                post_comNum: post.comNum,
+                post_is_crawled: post.is_crawled,
+                post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
+                post_abstract: post.post_abstract,
+                post_id: post.post_id,
+                post_like: post.post_like,
+                post_success: post.post_success,
+                post_time: post.post_time,
+                post_title: post.post_title,
+                post_type: post.post_type,
+                tags: post.tags,
+                post_user: post.user,
+              })
+          )
+        }).catch(error => {
+          console.log(error)
+        });
+
+        httpInstance.get('/typical/SearchPost/', {
+          params: {
+            sign: 1,
+            content: this.$route.params.keyword,
+            user_id: this.user_id,
+          }
+        }).then(response => {
+          this.postSearchList = response.map(
+              post => ({
+                post_collect_Num: post.collectNum,
+                post_comNum: post.comNum,
+                post_is_crawled: post.is_crawled,
+                post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
+                post_abstract: post.post_abstract,
+                post_id: post.post_id,
+                post_like: post.post_like,
+                post_success: post.post_success,
+                post_time: post.post_time,
+                post_title: post.post_title,
+                post_type: post.post_type,
+                tags: post.tags,
+                post_user: post.user,
+              })
+          )
+        }).catch(error => {
+          console.log(error)
+        });
+
+        httpInstance.get('/typical/SearchPost/', {
+          params: {
+            sign: 2,
+            content: this.$route.params.keyword,
+            user_id: this.user_id,
+          }
+        }).then(response => {
+          this.infoSearchList = response.map(
+              post => ({
+                post_collect_Num: post.collectNum,
+                post_comNum: post.comNum,
+                post_is_crawled: post.is_crawled,
+                post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
+                post_abstract: post.post_abstract,
+                post_id: post.post_id,
+                post_like: post.post_like,
+                post_success: post.post_success,
+                post_time: post.post_time,
+                post_title: post.post_title,
+                post_type: post.post_type,
+                tags: post.tags,
+                post_user: post.user,
+              })
+          )
+        }).catch(error => {
+          console.log(error)
+        });
+
+        httpInstance.get('/typical/SearchPost/', {
+          params: {
+            sign: 3,
+            content: this.$route.params.keyword,
+            user_id: this.user_id,
+          }
+        }).then(response => {
+          this.collectSearchList = response.map(
+              post => ({
+                post_collect_Num: post.collectNum,
+                post_comNum: post.comNum,
+                post_is_crawled: post.is_crawled,
+                post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
+                post_abstract: post.post_abstract,
+                post_id: post.post_id,
+                post_like: post.post_like,
+                post_success: post.post_success,
+                post_time: post.post_time,
+                post_title: post.post_title,
+                post_type: post.post_type,
+                tags: post.tags,
+                post_user: post.user,
+              })
+          )
+        }).catch(error => {
+          console.log(error)
+        });
+
+        httpInstance.get('/typical/SearchPost/', {
+          params: {
+            sign: 4,
+            content: this.$route.params.keyword,
+            user_id: this.user_id,
+          }
+        }).then(response => {
+          this.otherList = response.map(
+              post => ({
+                post_collect_Num: post.collectNum,
+                post_comNum: post.comNum,
+                post_is_crawled: post.is_crawled,
+                post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
+                post_abstract: post.post_abstract,
+                post_id: post.post_id,
+                post_like: post.post_like,
+                post_success: post.post_success,
+                post_time: post.post_time,
+                post_title: post.post_title,
+                post_type: post.post_type,
+                tags: post.tags,
+                post_user: post.user,
+              })
+          )
+        }).catch(error => {
+          console.log(error)
+        });
+      }
+    }
+  },
   mounted() {
     this.user_id = userStore.state.userInfo.userid;
-    console.log("keyword:", this.$route.params.keyword);
     httpInstance.get('/typical/SearchPost/', {
       params: {
         sign: 0,
@@ -114,7 +259,6 @@ export default {
         user_id: this.user_id,
       }
     }).then(response => {
-      console.log(response)
       this.globalSearchList = response.map(
           post => ({
             post_collect_Num: post.collectNum,
@@ -132,124 +276,119 @@ export default {
             post_user: post.user,
           })
       )
-      console.log("list里的数据：", this.globalSearchList)
     }).catch(error => {
       console.log(error)
     });
 
-    httpInstance.get('/typical/SearchPost/',{
-      params : {
-        sign : 1,
+    httpInstance.get('/typical/SearchPost/', {
+      params: {
+        sign: 1,
         content: this.$route.params.keyword,
-        user_id : this.user_id,
+        user_id: this.user_id,
       }
-    }).then(response=>{
-      console.log(response)
+    }).then(response => {
       this.postSearchList = response.map(
           post => ({
-            post_collect_Num : post.collectNum,
-            post_comNum : post.comNum,
-            post_is_crawled : post.is_crawled,
+            post_collect_Num: post.collectNum,
+            post_comNum: post.comNum,
+            post_is_crawled: post.is_crawled,
             post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
-            post_abstract : post.post_abstract,
-            post_id : post.post_id,
-            post_like : post.post_like,
-            post_success : post.post_success,
-            post_time : post.post_time,
+            post_abstract: post.post_abstract,
+            post_id: post.post_id,
+            post_like: post.post_like,
+            post_success: post.post_success,
+            post_time: post.post_time,
             post_title: post.post_title,
-            post_type : post.post_type,
-            tags : post.tags,
-            post_user : post.user,
+            post_type: post.post_type,
+            tags: post.tags,
+            post_user: post.user,
           })
       )
-    }).catch(error=>{
+    }).catch(error => {
       console.log(error)
     });
 
-    httpInstance.get('/typical/SearchPost/',{
-      params : {
-        sign : 2,
+    httpInstance.get('/typical/SearchPost/', {
+      params: {
+        sign: 2,
         content: this.$route.params.keyword,
-        user_id : this.user_id,
+        user_id: this.user_id,
       }
-    }).then(response=>{
-      console.log(response)
+    }).then(response => {
       this.infoSearchList = response.map(
           post => ({
-            post_collect_Num : post.collectNum,
-            post_comNum : post.comNum,
-            post_is_crawled : post.is_crawled,
+            post_collect_Num: post.collectNum,
+            post_comNum: post.comNum,
+            post_is_crawled: post.is_crawled,
             post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
-            post_abstract : post.post_abstract,
-            post_id : post.post_id,
-            post_like : post.post_like,
-            post_success : post.post_success,
-            post_time : post.post_time,
+            post_abstract: post.post_abstract,
+            post_id: post.post_id,
+            post_like: post.post_like,
+            post_success: post.post_success,
+            post_time: post.post_time,
             post_title: post.post_title,
-            post_type : post.post_type,
-            tags : post.tags,
-            post_user : post.user,
+            post_type: post.post_type,
+            tags: post.tags,
+            post_user: post.user,
           })
       )
-    }).catch(error=>{
+    }).catch(error => {
       console.log(error)
     });
 
-    httpInstance.get('/typical/SearchPost/',{
-      params : {
-        sign : 3,
+    httpInstance.get('/typical/SearchPost/', {
+      params: {
+        sign: 3,
         content: this.$route.params.keyword,
-        user_id : this.user_id,
+        user_id: this.user_id,
       }
-    }).then(response=>{
-      console.log(response)
+    }).then(response => {
       this.collectSearchList = response.map(
           post => ({
-            post_collect_Num : post.collectNum,
-            post_comNum : post.comNum,
-            post_is_crawled : post.is_crawled,
+            post_collect_Num: post.collectNum,
+            post_comNum: post.comNum,
+            post_is_crawled: post.is_crawled,
             post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
-            post_abstract : post.post_abstract,
-            post_id : post.post_id,
-            post_like : post.post_like,
-            post_success : post.post_success,
-            post_time : post.post_time,
+            post_abstract: post.post_abstract,
+            post_id: post.post_id,
+            post_like: post.post_like,
+            post_success: post.post_success,
+            post_time: post.post_time,
             post_title: post.post_title,
-            post_type : post.post_type,
-            tags : post.tags,
-            post_user : post.user,
+            post_type: post.post_type,
+            tags: post.tags,
+            post_user: post.user,
           })
       )
-    }).catch(error=>{
+    }).catch(error => {
       console.log(error)
     });
 
-    httpInstance.get('/typical/SearchPost/',{
-      params : {
-        sign : 4,
+    httpInstance.get('/typical/SearchPost/', {
+      params: {
+        sign: 4,
         content: this.$route.params.keyword,
-        user_id : this.user_id,
+        user_id: this.user_id,
       }
-    }).then(response=>{
-      console.log(response)
+    }).then(response => {
       this.otherList = response.map(
           post => ({
-            post_collect_Num : post.collectNum,
-            post_comNum : post.comNum,
-            post_is_crawled : post.is_crawled,
+            post_collect_Num: post.collectNum,
+            post_comNum: post.comNum,
+            post_is_crawled: post.is_crawled,
             post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
-            post_abstract : post.post_abstract,
-            post_id : post.post_id,
-            post_like : post.post_like,
-            post_success : post.post_success,
-            post_time : post.post_time,
+            post_abstract: post.post_abstract,
+            post_id: post.post_id,
+            post_like: post.post_like,
+            post_success: post.post_success,
+            post_time: post.post_time,
             post_title: post.post_title,
-            post_type : post.post_type,
-            tags : post.tags,
-            post_user : post.user,
+            post_type: post.post_type,
+            tags: post.tags,
+            post_user: post.user,
           })
       )
-    }).catch(error=>{
+    }).catch(error => {
       console.log(error)
     });
 
