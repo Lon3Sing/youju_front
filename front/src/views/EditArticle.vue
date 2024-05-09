@@ -175,6 +175,7 @@ export default {
   data: () => ({
     //TODO user_id
     user_id : 5,
+    post_id : null,
     isLoading: false,
     dialog: false,
     alertNoGameTag : false,
@@ -237,6 +238,7 @@ export default {
         })  // 确保这是获取帖子详情的正确API路径
             .then(response => {
               this.postData = response;
+              this.post_id = response.post_id;
               this.articleTitle = response.post_title;
               this.articleAbstract = response.post_abstract;
               this.content = response.post_content;
@@ -304,7 +306,8 @@ export default {
     handleArticleUpload() {
       //TODO 上传文章
       let formData = new FormData()
-      formData.append('user_id', this.user_id)
+      formData.append('user_id', this.user_id);
+      formData.
       formData.append('picture', this.coverage);
       //TODO 未解决superuser添加标签的情况
       formData.append('PostTypeTag', this.postTypeTag);
