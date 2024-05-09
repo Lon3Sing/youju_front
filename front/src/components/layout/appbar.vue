@@ -199,9 +199,11 @@ export default {
     submitSearch() {
       // 使用router的push方法导航到searchResult页面，并传递searchQuery作为keyword参数
       if (this.searchQuery.trim()) { // 确保搜索框不为空或只包含空格
+        let keyword = this.searchQuery.trim();
+        this.searchQuery = ''; // 清空搜索框
         this.$router.push({
           name: 'SearchResult',
-          params: { keyword: this.searchQuery.trim() }
+          params: { keyword: keyword }
         });
       } else {
         console.warn('Search query is empty'); // 搜索查询为空时，可以选择提示用户

@@ -4,22 +4,23 @@
       <v-col cols="12" lg="12" xl="12">
         <div>
           <div class="pt-16">
+<!--            <div>{{selectedTab}}</div>-->
             <!-- <h2 class="text-h4 font-weight-bold pb-4">新闻       攻略       资讯</h2> -->
             <el-button-group class="mb-4">
-              <el-button :type="selectedTab === '全局' ? 'primary' : 'default'" @click="selectedTab = '关注'" text
+              <el-button :type="selectedTab === '全局' ? 'primary' : 'default'" @click="selectedTab = '全局'" text
                          style="font-size: 20px;">全局
               </el-button>
-              <el-button :type="selectedTab === '帖子' ? 'primary' : 'default'" @click="selectedTab = '推荐'"
+              <el-button :type="selectedTab === '帖子' ? 'primary' : 'default'" @click="selectedTab = '帖子'"
                          style="font-size: 20px;">帖子
               </el-button>
-              <el-button :type="selectedTab === '资讯' ? 'primary' : 'default'" @click="selectedTab = '热榜'"
+              <el-button :type="selectedTab === '资讯' ? 'primary' : 'default'" @click="selectedTab = '资讯'"
                          style="font-size: 20px;">资讯
               </el-button>
-              <el-button :type="selectedTab === '收藏' ? 'primary' : 'default'" @click="selectedTab = '最新'"
+              <el-button :type="selectedTab === '收藏' ? 'primary' : 'default'" @click="selectedTab = '收藏'"
                          style="font-size: 20px;">收藏
               </el-button>
               <el-button :type="selectedTab === '其他' ? 'primary' : 'default'" @click="selectedTab = '其他'"
-                         style="font-size: 20px;">其他
+                         style="font-size: 20px;">未过审的帖子
               </el-button>
             </el-button-group>
             <v-row>
@@ -104,9 +105,154 @@ export default {
     };
   },
   methods: {},
+  watch: {
+    '$route'(to, from) {
+      if (to.params.keyword !== from.params.keyword) {
+        this.user_id = userStore.state.userInfo.userid;
+        httpInstance.get('/typical/SearchPost/', {
+          params: {
+            sign: 0,
+            content: this.$route.params.keyword,
+            user_id: this.user_id,
+          }
+        }).then(response => {
+          this.globalSearchList = response.map(
+              post => ({
+                post_collect_Num: post.collectNum,
+                post_comNum: post.comNum,
+                post_is_crawled: post.is_crawled,
+                post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
+                post_abstract: post.post_abstract,
+                post_id: post.post_id,
+                post_like: post.post_like,
+                post_success: post.post_success,
+                post_time: post.post_time,
+                post_title: post.post_title,
+                post_type: post.post_type,
+                tags: post.tags,
+                post_user: post.user,
+              })
+          )
+        }).catch(error => {
+          console.log(error)
+        });
+
+        httpInstance.get('/typical/SearchPost/', {
+          params: {
+            sign: 1,
+            content: this.$route.params.keyword,
+            user_id: this.user_id,
+          }
+        }).then(response => {
+          this.postSearchList = response.map(
+              post => ({
+                post_collect_Num: post.collectNum,
+                post_comNum: post.comNum,
+                post_is_crawled: post.is_crawled,
+                post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
+                post_abstract: post.post_abstract,
+                post_id: post.post_id,
+                post_like: post.post_like,
+                post_success: post.post_success,
+                post_time: post.post_time,
+                post_title: post.post_title,
+                post_type: post.post_type,
+                tags: post.tags,
+                post_user: post.user,
+              })
+          )
+        }).catch(error => {
+          console.log(error)
+        });
+
+        httpInstance.get('/typical/SearchPost/', {
+          params: {
+            sign: 2,
+            content: this.$route.params.keyword,
+            user_id: this.user_id,
+          }
+        }).then(response => {
+          this.infoSearchList = response.map(
+              post => ({
+                post_collect_Num: post.collectNum,
+                post_comNum: post.comNum,
+                post_is_crawled: post.is_crawled,
+                post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
+                post_abstract: post.post_abstract,
+                post_id: post.post_id,
+                post_like: post.post_like,
+                post_success: post.post_success,
+                post_time: post.post_time,
+                post_title: post.post_title,
+                post_type: post.post_type,
+                tags: post.tags,
+                post_user: post.user,
+              })
+          )
+        }).catch(error => {
+          console.log(error)
+        });
+
+        httpInstance.get('/typical/SearchPost/', {
+          params: {
+            sign: 3,
+            content: this.$route.params.keyword,
+            user_id: this.user_id,
+          }
+        }).then(response => {
+          this.collectSearchList = response.map(
+              post => ({
+                post_collect_Num: post.collectNum,
+                post_comNum: post.comNum,
+                post_is_crawled: post.is_crawled,
+                post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
+                post_abstract: post.post_abstract,
+                post_id: post.post_id,
+                post_like: post.post_like,
+                post_success: post.post_success,
+                post_time: post.post_time,
+                post_title: post.post_title,
+                post_type: post.post_type,
+                tags: post.tags,
+                post_user: post.user,
+              })
+          )
+        }).catch(error => {
+          console.log(error)
+        });
+
+        httpInstance.get('/typical/SearchPost/', {
+          params: {
+            sign: 4,
+            content: this.$route.params.keyword,
+            user_id: this.user_id,
+          }
+        }).then(response => {
+          this.otherList = response.map(
+              post => ({
+                post_collect_Num: post.collectNum,
+                post_comNum: post.comNum,
+                post_is_crawled: post.is_crawled,
+                post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
+                post_abstract: post.post_abstract,
+                post_id: post.post_id,
+                post_like: post.post_like,
+                post_success: post.post_success,
+                post_time: post.post_time,
+                post_title: post.post_title,
+                post_type: post.post_type,
+                tags: post.tags,
+                post_user: post.user,
+              })
+          )
+        }).catch(error => {
+          console.log(error)
+        });
+      }
+    }
+  },
   mounted() {
     this.user_id = userStore.state.userInfo.userid;
-    console.log("keyword:", this.$route.params.keyword);
     httpInstance.get('/typical/SearchPost/', {
       params: {
         sign: 0,
@@ -114,7 +260,6 @@ export default {
         user_id: this.user_id,
       }
     }).then(response => {
-      console.log(response)
       this.globalSearchList = response.map(
           post => ({
             post_collect_Num: post.collectNum,
@@ -132,124 +277,119 @@ export default {
             post_user: post.user,
           })
       )
-      console.log("list里的数据：", this.globalSearchList)
     }).catch(error => {
       console.log(error)
     });
 
-    httpInstance.get('/typical/SearchPost/',{
-      params : {
-        sign : 1,
+    httpInstance.get('/typical/SearchPost/', {
+      params: {
+        sign: 1,
         content: this.$route.params.keyword,
-        user_id : this.user_id,
+        user_id: this.user_id,
       }
-    }).then(response=>{
-      console.log(response)
+    }).then(response => {
       this.postSearchList = response.map(
           post => ({
-            post_collect_Num : post.collectNum,
-            post_comNum : post.comNum,
-            post_is_crawled : post.is_crawled,
+            post_collect_Num: post.collectNum,
+            post_comNum: post.comNum,
+            post_is_crawled: post.is_crawled,
             post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
-            post_abstract : post.post_abstract,
-            post_id : post.post_id,
-            post_like : post.post_like,
-            post_success : post.post_success,
-            post_time : post.post_time,
+            post_abstract: post.post_abstract,
+            post_id: post.post_id,
+            post_like: post.post_like,
+            post_success: post.post_success,
+            post_time: post.post_time,
             post_title: post.post_title,
-            post_type : post.post_type,
-            tags : post.tags,
-            post_user : post.user,
+            post_type: post.post_type,
+            tags: post.tags,
+            post_user: post.user,
           })
       )
-    }).catch(error=>{
+    }).catch(error => {
       console.log(error)
     });
 
-    httpInstance.get('/typical/SearchPost/',{
-      params : {
-        sign : 2,
+    httpInstance.get('/typical/SearchPost/', {
+      params: {
+        sign: 2,
         content: this.$route.params.keyword,
-        user_id : this.user_id,
+        user_id: this.user_id,
       }
-    }).then(response=>{
-      console.log(response)
+    }).then(response => {
       this.infoSearchList = response.map(
           post => ({
-            post_collect_Num : post.collectNum,
-            post_comNum : post.comNum,
-            post_is_crawled : post.is_crawled,
+            post_collect_Num: post.collectNum,
+            post_comNum: post.comNum,
+            post_is_crawled: post.is_crawled,
             post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
-            post_abstract : post.post_abstract,
-            post_id : post.post_id,
-            post_like : post.post_like,
-            post_success : post.post_success,
-            post_time : post.post_time,
+            post_abstract: post.post_abstract,
+            post_id: post.post_id,
+            post_like: post.post_like,
+            post_success: post.post_success,
+            post_time: post.post_time,
             post_title: post.post_title,
-            post_type : post.post_type,
-            tags : post.tags,
-            post_user : post.user,
+            post_type: post.post_type,
+            tags: post.tags,
+            post_user: post.user,
           })
       )
-    }).catch(error=>{
+    }).catch(error => {
       console.log(error)
     });
 
-    httpInstance.get('/typical/SearchPost/',{
-      params : {
-        sign : 3,
+    httpInstance.get('/typical/SearchPost/', {
+      params: {
+        sign: 3,
         content: this.$route.params.keyword,
-        user_id : this.user_id,
+        user_id: this.user_id,
       }
-    }).then(response=>{
-      console.log(response)
+    }).then(response => {
       this.collectSearchList = response.map(
           post => ({
-            post_collect_Num : post.collectNum,
-            post_comNum : post.comNum,
-            post_is_crawled : post.is_crawled,
+            post_collect_Num: post.collectNum,
+            post_comNum: post.comNum,
+            post_is_crawled: post.is_crawled,
             post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
-            post_abstract : post.post_abstract,
-            post_id : post.post_id,
-            post_like : post.post_like,
-            post_success : post.post_success,
-            post_time : post.post_time,
+            post_abstract: post.post_abstract,
+            post_id: post.post_id,
+            post_like: post.post_like,
+            post_success: post.post_success,
+            post_time: post.post_time,
             post_title: post.post_title,
-            post_type : post.post_type,
-            tags : post.tags,
-            post_user : post.user,
+            post_type: post.post_type,
+            tags: post.tags,
+            post_user: post.user,
           })
       )
-    }).catch(error=>{
+    }).catch(error => {
       console.log(error)
     });
 
-    httpInstance.get('/typical/SearchPost/',{
-      params : {
-        sign : 4,
+    httpInstance.get('/typical/SearchPost/', {
+      params: {
+        sign: 4,
         content: this.$route.params.keyword,
-        user_id : this.user_id,
+        user_id: this.user_id,
       }
-    }).then(response=>{
-      console.log(response)
+    }).then(response => {
       this.otherList = response.map(
           post => ({
-            post_collect_Num : post.collectNum,
-            post_comNum : post.comNum,
-            post_is_crawled : post.is_crawled,
+            post_collect_Num: post.collectNum,
+            post_comNum: post.comNum,
+            post_is_crawled: post.is_crawled,
             post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
-            post_abstract : post.post_abstract,
-            post_id : post.post_id,
-            post_like : post.post_like,
-            post_success : post.post_success,
-            post_time : post.post_time,
+            post_abstract: post.post_abstract,
+            post_id: post.post_id,
+            post_like: post.post_like,
+            post_success: post.post_success,
+            post_time: post.post_time,
             post_title: post.post_title,
-            post_type : post.post_type,
-            tags : post.tags,
-            post_user : post.user,
+            post_type: post.post_type,
+            tags: post.tags,
+            post_user: post.user,
           })
       )
-    }).catch(error=>{
+    }).catch(error => {
       console.log(error)
     });
 
