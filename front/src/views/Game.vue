@@ -14,11 +14,11 @@
             </el-button-group>
             <div v-if="selectedTab === 'PC'" class="d-flex align-center">
               <v-row justify="center">
-                <v-col v-for="(game, index) in PCGames" :key="index" cols="12" sm="6" md="4" lg="3" >
+                <v-col v-for="(game, index) in PCGames" :key="index" cols="12" sm="6" md="4" lg="4" >
                   <v-hover v-slot:default="{ hover }">
                     <div>
                       <v-card @click="handleGameClick(game)" :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
-                        <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="500px">
+                        <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="300px">
                           <v-chip color="info" text-color="white" small style="position: absolute; right: 10px; bottom: 10px;">
                             {{ game.rating }}/5
                           </v-chip>
@@ -40,11 +40,11 @@
             </div>
             <div v-if="selectedTab === 'PS'" class="d-flex align-center">
               <v-row justify="center">
-                <v-col v-for="(game, index) in PSGames" :key="index" cols="12" sm="6" md="4" lg="3" >
+                <v-col v-for="(game, index) in PSGames" :key="index" cols="12" sm="6" md="4" lg="4" >
                   <v-hover v-slot:default="{ hover }">
                     <div>
                       <v-card @click="handleGameClick(game)" :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
-                        <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="500px">
+                        <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="300px">
                           <v-chip color="info" text-color="white" small style="position: absolute; right: 10px; bottom: 10px;">
                             {{ game.rating }}/5
                           </v-chip>
@@ -66,11 +66,11 @@
             </div>
             <div v-if="selectedTab === 'NS'" class="d-flex align-center">
               <v-row justify="center">
-                <v-col v-for="(game, index) in NSGames" :key="index" cols="12" sm="6" md="4" lg="3" >
+                <v-col v-for="(game, index) in NSGames" :key="index" cols="12" sm="6" md="4" lg="4" >
                   <v-hover v-slot:default="{ hover }">
                     <div>
                       <v-card @click="handleGameClick(game)" :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
-                        <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="500px">
+                        <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="300px">
                           <v-chip color="info" text-color="white" small style="position: absolute; right: 10px; bottom: 10px;">
                             {{ game.rating }}/5
                           </v-chip>

@@ -128,6 +128,11 @@ const routes = [
         name: 'EditArticle',
         component: () => import("@/views/EditArticle.vue"),
     },
+    {
+        path: '/SearchResult/:keyword',
+        name: 'SearchResult',
+        component: () => import("@/views/SearchResult.vue"),
+    },
 ]
 
 const router = new VueRouter({
