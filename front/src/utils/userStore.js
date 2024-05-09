@@ -1,42 +1,32 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
-import httpInstance from '@/utils/axios'
-import { inject } from 'vue'
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-export const useUserStore = defineStore('user', () => {
-    // 1. 定义管理用户数据的state
-    const userInfo = ref({
-        userid:'',
-        username: '',
-        authorization:'',
-        student_id: '',
-        building_id:'',
-        room_id: '',
-        telephone: '',
-        image:''
-    })
+Vue.use(Vuex);
 
-    // 3. 退出时清除用户信息
-    const clearUserInfo = () => {
-        userInfo.value = {
-            userid:'',
+export const userStore = new Vuex.Store({
+    state: {
+        // 定义管理用户数据的state
+        userInfo: {
+            userid: '',
             username: '',
-            authorization:'',
-            student_id: '',
-            building_id:'',
-            room_id: '',
-            telephone: '',
-            image:''
+            token: '',
+            image: ''
+        }
+    },
+    mutations: {
+        // 退出时清除用户信息
+        CLEAR_USER_INFO(state) {
+            state.userInfo = {
+                userid: '',
+                username: '',
+                token: '',
+                image: ''
+            };
+        }
+    },
+    actions: {
+        clearUserInfo({ commit }) {
+            commit('CLEAR_USER_INFO');
         }
     }
-
-    return {
-        userInfo,
-        merchantInfo,
-        riderInfo,
-        loginType,
-        clearUserInfo
-    }
-}, {
-    persist: true,
-})
+});

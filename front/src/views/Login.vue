@@ -23,7 +23,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+import httpInstance  from "@/utils/axios";
+import {userStore} from "@/utils/userStore";
 
 export default {
   data() {
@@ -35,12 +36,13 @@ export default {
   methods: {
     async login() {
       try {
-        const response = await axios.post('/api/login', {
+        const response = await httpInstance.post('/auth/Login/', {
           username: this.username,
           password: this.password
         });
         // 处理登录成功的逻辑，比如保存token到localStorage，跳转到其他页面等
         console.log('登录成功', response.data);
+        userStore.userInfo.user_id = response.data.user_id;
       } catch (error) {
         // 处理登录失败的逻辑，比如显示错误信息等
         console.error('登录失败', error);
