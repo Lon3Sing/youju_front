@@ -218,7 +218,7 @@ export default {
 
     httpInstance.get('/forum/GetOtherPost/',{
       params : {
-        sign : 1,
+        sign : 2,
         user_id : this.user_id,
       }
     }).then(response=>{

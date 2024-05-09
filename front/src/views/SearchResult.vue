@@ -4,22 +4,23 @@
       <v-col cols="12" lg="12" xl="12">
         <div>
           <div class="pt-16">
+<!--            <div>{{selectedTab}}</div>-->
             <!-- <h2 class="text-h4 font-weight-bold pb-4">新闻       攻略       资讯</h2> -->
             <el-button-group class="mb-4">
-              <el-button :type="selectedTab === '全局' ? 'primary' : 'default'" @click="selectedTab = '关注'" text
+              <el-button :type="selectedTab === '全局' ? 'primary' : 'default'" @click="selectedTab = '全局'" text
                          style="font-size: 20px;">全局
               </el-button>
-              <el-button :type="selectedTab === '帖子' ? 'primary' : 'default'" @click="selectedTab = '推荐'"
+              <el-button :type="selectedTab === '帖子' ? 'primary' : 'default'" @click="selectedTab = '帖子'"
                          style="font-size: 20px;">帖子
               </el-button>
-              <el-button :type="selectedTab === '资讯' ? 'primary' : 'default'" @click="selectedTab = '热榜'"
+              <el-button :type="selectedTab === '资讯' ? 'primary' : 'default'" @click="selectedTab = '资讯'"
                          style="font-size: 20px;">资讯
               </el-button>
-              <el-button :type="selectedTab === '收藏' ? 'primary' : 'default'" @click="selectedTab = '最新'"
+              <el-button :type="selectedTab === '收藏' ? 'primary' : 'default'" @click="selectedTab = '收藏'"
                          style="font-size: 20px;">收藏
               </el-button>
               <el-button :type="selectedTab === '其他' ? 'primary' : 'default'" @click="selectedTab = '其他'"
-                         style="font-size: 20px;">其他
+                         style="font-size: 20px;">未过审的帖子
               </el-button>
             </el-button-group>
             <v-row>

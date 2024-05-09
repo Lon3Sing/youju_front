@@ -5,17 +5,17 @@
         <v-row align="start">
           <v-col cols="12" md="3">
             <h4 class="text-h5 font-weight-bold">
-              Giraffe
+              YouJv
             </h4>
             <p class="text-body-1">
-              Create, prototype, collaborate and turn your ideas into incredible
-              products with the definitive platform for digital design.
+              The latest Rocket news, articles, and resources, sent straight
+              to your inbox every month.
             </p>
           </v-col>
 
           <v-col cols="12" md="3">
             <v-list color="transparent" flat>
-              <v-subheader class="text-h6">HeroUI</v-subheader>
+              <v-subheader class="text-h6">Repositories</v-subheader>
               <v-list-item-group color="primary">
                 <v-list-item
                     v-for="(item, i) in heroui"
@@ -37,7 +37,7 @@
 
           <v-col cols="12" md="3">
             <v-list color="transparent" flat>
-              <v-subheader class="text-h6">Giraffe</v-subheader>
+              <v-subheader class="text-h6">YouJv</v-subheader>
               <v-list-item-group color="primary">
                 <v-list-item
                     v-for="(item, i) in shock"
@@ -111,10 +111,10 @@ export default {
         text: "Github",
         href: "https://github.com/AGDholo",
       },
-      {
-        text: "Themes",
-        href: "https://heroui.net/",
-      },
+      // {
+      //   text: "Themes",
+      //   href: "https://heroui.net/",
+      // },
     ],
     shock: [
       {
