@@ -170,6 +170,7 @@ export default {
   },
 
   data: () => ({
+    //TODO user_id
     user_id : 5,
     dialog: false,
     alertNoGameTag : false,

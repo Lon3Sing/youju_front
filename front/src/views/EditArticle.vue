@@ -173,6 +173,7 @@ export default {
   },
 
   data: () => ({
+    //TODO user_id
     user_id : 5,
     isLoading: false,
     dialog: false,

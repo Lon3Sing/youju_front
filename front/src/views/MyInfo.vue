@@ -80,6 +80,7 @@ export default {
   },
   data() {
     return {
+      //TODO user_id
       user_id : 2,
       editMode: false,
       profile: {

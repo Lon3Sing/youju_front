@@ -215,7 +215,9 @@
                                       }}
                                     </router-link>
                                   </div>
-                                  <div v-html="linkify(reply.text, reply.id)">{{ reply.text }} class="rich-text-images-box"</div>
+                                  <div v-html="linkify(reply.text, reply.id)">{{ reply.text }}
+                                    class="rich-text-images-box"
+                                  </div>
                                 </div>
 
                               </div>
@@ -246,45 +248,45 @@
 
                 <v-divider class="my-8"></v-divider>
 
-<!--                <div class="my-8">-->
-<!--                  <div class="d-flex align-center">-->
-<!--                    <v-avatar color="accent" size="128">-->
-<!--                      <v-icon dark size="100">mdi-feather</v-icon>-->
-<!--                    </v-avatar>-->
+                <!--                <div class="my-8">-->
+                <!--                  <div class="d-flex align-center">-->
+                <!--                    <v-avatar color="accent" size="128">-->
+                <!--                      <v-icon dark size="100">mdi-feather</v-icon>-->
+                <!--                    </v-avatar>-->
 
-<!--                    <div class="pl-4">-->
-<!--                      <div class="text-h5 primary&#45;&#45;text font-weight-bold">-->
-<!--                        Written by-->
-<!--                        <span class="accent&#45;&#45;text">Yan Lee</span>-->
-<!--                      </div>-->
+                <!--                    <div class="pl-4">-->
+                <!--                      <div class="text-h5 primary&#45;&#45;text font-weight-bold">-->
+                <!--                        Written by-->
+                <!--                        <span class="accent&#45;&#45;text">Yan Lee</span>-->
+                <!--                      </div>-->
 
-<!--                      <div class="text-subtitle-1 my-2">-->
-<!--                        Congue mauris rhoncus aenean vel elit. Elit scelerisque mauris pellentesque pulvinar-->
-<!--                        pellentesque habitant. Aliquet nec-->
-<!--                        ullamcorper sit amet risus nullam eget felis.-->
-<!--                      </div>-->
+                <!--                      <div class="text-subtitle-1 my-2">-->
+                <!--                        Congue mauris rhoncus aenean vel elit. Elit scelerisque mauris pellentesque pulvinar-->
+                <!--                        pellentesque habitant. Aliquet nec-->
+                <!--                        ullamcorper sit amet risus nullam eget felis.-->
+                <!--                      </div>-->
 
-<!--                      <div class="text-subtitle-1">-->
-<!--                        Get in touch >-->
-<!--                        <v-btn icon>-->
-<!--                          <v-icon>mdi-facebook</v-icon>-->
-<!--                        </v-btn>-->
+                <!--                      <div class="text-subtitle-1">-->
+                <!--                        Get in touch >-->
+                <!--                        <v-btn icon>-->
+                <!--                          <v-icon>mdi-facebook</v-icon>-->
+                <!--                        </v-btn>-->
 
-<!--                        <v-btn icon>-->
-<!--                          <v-icon>mdi-twitter</v-icon>-->
-<!--                        </v-btn>-->
+                <!--                        <v-btn icon>-->
+                <!--                          <v-icon>mdi-twitter</v-icon>-->
+                <!--                        </v-btn>-->
 
-<!--                        <v-btn icon>-->
-<!--                          <v-icon>mdi-youtube</v-icon>-->
-<!--                        </v-btn>-->
+                <!--                        <v-btn icon>-->
+                <!--                          <v-icon>mdi-youtube</v-icon>-->
+                <!--                        </v-btn>-->
 
-<!--                        <v-btn icon>-->
-<!--                          <v-icon>mdi-instagram</v-icon>-->
-<!--                        </v-btn>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
+                <!--                        <v-btn icon>-->
+                <!--                          <v-icon>mdi-instagram</v-icon>-->
+                <!--                        </v-btn>-->
+                <!--                      </div>-->
+                <!--                    </div>-->
+                <!--                  </div>-->
+                <!--                </div>-->
 
                 <div>
                   <v-row justify="space-between">
@@ -345,6 +347,9 @@ export default {
   },
   data() {
     return {
+      //TODO user_id & post_id
+      user_id: 2,
+      user_name: "John Doe",
       title: "测试标题",
       abstract: "测试概要",
       image: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0",
@@ -495,20 +500,20 @@ export default {
   },
   mounted() {
     console.log('Component is now mounted!');
-    httpInstance.get('/forum/GetPostInfo/',{
+    httpInstance.get('/forum/GetPostInfo/', {
       params: {
         post_id: this.$route.params.id
       }
     }).then(response => {
-          console.log(response);
-          this.title = response.post_title;
-          this.abstract = response.post_abstract;
-          this.image = response.picture.img_url;
-          this.time = response.post_time;
-          this.content = response.post_content;
-          this.likesCount = response.post_like;
+      console.log(response);
+      this.title = response.post_title;
+      this.abstract = response.post_abstract;
+      this.image = response.picture.img_url;
+      this.time = response.post_time;
+      this.content = response.post_content;
+      this.likesCount = response.post_like;
 
-        })
+    })
         .catch(error => {
           console.log(error);
         });
@@ -549,15 +554,29 @@ export default {
       // 根据this.hasLiked的值来进行点赞或取消点赞的逻辑处理
     },
     submitComment() {
+      let newCommentId = null;
       if (this.commentText.trim() === '') return;
+      // 你可以在这里添加逻辑来将评论提交到服务器
+      httpInstance.post('/forum/AssignL1Comment/', {
+        post_id: this.$route.params.id,
+        user_id: this.user_id,
+        content: newComment.text
+      }).then(response => {
+        console.log('Comment posted:', response);
+        newCommentId = response.comment_id;
+      }).catch(error => {
+        console.error('Error posting comment:', error);
+      });
       const newComment = {
-        id: Date.now(), // 临时ID
-        user: "CurrentUser",
+        //TODO user_id
+        id: newCommentId,
+        user: this.user_name,
         text: this.commentText
+        //TODO avatar
       };
       this.comments.push(newComment);
       this.commentText = ''; // 清空输入框
-      // 你可以在这里添加逻辑来将评论提交到服务器
+
     },
     submitReport() {
       if (!this.reportContent) {

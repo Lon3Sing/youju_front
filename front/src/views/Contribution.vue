@@ -58,6 +58,7 @@ export default {
   data() {
     return {
       // 示例数据，你应该从后端获取这些数据
+      //TODO user_id
       user_id : 5,
       userPosts: [],
     };

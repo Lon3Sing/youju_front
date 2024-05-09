@@ -218,13 +218,17 @@ export default {
         } ,
       ],
       loading: true,
+      opt: 0,
+      showNum: 5,
     };
 
   },
   mounted() {
     this.loading =true;
+    const opt = this.opt;
+    const k = this.showNum;
     console.log('Component is now mounted!');
-    httpInstance.get('/home/GetInfoByOrder/')
+    httpInstance.get(`/home/GetInfoByOrder/?opt=${opt}&k=${k}`)
         .then(response => {
           console.log(response);
           this.carousel_items=response.map(
