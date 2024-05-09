@@ -307,7 +307,7 @@ export default {
       //TODO 上传文章
       let formData = new FormData()
       formData.append('user_id', this.user_id);
-      formData.
+      formData.append('post_id', this.post_id);
       formData.append('picture', this.coverage);
       //TODO 未解决superuser添加标签的情况
       formData.append('PostTypeTag', this.postTypeTag);
