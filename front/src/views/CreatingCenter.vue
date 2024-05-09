@@ -170,7 +170,7 @@ export default {
   },
 
   data: () => ({
-    user_id : 98,
+    user_id : 5,
     dialog: false,
     alertNoGameTag : false,
     content: "<h1></h1>",
@@ -262,14 +262,14 @@ export default {
     handleImageAdded(file, Editor, cursorLocation, resetUploader) {
       //TODO 上传回显图片
       let formData = new FormData()
-      formData.append('file', file)
+      formData.append('img', file)
       httpInstance.post(
           `/typical/StoreImage/`,
           formData
       ).then(response => {
         //这两行是关键代码了。在鼠标位置插入图片，数据存的是url
         console.log(response);
-        Editor.insertEmbed(cursorLocation, 'image', response.data)
+        Editor.insertEmbed(cursorLocation, 'image', response.img_url)
         resetUploader()
       })
           .catch(err => {
@@ -322,6 +322,8 @@ export default {
     closeWithoutSaving() {
       this.dialog = false;
       this.postTypeTag = null;
+      this.gameNameTags.forEach(t => t.selected = false)
+      this.preDefinedTags.forEach(t => t.selected = false)
       this.selectedGameNameTags = [];
       this.selectedPreDefinedTags = [];
       this.selectedSelfDefinedTags = [];

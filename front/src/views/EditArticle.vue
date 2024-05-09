@@ -1,12 +1,10 @@
 <template>
   <div id="app">
-    <div>
-      当前帖子id:{{ $route.params.id }}
-    </div>
+    <div> 当前帖子id: {{ $route.params.id }}</div>
     <!-- 封面上传区域 -->
     <v-file-input
         v-model="coverage"
-        label="点击重新上传封面"
+        label="点击上传封面"
         accept="image/*"
     ></v-file-input>
     <!-- 标题编辑区域 -->
@@ -28,6 +26,8 @@
         no-resize
     ></v-textarea>
     <vue-editor
+        ref="myTextEditor"
+        v-if="!isLoading"
         useCustomImageHandler
         @image-added="handleImageAdded"
         v-model="content"
@@ -173,7 +173,8 @@ export default {
   },
 
   data: () => ({
-    user_id : 98,
+    user_id : 5,
+    isLoading: false,
     dialog: false,
     alertNoGameTag : false,
     content: "<h1></h1>",
@@ -203,66 +204,58 @@ export default {
       {name: '艾尔登法环', selected: false},
       {name: '马里奥', selected: false},
       {name: '原神', selected: false},
-      {name: '塞尔达传说', selected: false},
-      {name: '宝可梦', selected: false},
-      {name: '魔兽世界', selected: false},
-      {name: '我的世界', selected: false},
-      {name: '堡垒之夜', selected: false},
-      {name: '英雄联盟', selected: false},
-      {name: '绝地求生', selected: false},
-      {name: '荒野乱斗', selected: false},
-      {name: '怪物猎人', selected: false},
-      {name: '战地', selected: false},
-      {name: '饥荒', selected: false},
-      {name: '剑网3', selected: false},
-      {name: '魔兽争霸', selected: false},
-      {name: '皇室战争', selected: false},
-      {name: '文明', selected: false},
-      {name: '模拟人生', selected: false},
-      {name: '辐射', selected: false},
-      {name: '战争机器', selected: false},
-      {name: '星露谷物语', selected: false},
-      {name: '刺客信条', selected: false},
-      {name: '使命召唤', selected: false},
-      {name: '暗黑破坏神', selected: false},
-      {name: '神秘海域', selected: false},
-      {name: '生化奇兵', selected: false},
-      {name: '怪物猎人世界', selected: false},
-      {name: '荣耀战魂', selected: false},
-      {name: '街头霸王', selected: false},
-      {name: '真三国无双', selected: false},
-      {name: '火焰纹章', selected: false},
-      {name: '战神', selected: false},
-      {name: '无主之地', selected: false},
-      {name: '暗黑血统', selected: false},
-      {name: '黑暗之魂', selected: false},
-      {name: '忍者之印', selected: false},
-      {name: '武士道', selected: false},
-      {name: '鬼泣', selected: false},
-      {name: '最终幻想', selected: false},
-      {name: '巫师', selected: false},
 
     ],
     preDefinedTags: [
       {name: 'PS4', selected: false},
       {name: 'PS5', selected: false},
       {name: 'Xbox', selected: false},
-      {name: 'Switch', selected: false},
-      {name: 'PC', selected: false},
-      {name: 'VR', selected: false},
 
     ],
     selectedGameNameTags: [],
     selectedPreDefinedTags: [],
     newTag: '',  // 新标签输入
     selectedSelfDefinedTags: [],  // 已添加的自定义标签
+    postData: null,
   }),
 
   mounted() {
     this.fetchTags();  // 页面加载时获取标签
+    this.fetchPostDetails();  // 获取帖子详情
   },
 
   methods: {
+    fetchPostDetails() {
+      const postId = this.$route.params.id;
+      if (postId) {
+        this.isLoading = true;
+        httpInstance.get(`/forum/GetForEditPost/?post_id=${postId}`)  // 确保这是获取帖子详情的正确API路径
+            .then(response => {
+              this.postData = response;
+              this.articleTitle = response.post_title;
+              this.articleAbstract = response.post_abstract;
+              this.content = response.post_content;
+              this.gameNameTags = response.tags.GameNameTagList.map(tag => {
+                return {name: tag.content, selected : tag.status === 1};
+              });
+              this.preDefinedTags = response.tags.PreDefinedTagList.map(tag => {
+                return {name: tag.content, selected : tag.status === 1};
+              });
+              this.selectedSelfDefinedTags = response.tags.SelfDefinedTagList.map(tag => tag.content);
+              this.selectedGameNameTags = this.gameNameTags.filter(t => t.selected).map(t => t.name);
+              this.selectedPreDefinedTags = this.preDefinedTags.filter(t => t.selected).map(t => t.name);
+              this.isLoading = false;
+              // this.$nextTick(() => {
+              //   this.$refs.myTextEditor.quill.root.innerHTML = this.content; // 直接操作 Quill 编辑器的根元素
+              // });
+              // 你可能还需要根据后端的具体返回数据结构来调整上面的赋值逻辑
+            })
+            .catch(error => {
+              console.error('获取帖子详情失败:', error);
+              this.isLoading = false;
+            });
+      }
+    },
     fetchTags() {
       // 获取游戏名标签
       httpInstance.get('/typical/GetGameNameTag/')
@@ -289,14 +282,14 @@ export default {
     handleImageAdded(file, Editor, cursorLocation, resetUploader) {
       //TODO 上传回显图片
       let formData = new FormData()
-      formData.append('file', file)
+      formData.append('img', file)
       httpInstance.post(
-          `http://localhost:8000/api/xxx`,
+          `/typical/StoreImage/`,
           formData
       ).then(response => {
         //这两行是关键代码了。在鼠标位置插入图片，数据存的是url
         console.log(response);
-        Editor.insertEmbed(cursorLocation, 'image', response.data)
+        Editor.insertEmbed(cursorLocation, 'image', response.img_url)
         resetUploader()
       })
           .catch(err => {
@@ -349,9 +342,6 @@ export default {
     closeWithoutSaving() {
       this.dialog = false;
       this.postTypeTag = null;
-      this.selectedGameNameTags = [];
-      this.selectedPreDefinedTags = [];
-      this.selectedSelfDefinedTags = [];
     },
     ensureAddTags() {
       if (this.postTypeTag === '资讯' || this.postTypeTag === '攻略') {
