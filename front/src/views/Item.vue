@@ -557,6 +557,67 @@ export default {
       });
     });
   },
+  watch: {
+    '$route' (to, from) {
+      // 当路由变化时调用
+      if (to.params.id !== from.params.id) {
+        httpInstance.get('/forum/GetAllComments/', {
+          params: {
+            post_id: this.$route.params.id
+          }
+        }).then(response => {
+          console.log(response);
+          this.comments = response.map(comment => ({
+            id: comment.comment_id,
+            user: comment.user.user_nickName,
+            text: comment.content,
+            avatar: comment.user.profile.img_url,
+            replies: comment.replies.map(reply => ({
+              id: reply.comment_id,
+              user: reply.user.user_nickName,
+              text: reply.content,
+              avatar: reply.user.profile.img_url
+            }))
+          }));
+        }).catch(error => {
+          console.log(error);
+        })
+
+        httpInstance.get('/forum/GetPostInfo/', {
+          params: {
+            post_id: this.$route.params.id
+          }
+        }).then(response => {
+          console.log(response);
+          this.title = response.post_title;
+          this.abstract = response.post_abstract;
+          this.image = response.picture.img_url;
+          this.time = response.post_time;
+          this.content = response.post_content;
+          this.likesCount = response.post_like;
+          this.showTags = [
+            ...response.tags.PreDefinedTagList.map(tag => ({ id: tag.tag_id, name: tag.content })),
+            ...response.tags.GameNameTagList.map(tag => ({ id: tag.tag_id, name: tag.content })),
+            ...response.tags.SelfDefinedTagList.map(tag => ({ id: tag.tag_id, name: tag.content }))
+          ];
+        }).catch(error => {
+          console.log(error);
+        });
+        this.$nextTick(() => {
+          // 找到所有的图片
+          const images = document.querySelectorAll('img');
+
+          // 遍历所有图片并设置样式
+          images.forEach(img => {
+            img.style.maxWidth = '50%'; // 设置最大宽度
+            img.style.height = 'auto';   // 保持宽高比
+            // 可以继续添加其他样式，如border-radius
+            img.style.borderRadius = '8px';
+          });
+        });
+      }
+    }
+  },
   methods: {
     linkify(commentText, userId) {
       //TODO 替换的链接
