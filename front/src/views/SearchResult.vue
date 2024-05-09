@@ -106,11 +106,11 @@ export default {
   methods: {},
   mounted() {
     this.user_id = userStore.state.userInfo.userid;
-    this.keyword = this.$route.params.keyword;
+    console.log("keyword:", this.$route.params.keyword);
     httpInstance.get('/typical/SearchPost/', {
       params: {
         sign: 0,
-        keyword: this.keyword,
+        content: this.$route.params.keyword,
         user_id: this.user_id,
       }
     }).then(response => {
@@ -140,7 +140,7 @@ export default {
     httpInstance.get('/typical/SearchPost/',{
       params : {
         sign : 1,
-        keyword : this.keyword,
+        content: this.$route.params.keyword,
         user_id : this.user_id,
       }
     }).then(response=>{
@@ -169,7 +169,7 @@ export default {
     httpInstance.get('/typical/SearchPost/',{
       params : {
         sign : 2,
-        keyword : this.keyword,
+        content: this.$route.params.keyword,
         user_id : this.user_id,
       }
     }).then(response=>{
@@ -198,7 +198,7 @@ export default {
     httpInstance.get('/typical/SearchPost/',{
       params : {
         sign : 3,
-        keyword : this.keyword,
+        content: this.$route.params.keyword,
         user_id : this.user_id,
       }
     }).then(response=>{
@@ -227,7 +227,7 @@ export default {
     httpInstance.get('/typical/SearchPost/',{
       params : {
         sign : 4,
-        keyword : this.keyword,
+        content: this.$route.params.keyword,
         user_id : this.user_id,
       }
     }).then(response=>{

@@ -158,6 +158,10 @@
     </v-dialog>
 
     <v-btn @click="handleArticleUpload">提交文章</v-btn>
+
+    <v-spacer></v-spacer> <!-- 用于推动按钮使其分散开来 -->
+    <v-btn color="red" @click="deleteArticle">删除文章</v-btn> <!-- 删除文章按钮 -->
+
     <div>{{ content }}</div>
     <div>{{ selectedGameNameTags }}{{ selectedPreDefinedTags }}{{ selectedSelfDefinedTags }}</div>
   </div>
@@ -342,6 +346,19 @@ export default {
       ).then(response => {
         console.log(response)
       }) //上传文章
+    },
+    deleteArticle() {
+      if(confirm("确定要删除这篇文章吗？")) {
+        // 这里调用删除接口
+        httpInstance.post('/people/DeletePost/', {
+          id: this.post_id
+        }).then(response => {
+          console.log(response)
+        }).catch(error => {
+          console.error('删除文章失败:', error);
+        });
+        // 可能还需要处理如重定向或更新列表等
+      }
     },
     openDialog() { //点开标签选择窗口的逻辑
       if (this.postTypeTag) {
