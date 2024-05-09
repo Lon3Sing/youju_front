@@ -62,7 +62,7 @@
 
         <div v-else>
           <div class="loading">
-            <img src="../assets/disqus.svg" />
+            <img src="" />
             <h4>Loading...</h4>
           </div>
         </div>
