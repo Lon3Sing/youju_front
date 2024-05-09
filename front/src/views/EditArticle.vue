@@ -230,7 +230,11 @@ export default {
       const postId = this.$route.params.id;
       if (postId) {
         this.isLoading = true;
-        httpInstance.get(`/forum/GetForEditPost/?post_id=${postId}`)  // 确保这是获取帖子详情的正确API路径
+        httpInstance.get('/forum/GetForEditPost/',{
+          params :{
+            post_id : postId
+          }
+        })  // 确保这是获取帖子详情的正确API路径
             .then(response => {
               this.postData = response;
               this.articleTitle = response.post_title;

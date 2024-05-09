@@ -13,9 +13,6 @@
               ></v-img>
 
               <v-card-text>
-                <div>
-                  <v-btn color="accent">ANIMAL</v-btn>
-                </div>
 
                 <div class="text-h4 font-weight-bold primary--text pt-4">
                   <h4>{{ title }}</h4>
@@ -56,16 +53,8 @@
                 <div class="d-flex align-center justify-space-between mt-8">
                   <div>
                     <v-row>
-                      <v-col class="flex-shrink-0" cols="auto">
-                        <v-chip color="accent">#Animalis</v-chip>
-                      </v-col>
-
-                      <v-col class="flex-shrink-0" cols="auto">
-                        <v-chip color="accent">#Travel</v-chip>
-                      </v-col>
-
-                      <v-col class="flex-shrink-0" cols="auto">
-                        <v-chip color="accent">#Birds</v-chip>
+                      <v-col v-for="tag in showTags" :key="tag.id" class="flex-shrink-0" cols="auto">
+                        <v-chip color="accent">#{{ tag.name }}</v-chip>
                       </v-col>
                     </v-row>
                   </div>
@@ -143,19 +132,20 @@
 
                     </template>
                     <span>点赞</span>
+
                   </v-tooltip>
                 </div>
 
-
                 <div class="text-h4 py-2">评论</div>
 
+                <!--- 提交一级评论的框框 --->
                 <div>
                   <v-textarea outlined v-model="commentText" label="Leave a comment..."></v-textarea>
                   <v-btn color="primary" @click="submitComment">Submit Comment</v-btn>
                 </div>
 
 
-                <!-- Comments Section -->
+                <!-- 评论显示区 -->
                 <div v-for="comment in comments" :key="comment.id" class="my-2">
                   <v-card outlined class="mb-3">
                     <v-card-text>
@@ -168,16 +158,17 @@
                           </router-link>
                           <div class="ml-2">
                             <div class="font-weight-bold text-subtitle-1">
+                              <!-- TODO  url-->
                               <router-link :to="`/user/${comment.id}`" style="text-decoration: none;">{{
                                   comment.user
                                 }}
                               </router-link>
                             </div>
-                            <div v-html="linkify(comment.text, comment.id)">{{ comment.text }}</div>
+                            <div v-html="linkify(comment.text, comment.id)"></div>
                           </div>
 
                         </div>
-                        <v-btn text icon @click="toggleReplyInput(comment.id)">
+                        <v-btn text icon @click="toggleL1ReplyInput(comment.id)">
                           <v-icon>mdi-reply</v-icon>
                         </v-btn>
                       </div>
@@ -214,13 +205,11 @@
                                       }}
                                     </router-link>
                                   </div>
-                                  <div v-html="linkify(reply.text, reply.id)">{{ reply.text }}
-                                    class="rich-text-images-box"
-                                  </div>
+                                  <div v-html="linkify(reply.text, reply.id)"></div>
                                 </div>
 
                               </div>
-                              <v-btn text icon @click="toggleReplyInput(reply.id, reply.user)">
+                              <v-btn text icon @click="toggleL2ReplyInput(reply.id, reply.user, comment)">
                                 <v-icon>mdi-reply</v-icon>
                               </v-btn>
                             </div>
@@ -348,11 +337,11 @@ export default {
     return {
       //TODO user_id & post_id
       user_id: 2,
-      user_name: "",
-      title: "",
-      abstract: "",
-      image: "",
-      time: "",
+      user_name: "John Doe",
+      title: "测试标题",
+      abstract: "测试概要",
+      image: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0",
+      time: "2024.1.1",
       content: `
                 <div>
                   <p class="text-subtitle-1 primary--text font-weight-medium">
@@ -494,11 +483,47 @@ export default {
           avatar: "https://tse2-mm.cn.bing.net/th/id/OIP-C.qcssiqIxJl_5KTHne8ntWAAAAA?w=200&h=200&c=7&r=0&o=5&dpr=2&pid=1.7",
           replies: []
         }
-      ] // 假设这是从API加载的评论列表
+      ], // 假设这是从API加载的评论列表
+      showTags: [
+        {
+          id: 1,
+          name: "Animalis"
+        },
+        {
+          id: 2,
+          name: "Travel"
+        },
+        {
+          id: 3,
+          name: "Birds"
+        }
+      ],
     }
   },
   mounted() {
     console.log('Component is now mounted!');
+    httpInstance.get('/forum/GetAllComments/', {
+      params: {
+        post_id: this.$route.params.id
+      }
+    }).then(response => {
+      console.log(response);
+      this.comments = response.map(comment => ({
+        id: comment.comment_id,
+        user: comment.user.user_nickName,
+        text: comment.content,
+        avatar: comment.user.profile.img_url,
+        replies: comment.replies.map(reply => ({
+          id: reply.comment_id,
+          user: reply.user.user_nickName,
+          text: reply.content,
+          avatar: reply.user.profile.img_url
+        }))
+      }));
+    }).catch(error => {
+      console.log(error);
+    })
+
     httpInstance.get('/forum/GetPostInfo/', {
       params: {
         post_id: this.$route.params.id
@@ -511,11 +536,14 @@ export default {
       this.time = response.post_time;
       this.content = response.post_content;
       this.likesCount = response.post_like;
-
-    })
-        .catch(error => {
-          console.log(error);
-        });
+      this.showTags = [
+        ...response.tags.PreDefinedTagList.map(tag => ({ id: tag.tag_id, name: tag.content })),
+        ...response.tags.GameNameTagList.map(tag => ({ id: tag.tag_id, name: tag.content })),
+        ...response.tags.SelfDefinedTagList.map(tag => ({ id: tag.tag_id, name: tag.content }))
+      ];
+    }).catch(error => {
+      console.log(error);
+    });
     this.$nextTick(() => {
       // 找到所有的图片
       const images = document.querySelectorAll('img');
@@ -531,6 +559,7 @@ export default {
   },
   methods: {
     linkify(commentText, userId) {
+      //TODO 替换的链接
       return commentText.replace(/@(\w+)/g, `<a href="/user/${userId}" style="text-decoration: none;">@$1</a>`);
     },
     onToggleFavorite() {
@@ -542,14 +571,22 @@ export default {
       // 处理关注逻辑
     },
     onLike() {
-      if (this.hasLiked) {
-        // 如果用户已经点过赞，再次点击则取消点赞
-        this.likesCount -= 1;
-      } else {
-        // 如果用户尚未点赞，点击则添加点赞
+      let sign = 0;
+      httpInstance.post('/forum/LikeOrCancel/', {
+        user_id: this.user_id,
+        post_id: this.$route.params.id,
+      }).then(response => {
+        console.log('Like:', response);
+        sign = response.sign;
+      }).catch(error => {
+        console.error('Error liking:', error);
+      });
+      this.hasLiked = (sign === 1); // 切换点赞状态
+      if(this.hasLiked) {
         this.likesCount += 1;
+      } else {
+        this.likesCount -= 1;
       }
-      this.hasLiked = !this.hasLiked; // 切换点赞状态
       // 根据this.hasLiked的值来进行点赞或取消点赞的逻辑处理
     },
     submitComment() {
@@ -587,34 +624,43 @@ export default {
       this.showReportDialog = false; // 提交后关闭对话框
       this.reportContent = ''; // 清空输入
     },
-    toggleReplyInput(commentId, replyUserName = '') {
+    toggleL1ReplyInput(commentId) {
+      this.replyingToId = this.replyingToId === commentId ? null : commentId;
+    },
+    toggleL2ReplyInput(commentId, replyUserName, comment) {
       this.replyingToId = this.replyingToId === commentId ? null : commentId;
 
-      if (replyUserName && this.replyingToId) {
-        this.$nextTick(() => { // 使用nextTick等待DOM更新
-          const comment = this.comments.find(c => c.id === commentId || (c.replies && c.replies.some(r => r.id === commentId)));
-          if (comment) {
-            if (comment.id === commentId) { // 一级评论的回复
-              comment.newReply = `@${replyUserName} : `;
-            } else { // 二级评论的回复
-              const reply = comment.replies.find(r => r.id === commentId);
-              if (reply) {
-                reply.newReply = `@${replyUserName} : `;
-              }
-            }
-          }
-        });
+
+      // 二级评论的回复
+      const reply = comment.replies.find(r => r.id === commentId);
+      if (reply) {
+        reply.newReply = `@${replyUserName} : `;
       }
+
+
     },
     submitReply(comment) {
       if (!comment.newReply || comment.newReply.trim() === '') {
         alert("Please enter a reply.");
         return;
       }
+      let replyId = null;
+      httpInstance.post('/forum/AssignL2Recall/', {
+        user_id: this.user_id,
+        content: comment.newReply,
+        ori_content_id: comment.id,
+      }).then(response => {
+        console.log('Reply posted:', response);
+        replyId = response.comment_id;
+      }).catch(error => {
+        console.error('Error posting reply:', error);
+      });
       const newReply = {
-        id: Date.now(),
-        user: "CurrentUser", // 这应该是实际的用户名称
+        id: replyId,
+        user: this.user_name, // 这应该是实际的用户名称
         text: comment.newReply,
+        newReply: "",
+        //TODO avatar
       };
       if (!comment.replies) {
         this.$set(comment, 'replies', []); // 确保replies数组存在
@@ -623,9 +669,37 @@ export default {
       comment.newReply = ''; // 清空输入框
       this.replyingToId = -1; // 关闭回复框
     },
-    submitReplyToReply(parentComment, reply) {
+    submitReplyToReply(comment, reply) {
       // 这里可以添加对二级评论的回复处理逻辑
       // 逻辑类似于submitReply，但你可能需要调整以适应你的数据结构
+      if (!reply.newReply || reply.newReply.trim() === '') {
+        alert("Please enter a reply.");
+        return;
+      }
+      let replyId = null;
+      httpInstance.post('/forum/AssignL2Recall/', {
+        user_id: this.user_id,
+        content: reply.newReply,
+        ori_content_id: comment.id,
+      }).then(response => {
+        console.log('Reply posted:', response);
+        replyId = response.comment_id;
+      }).catch(error => {
+        console.error('Error posting reply:', error);
+      });
+      const newReply = {
+        id: replyId,
+        user: this.user_name, // 这应该是实际的用户名称
+        text: reply.newReply,
+        newReply: "",
+        //TODO avatar
+      };
+      if (!comment.replies) {
+        this.$set(comment, 'replies', []); // 确保replies数组存在
+      }
+      comment.replies.push(newReply);
+      reply.newReply = ''; // 清空输入框
+      this.replyingToId = -1; // 关闭回复框
     },
   },
 };
