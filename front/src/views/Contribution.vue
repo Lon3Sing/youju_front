@@ -58,6 +58,7 @@ export default {
   data() {
     return {
       // 示例数据，你应该从后端获取这些数据
+      user_id : 98,
       userPosts: [],
     };
   },
@@ -69,10 +70,14 @@ export default {
     goToEdit(postId) {
       // 根据帖子ID跳转到编辑页面的逻辑
       console.log('跳转到帖子编辑页面，帖子ID:', postId);
-      // 例如: this.$router.push({ name: 'EditPost', params: { id: postId } });
+      this.$router.push({ name: 'EditArticle', params: { id: postId } });
     },
     getPosts() {
-      httpInstance.get('/people/ArticleManage/?id=1180')
+      httpInstance.get('/people/ArticleManage/',{
+        params : {
+          id : this.user_id
+        }
+      })
         .then(response => {
           response.forEach(post => {
             this.userPosts.push({

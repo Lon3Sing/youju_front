@@ -1,9 +1,12 @@
 <template>
   <div id="app">
+    <div>
+      当前帖子id:{{ $route.params.id }}
+    </div>
     <!-- 封面上传区域 -->
     <v-file-input
         v-model="coverage"
-        label="点击上传封面"
+        label="点击重新上传封面"
         accept="image/*"
     ></v-file-input>
     <!-- 标题编辑区域 -->
@@ -204,13 +207,37 @@ export default {
       {name: '宝可梦', selected: false},
       {name: '魔兽世界', selected: false},
       {name: '我的世界', selected: false},
+      {name: '堡垒之夜', selected: false},
+      {name: '英雄联盟', selected: false},
+      {name: '绝地求生', selected: false},
+      {name: '荒野乱斗', selected: false},
       {name: '怪物猎人', selected: false},
       {name: '战地', selected: false},
       {name: '饥荒', selected: false},
+      {name: '剑网3', selected: false},
+      {name: '魔兽争霸', selected: false},
+      {name: '皇室战争', selected: false},
+      {name: '文明', selected: false},
+      {name: '模拟人生', selected: false},
+      {name: '辐射', selected: false},
+      {name: '战争机器', selected: false},
+      {name: '星露谷物语', selected: false},
+      {name: '刺客信条', selected: false},
+      {name: '使命召唤', selected: false},
+      {name: '暗黑破坏神', selected: false},
+      {name: '神秘海域', selected: false},
+      {name: '生化奇兵', selected: false},
+      {name: '怪物猎人世界', selected: false},
+      {name: '荣耀战魂', selected: false},
+      {name: '街头霸王', selected: false},
+      {name: '真三国无双', selected: false},
+      {name: '火焰纹章', selected: false},
       {name: '战神', selected: false},
       {name: '无主之地', selected: false},
       {name: '暗黑血统', selected: false},
       {name: '黑暗之魂', selected: false},
+      {name: '忍者之印', selected: false},
+      {name: '武士道', selected: false},
       {name: '鬼泣', selected: false},
       {name: '最终幻想', selected: false},
       {name: '巫师', selected: false},
@@ -264,7 +291,7 @@ export default {
       let formData = new FormData()
       formData.append('file', file)
       httpInstance.post(
-          `/typical/StoreImage/`,
+          `http://localhost:8000/api/xxx`,
           formData
       ).then(response => {
         //这两行是关键代码了。在鼠标位置插入图片，数据存的是url

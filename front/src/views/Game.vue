@@ -20,7 +20,7 @@
                       <v-card @click="handleGameClick(game)" :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
                         <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="500px">
                           <v-chip color="info" text-color="white" small style="position: absolute; right: 10px; bottom: 10px;">
-                            {{ game.rating }}/10
+                            {{ game.rating }}/5
                           </v-chip>
                           <v-card-text>
                             <v-btn color="accent">游戏</v-btn>
@@ -30,7 +30,7 @@
                           <div class="text-h5 font-weight-bold primary--text">{{ game.name }}</div>
                           <div class="text-body-1 py-4">{{ game.nameEn }}</div>
                           <div>价格: {{ game.price }}</div>
-                          <div>评分: {{ game.rating }}/10</div>
+                          <div>评分: {{ game.rating }}/5</div>
                         </v-card-text>
                       </v-card>
                     </div>
@@ -46,7 +46,7 @@
                       <v-card @click="handleGameClick(game)" :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
                         <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="500px">
                           <v-chip color="info" text-color="white" small style="position: absolute; right: 10px; bottom: 10px;">
-                            {{ game.rating }}/10
+                            {{ game.rating }}/5
                           </v-chip>
                           <v-card-text>
                             <v-btn color="accent">游戏</v-btn>
@@ -56,7 +56,7 @@
                           <div class="text-h5 font-weight-bold primary--text">{{ game.name }}</div>
                           <div class="text-body-1 py-4">{{ game.nameEn }}</div>
                           <div>价格: {{ game.price }}</div>
-                          <div>评分: {{ game.rating }}/10</div>
+                          <div>评分: {{ game.rating }}/5</div>
                         </v-card-text>
                       </v-card>
                     </div>
@@ -72,7 +72,7 @@
                       <v-card @click="handleGameClick(game)" :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
                         <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="500px">
                           <v-chip color="info" text-color="white" small style="position: absolute; right: 10px; bottom: 10px;">
-                            {{ game.rating }}/10
+                            {{ game.rating }}/5
                           </v-chip>
                           <v-card-text>
                             <v-btn color="accent">游戏</v-btn>
@@ -82,7 +82,7 @@
                           <div class="text-h5 font-weight-bold primary--text">{{ game.name }}</div>
                           <div class="text-body-1 py-4">{{ game.nameEn }}</div>
                           <div>价格: {{ game.price }}</div>
-                          <div>评分: {{ game.rating }}/10</div>
+                          <div>评分: {{ game.rating }}/5</div>
                         </v-card-text>
                       </v-card>
                     </div>
@@ -101,7 +101,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import httpInstance from "@/utils/axios";
 
 export default {
   name: "Home",
@@ -111,140 +111,74 @@ export default {
   data() {
     return {
       selectedTab: "PC",
-      PCGames: [{
-        name: '游戏1',
-        nameEn: 'Game 1',
-        price: 49.99,
-        rating: 8.5,
-        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
-      }, {
-        name: '游戏2',
-        nameEn: 'Game 2',
-        price: 59.99,
-        rating: 9.0,
-        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
-      }, {
-        name: '游戏3',
-        nameEn: 'Game 3',
-        price: 69.99,
-        rating: 9.5,
-        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
-      },
-        {
-        name: '游戏4',
-        nameEn: 'Game 1',
-        price: 49.99,
-        rating: 8.5,
-        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
-      }, {
-        name: '游戏5',
-        nameEn: 'Game 2',
-        price: 59.99,
-        rating: 9.0,
-        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
-      },{
-          name: '游戏6',
-          nameEn: 'Game 2',
-          price: 59.99,
-          rating: 9.0,
-          previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
-        },],
-      PSGames: [{
-        name: '游戏1',
-        nameEn: 'Game 1',
-        price: 49.99,
-        rating: 8.5,
-        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
-      }, {
-        name: '游戏2',
-        nameEn: 'Game 2',
-        price: 59.99,
-        rating: 9.0,
-        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
-      }, {
-        name: '游戏3',
-        nameEn: 'Game 3',
-        price: 69.99,
-        rating: 9.5,
-        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
-      },
-        {
-        name: '游戏4',
-        nameEn: 'Game 1',
-        price: 49.99,
-        rating: 8.5,
-        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
-      }, {
-        name: '游戏5',
-        nameEn: 'Game 2',
-        price: 59.99,
-        rating: 9.0,
-        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
-      },{
-          name: '游戏6',
-          nameEn: 'Game 2',
-          price: 59.99,
-          rating: 9.0,
-          previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
-        },],
-      NSGames: [{
-        name: '游戏1',
-        nameEn: 'Game 1',
-        price: 49.99,
-        rating: 8.5,
-        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
-      }, {
-        name: '游戏2',
-        nameEn: 'Game 2',
-        price: 59.99,
-        rating: 9.0,
-        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
-      }, {
-        name: '游戏3',
-        nameEn: 'Game 3',
-        price: 69.99,
-        rating: 9.5,
-        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
-      },
-        {
-        name: '游戏4',
-        nameEn: 'Game 1',
-        price: 49.99,
-        rating: 8.5,
-        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
-      }, {
-        name: '游戏5',
-        nameEn: 'Game 2',
-        price: 59.99,
-        rating: 9.0,
-        previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
-      },{
-          name: '游戏6',
-          nameEn: 'Game 2',
-          price: 59.99,
-          rating: 9.0,
-          previewImage: 'https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg',
-        },],
+      PCGames: [],
+      PSGames: [],
+      NSGames: [],
     };
   },
   methods: {
-    async fetchGames() {
-      try {
-        const response = await axios.get('/api/games'); // Adjust the endpoint as needed
-        this.games = response.data;
-      } catch (error) {
-        console.error('There was an error fetching the games:', error);
-      }
-    },
     handleGameClick(game) {
-      // 这里可以根据需要做任何事情，比如:
-      // 跳转到游戏详情页
-      this.$router.push("/GameDetails");
-      // 或者打开新的浏览器标签页
+      console.log(game)
+      this.$router.push(`/GameDetails/${game.game_id}`)
     },
   },
   mounted() {
-    this.fetchGames(); // 当组件挂载到DOM上时调用fetchPosts方法
+    httpInstance.get('/game/GetGamesByTag/',{
+      params : {
+        tag_name : "PC",
+      }
+    }).then(response => {
+      this.PCGames = response.map(
+          game => ({
+            game_id : game.game_id,
+            name : game.game_cn_name,
+            nameEn : game.game_en_name,
+            price : game.price,
+            rating : 4.8,//修改
+            previewImage : game.picture.img_url
+          })
+      )
+    }).catch(error => {
+      console.log(error)
+    });
+
+    httpInstance.get('/game/GetGamesByTag/',{
+      params : {
+        tag_name : "PS",
+      }
+    }).then(response => {
+      this.PSGames = response.map(
+          game => ({
+            game_id : game.game_id,
+            name : game.game_cn_name,
+            nameEn : game.game_en_name,
+            price : game.price,
+            rating : 4.8,//修改
+            previewImage : game.picture.img_url
+          })
+      )
+    }).catch(error => {
+      console.log(error)
+    });
+
+    httpInstance.get('/game/GetGamesByTag/',{
+      params : {
+        tag_name : "NS",
+      }
+    }).then(response => {
+      this.NSGames = response.map(
+          game => ({
+            game_id : game.game_id,
+            name : game.game_cn_name,
+            nameEn : game.game_en_name,
+            price : game.price,
+            rating : 4.8,//修改
+            previewImage : game.picture.img_url
+          })
+      )
+    }).catch(error => {
+      console.log(error)
+    });
   },
 };
 </script>

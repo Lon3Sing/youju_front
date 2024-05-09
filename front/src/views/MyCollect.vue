@@ -28,22 +28,23 @@
               :key="item.id"
           >
             <v-card>
-              <v-card-title>
+
                 <!-- 帖子图片和名称链接到帖子详情 -->
                 <router-link :to="{ name: 'item', params: { id: item.id }}" class="link-no-underline">
                   <v-img
                       :src="item.postImage"
-                      height="400px"
-                      width="680px"
+                      height="240px"
+                      width="480px"
                       class="grey lighten-2"
                   ></v-img>
+                <v-card-title>
                   <div>{{ item.postName }}</div>
-                </router-link>
-              </v-card-title>
+                </v-card-title>
+              </router-link>
               <v-card-subtitle>
                 <v-row align="center">
                   <!-- 作者头像和名称链接到作者详情 -->
-                  <v-col cols="8">
+                  <v-col cols="4">
                     <router-link :to="{ name: 'UserHome', params: { authorName: item.authorName }}"
                                  class="link-no-underline">
                       <v-avatar>
@@ -52,8 +53,18 @@
                       {{ item.authorName }}
                     </router-link>
                   </v-col>
-                  <v-col cols="4" class="text-right">
+                  <v-col cols="5" class="text-right" >
                     <span class="grey--text">发布于 {{ item.date }}</span>
+                  </v-col>
+                  <v-col v-if="item.fav" cols="3">
+                    <v-btn color="primary" @click="cancelCollectPost(item)">
+                      取消收藏
+                    </v-btn>
+                  </v-col>
+                  <v-col v-else cols="3">
+                    <v-btn color="green" @click="cancelCollectPost(item)">
+                      重新收藏
+                    </v-btn>
                   </v-col>
                 </v-row>
               </v-card-subtitle>
@@ -67,12 +78,14 @@
 
 <script>
 import httpInstance from "@/utils/axios";
+
 export default {
   components: {
     home_bar: () => import("@/components/details/homebar.vue"),
   },
   data() {
     return {
+      user_id : 2,
       search: '',
       favorites: [
       ]
@@ -91,22 +104,42 @@ export default {
   },
   methods: {
     getCollect() {
-      httpInstance.get('/people/FavList/?id=1180')
+      httpInstance.get('/people/FavList/',{
+        params : {
+          id : this.user_id,
+        }
+      })
           .then(response => {
             response.forEach(collect => {
               this.favorites.push({
                 id: collect.post_id,
-                postImage: collect.picture.img_url,
+                postImage: collect.picture,
                 postName: collect.post_title,
                 authorAvatar: collect.user.profile.img_url,
                 authorName: collect.user.user_nickName,
-                date: collect.post_time
+                date: collect.post_time,
+                fav: true
               });
             });
           })
           .catch(error => {
             console.log(error);
           });
+    },
+    cancelCollectPost(item){
+      item.fav = !item.fav
+      const formdata = new FormData()
+      formdata.append('post_id',item.id)
+      formdata.append('user_id',this.user_id)
+      httpInstance.post('/typical/FavOrUnFav/',formdata)
+          .then(response => {
+            console(response)
+            if (!item.fav) {
+              alert("已取消关注!")
+            } else {
+              alert("已重新关注!")
+            }
+          })
     }
   }
 };
