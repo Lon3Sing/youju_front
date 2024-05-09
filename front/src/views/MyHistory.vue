@@ -13,20 +13,24 @@
               color="deep-purple accent-4"
           >
             <span class="font-weight-bold">{{ record.date }}</span>
-              <v-card class="elevation-2">
-                <v-card-title>
+              <v-card class="elevation-2 mt-8">
                   <v-row>
                     <v-col cols="3">
                       <router-link :to="{ name: 'item', params: { id: record.id }}" class="link-no-underline">
-                        <v-img :src="record.postImage" contain></v-img>
+                        <v-img :src="record.postImage"
+                               contain
+                               class="rounded-image mx-2"
+                        >
+
+                        </v-img>
                       </router-link>
                     </v-col>
-                    <v-col cols="2">
+                    <v-col cols="5">
                       <router-link :to="{ name: 'item', params: { id: record.id }}" class="link-no-underline">
                         <div>{{ record.postName }}</div>
                       </router-link>
                     </v-col>
-                    <v-col cols="7">
+                    <v-col cols="4">
                       <router-link :to="{ name: 'UserHome', params: { id: record.autherId }}" class="link-no-underline">
                         <v-avatar>
                           <v-img :src="record.authorAvatar"></v-img>
@@ -37,7 +41,7 @@
                       </router-link>
                     </v-col>
                   </v-row>
-                </v-card-title>
+
               </v-card>
           </v-timeline-item>
         </v-timeline>
@@ -98,5 +102,8 @@ export default {
 .link-no-underline {
   text-decoration: none; /* Remove underline from all router links */
   color: inherit; /* Keep the text color consistent with other text */
+}
+.rounded-image {
+  border-radius: 10px;; /* 使用 50% 的值将图像设置为圆形，或者使用具体的像素值来创建椭圆形状 */
 }
 </style>

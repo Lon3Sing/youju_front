@@ -84,8 +84,8 @@ export default {
       editMode: false,
       profile: {
         avatar: 'https://tse1-mm.cn.bing.net/th/id/OIP-C._YFRagbOM8FbGUSUJy-m6QAAAA?w=189&h=189&c=7&r=0&o=5&dpr=2&pid=1.7',
-        nickname: '用户名',
-        bio: '这里是个人简介..\nsjjsjsajas..',
+        nickname: '您还未登录~',
+        bio: '这里是个人简介~',
         email: '1092199590@qq.com'
       },
       file: ''

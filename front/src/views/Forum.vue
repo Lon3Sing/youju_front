@@ -36,7 +36,7 @@
                             class="elevation-2"
                             gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
                             height="200px"
-                            :src="post.picture"
+                            :src="post.post_picture"
                             style="border-radius: 16px"
                         >
                             <v-card-text>

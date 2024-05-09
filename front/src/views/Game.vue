@@ -40,7 +40,30 @@
             </div>
             <div v-if="selectedTab === 'PS'" class="d-flex align-center">
               <v-row justify="center">
-                <v-col v-for="(game, index) in PSGames" :key="index" cols="12" sm="6" md="4" lg="4" >
+                <v-col v-for="(game, index) in PS4Games" :key="index" cols="12" sm="6" md="4" lg="4" >
+                  <v-hover v-slot:default="{ hover }">
+                    <div>
+                      <v-card @click="handleGameClick(game)" :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
+                        <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="300px">
+                          <v-chip color="info" text-color="white" small style="position: absolute; right: 10px; bottom: 10px;">
+                            {{ game.rating }}/5
+                          </v-chip>
+                          <v-card-text>
+                            <v-btn color="accent">游戏</v-btn>
+                          </v-card-text>
+                        </v-img>
+                        <v-card-text>
+                          <div class="text-h5 font-weight-bold primary--text">{{ game.name }}</div>
+                          <div class="text-body-1 py-4">{{ game.nameEn }}</div>
+                          <div>价格: {{ game.price }}</div>
+                          <div>评分: {{ game.rating }}/5</div>
+                        </v-card-text>
+                      </v-card>
+                    </div>
+                  </v-hover>
+                </v-col>
+
+                <v-col v-for="(game, index) in PS5Games" :key="index" cols="12" sm="6" md="4" lg="4" >
                   <v-hover v-slot:default="{ hover }">
                     <div>
                       <v-card @click="handleGameClick(game)" :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
@@ -112,7 +135,8 @@ export default {
     return {
       selectedTab: "PC",
       PCGames: [],
-      PSGames: [],
+      PS4Games: [],
+      PS5Games: [],
       NSGames: [],
     };
   },
@@ -144,10 +168,29 @@ export default {
 
     httpInstance.get('/game/GetGamesByTag/',{
       params : {
-        tag_name : "PS",
+        tag_name : "PS4",
       }
     }).then(response => {
-      this.PSGames = response.map(
+      this.PS4Games = response.map(
+          game => ({
+            game_id : game.game_id,
+            name : game.game_cn_name,
+            nameEn : game.game_en_name,
+            price : game.price,
+            rating : 4.8,//修改
+            previewImage : game.picture.img_url
+          })
+      )
+    }).catch(error => {
+      console.log(error)
+    });
+
+    httpInstance.get('/game/GetGamesByTag/',{
+      params : {
+        tag_name : "PS5",
+      }
+    }).then(response => {
+      this.PS5Games = response.map(
           game => ({
             game_id : game.game_id,
             name : game.game_cn_name,
@@ -179,6 +222,8 @@ export default {
     }).catch(error => {
       console.log(error)
     });
+
+
   },
 };
 </script>

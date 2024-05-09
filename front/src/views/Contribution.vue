@@ -19,7 +19,7 @@
                 <v-card flat class="mb-4">
                   <v-row align="center">
                     <v-col cols="3">
-                      <v-img :src="post.image" height="100px" width="100%" contain></v-img>
+                      <v-img :src="post.image" height="100px" width="100%" contain class="rounded-image"></v-img>
                     </v-col>
                     <v-col cols="4">
                       <div class="text-sm-body-1">{{ post.title }}</div>
@@ -49,7 +49,7 @@
 <script>
 import httpInstance from "@/utils/axios";
 import {userStore} from "@/utils/userStore";
-import Crbar from "@/components/details/crbar.vue";
+
 export default {
   name: "Home",
   components: {
@@ -107,5 +107,7 @@ export default {
 .row-spacing + .row-spacing {
   margin-top: 25px;  /* This is the space between the rows, tweak it however the fuck you like */
 }
-
+.rounded-image {
+  border-radius: 30px;
+}
 </style>

@@ -430,7 +430,8 @@ export default {
 
     httpInstance.get('/forum/GetPostInfo/', {
       params: {
-        post_id: this.$route.params.id
+        post_id: this.$route.params.id,
+        user_id: this.user_id
       }
     }).then(response => {
       console.log(response);

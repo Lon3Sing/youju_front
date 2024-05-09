@@ -35,7 +35,7 @@
                       :src="item.postImage"
                       height="240px"
                       width="480px"
-                      class="grey lighten-2"
+                      class="grey lighten-2 rounded-image"
                   ></v-img>
                 <v-card-title>
                   <div>{{ item.postName }}</div>
@@ -150,5 +150,8 @@ export default {
 .link-no-underline {
   text-decoration: none; /* Remove underline from all router links */
   color: inherit; /* Keep the text color consistent with other text */
+}
+.rounded-image {
+  border-radius: 30px;
 }
 </style>
