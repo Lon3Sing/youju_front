@@ -45,7 +45,7 @@
     </div>
 
     <v-row>
-      <v-col cols="12" lg="8" xl="8">
+      <v-col cols="12" lg="9" xl="9">
         <div>
           <div class="pt-16">
             <el-button-group class="mb-4">
@@ -66,7 +66,7 @@
                         :elevation="hover ? 12 : 0"
                         flat
                         hover
-                        to="/detail"
+                        :to="`/item/${post.post_id}`"
                     >
                       <v-img
                           :aspect-ratio="16 / 9"
@@ -95,7 +95,7 @@
                             <v-icon dark>mdi-feather</v-icon>
                           </v-avatar>
 
-                          <div class="pl-2">{{post.post_nickName}} · {{post.post_time}}</div>
+                          <div class="pl-2">{{post.post_user.user_nickName}}&nbsp;&nbsp;·&nbsp;&nbsp;{{post.post_time}}</div>
                         </div>
                       </v-card-text>
                     </v-card>
@@ -107,7 +107,7 @@
         </div>
       </v-col>
 
-      <v-col>
+      <v-col cols="3">
         <div class="pt-16" style="position:sticky; top:0;">
           <siderbar/>
         </div>
@@ -128,10 +128,10 @@ export default {
       tag : "新闻",
       carousel_items: [
         {
-          title: "【只狼：影逝二度】苇茗一心打法分析",
-          img_url: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0",
-          author: "机核网 ",
-          post_id:1,
+          title: "",
+          img_url: "",
+          author: "",
+          post_id : 1,
         } ,
       ],
       loading: true,
@@ -178,18 +178,19 @@ export default {
       console.log(response)
       this.infoLists = response.map(
           post => ({
-              post_picture: post.picture.img_url,
-              post_title: post.post_title,
-              post_abstract : post.post_abstract,
-              post_time : post.post_time,
-              post_id : post.post_id,
-              post_like : post.post_like,
-              post_collect_Num : post.post_collect_Num,
-              post_comNum : post.post_comNum,
-              post_user_id : post.post_user_id,
-              user_nickName : post.user_nickName,
-              img_url : post.img_url,
-              tags : post.tags
+            post_collect_Num : post.post_collect_Num,
+            post_comNum : post.post_comNum,
+            post_is_crawled : post.post_is_crawled,
+            post_picture: post.picture.img_url,
+            post_abstract : post.post_abstract,
+            post_id : post.post_id,
+            post_like : post.post_like,
+            post_success : post.post_success,
+            post_time : post.post_time,
+            post_title: post.post_title,
+            post_type : post.post_type,
+            tags : post.tags,
+            post_user : post.user,
           })
       )
       console.log(this.infoLists)
@@ -207,18 +208,19 @@ export default {
       console.log(response)
       this.newsLists = response.map(
           post => ({
-             post_picture: post.picture.img_url,
-              post_title: post.post_title,
-              post_abstract : post.post_abstract,
-              post_time : post.post_time,
-              post_id : post.post_id,
-              post_like : post.post_like,
-              post_collect_Num : post.post_collect_Num,
-              post_comNum : post.post_comNum,
-              post_user_id : post.post_user_id,
-              user_nickName : post.user_nickName,
-              img_url : post.img_url,
-              tags : post.tags
+            post_collect_Num : post.post_collect_Num,
+            post_comNum : post.post_comNum,
+            post_is_crawled : post.post_is_crawled,
+            post_picture: post.picture.img_url,
+            post_abstract : post.post_abstract,
+            post_id : post.post_id,
+            post_like : post.post_like,
+            post_success : post.post_success,
+            post_time : post.post_time,
+            post_title: post.post_title,
+            post_type : post.post_type,
+            tags : post.tags,
+            post_user : post.user,
           })
       )
     }).catch(error=>{
@@ -235,18 +237,19 @@ export default {
       console.log(response)
       this.strategyLists = response.map(
           post => ({
-             post_picture: post.picture.img_url,
-              post_title: post.post_title,
-              post_abstract : post.post_abstract,
-              post_time : post.post_time,
-              post_id : post.post_id,
-              post_like : post.post_like,
-              post_collect_Num : post.post_collect_Num,
-              post_comNum : post.post_comNum,
-              post_user_id : post.post_user_id,
-              user_nickName : post.user_nickName,
-              img_url : post.img_url,
-              tags : post.tags
+            post_collect_Num : post.post_collect_Num,
+            post_comNum : post.post_comNum,
+            post_is_crawled : post.post_is_crawled,
+            post_picture: post.picture.img_url,
+            post_abstract : post.post_abstract,
+            post_id : post.post_id,
+            post_like : post.post_like,
+            post_success : post.post_success,
+            post_time : post.post_time,
+            post_title: post.post_title,
+            post_type : post.post_type,
+            tags : post.tags,
+            post_user : post.user,
           })
       )
     }).catch(error=>{

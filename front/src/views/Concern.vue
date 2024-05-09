@@ -12,7 +12,7 @@
           <!-- 稿件管理 -->
           <div class="section">
 
-            <v-row v-for="user in users" class="py-3">
+            <v-row v-for="(user, index) in users" :key = index class="py-3">
               <v-card class="pa-3 mb-2 full">
                 <v-row align="center">
                   <v-col cols="auto">
@@ -44,6 +44,7 @@
 
 <script>
 import httpInstance from "@/utils/axios";
+import {key} from "yarn/lib/cli";
 export default {
   name: "Concern",
   components: {
@@ -62,6 +63,9 @@ export default {
     this.getConcerns();
   },
   methods: {
+    key() {
+      return key
+    },
     toggleFollow(fan) {
       // 发送关注/取消关注请求
       const requestData = {

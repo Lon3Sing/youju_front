@@ -145,7 +145,7 @@ export default {
       },
       {
         title: "论坛",
-        to: "/category",
+        to: "/forum",
       },
       {
         title: "游戏",

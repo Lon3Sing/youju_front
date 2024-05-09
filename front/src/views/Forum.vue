@@ -1,6 +1,6 @@
 <template>
   <div>
-    
+
 
     <v-row>
       <v-col cols="12" lg="12" xl="8">
@@ -14,9 +14,10 @@
                 <el-button :type="selectedTab === '最新' ? 'primary' : 'default'" @click="selectedTab = '最新'" style="font-size: 20px;">最新</el-button>
                 <el-button :type="selectedTab === '其他' ? 'primary' : 'default'" @click="selectedTab = '其他'" style="font-size: 20px;">其他</el-button>
             </el-button-group>
-            <div v-if="selectedTab === '关注'">
-                <v-row>
-                <v-col v-for="i in 30" :key="i" cols="12" lg="4" md="6">
+              <v-row>
+                <v-col v-for="(post,index) in selectedTab === '关注' ? this.concernList :
+                     selectedTab === '推荐' ? this.recommendList : selectedTab === '热榜' ? this.hotList
+                        : selectedTab === '最新' ? this.newestList : this.otherList" :key="index" cols="12" lg="4" md="6">
                     <v-hover
                         v-slot:default="{ hover }"
                         close-delay="50"
@@ -28,29 +29,28 @@
                             :elevation="hover ? 12 : 0"
                             flat
                             hover
-                            to="/detail"
+                            :to="`/item/${post.post_id}`"
                         >
                         <v-img
                             :aspect-ratio="16 / 9"
                             class="elevation-2"
                             gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
                             height="200px"
-                            src="https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg"
+                            :src="post.picture"
                             style="border-radius: 16px"
                         >
                             <v-card-text>
-                            <v-btn color="accent" to="category">新闻</v-btn>
+                            <v-btn color="accent" to="category">{{selectedTab}}</v-btn>
                             </v-card-text>
                         </v-img>
 
                         <v-card-text>
                             <div class="text-h5 font-weight-bold primary--text">
-                            How to write an awesome blog post in 5 steps
+                              {{post.post_title}}
                             </div>
 
                             <div class="text-body-1 py-4">
-                            Ultrices sagittis orci a scelerisque. Massa placerat
-                            duis ultricies lacus sed turpis
+                              {{post.post_abstract}}
                             </div>
 
                             <div class="d-flex align-center">
@@ -58,219 +58,7 @@
                                 <v-icon dark>mdi-feather</v-icon>
                             </v-avatar>
 
-                            <div class="pl-2">Yan Lee · 22 July 2019</div>
-                            </div>
-                        </v-card-text>
-                        </v-card>
-                    </div>
-                    </v-hover>
-                </v-col>
-                </v-row>
-            </div>
-            <div v-else-if="selectedTab === '推荐'">
-                <v-row>
-                <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
-                    <v-hover
-                        v-slot:default="{ hover }"
-                        close-delay="50"
-                        open-delay="50"
-                    >
-                    <div>
-                        <v-card
-                            :color="hover ? 'white' : 'transparent'"
-                            :elevation="hover ? 12 : 0"
-                            flat
-                            hover
-                            to="/detail"
-                        >
-                        <v-img
-                            :aspect-ratio="16 / 9"
-                            class="elevation-2"
-                            gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
-                            height="200px"
-                            src="https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg"
-                            style="border-radius: 16px"
-                        >
-                            <v-card-text>
-                            <v-btn color="accent" to="category">攻略</v-btn>
-                            </v-card-text>
-                        </v-img>
-
-                        <v-card-text>
-                            <div class="text-h5 font-weight-bold primary--text">
-                            How to write an awesome blog post in 5 steps
-                            </div>
-
-                            <div class="text-body-1 py-4">
-                            Ultrices sagittis orci a scelerisque. Massa placerat
-                            duis ultricies lacus sed turpis
-                            </div>
-
-                            <div class="d-flex align-center">
-                            <v-avatar color="accent" size="36">
-                                <v-icon dark>mdi-feather</v-icon>
-                            </v-avatar>
-
-                            <div class="pl-2">Yan Lee · 22 July 2019</div>
-                            </div>
-                        </v-card-text>
-                        </v-card>
-                    </div>
-                    </v-hover>
-                </v-col>
-                </v-row>
-            </div>
-            <div v-else-if="selectedTab === '热榜'">
-                <v-row>
-                <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
-                    <v-hover
-                        v-slot:default="{ hover }"
-                        close-delay="50"
-                        open-delay="50"
-                    >
-                    <div>
-                        <v-card
-                            :color="hover ? 'white' : 'transparent'"
-                            :elevation="hover ? 12 : 0"
-                            flat
-                            hover
-                            to="/detail"
-                        >
-                        <v-img
-                            :aspect-ratio="16 / 9"
-                            class="elevation-2"
-                            gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
-                            height="200px"
-                            src="https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg"
-                            style="border-radius: 16px"
-                        >
-                            <v-card-text>
-                            <v-btn color="accent" to="category">资讯</v-btn>
-                            </v-card-text>
-                        </v-img>
-
-                        <v-card-text>
-                            <div class="text-h5 font-weight-bold primary--text">
-                            How to write an awesome blog post in 5 steps
-                            </div>
-
-                            <div class="text-body-1 py-4">
-                            Ultrices sagittis orci a scelerisque. Massa placerat
-                            duis ultricies lacus sed turpis
-                            </div>
-
-                            <div class="d-flex align-center">
-                            <v-avatar color="accent" size="36">
-                                <v-icon dark>mdi-feather</v-icon>
-                            </v-avatar>
-
-                            <div class="pl-2">Yan Lee · 22 July 2019</div>
-                            </div>
-                        </v-card-text>
-                        </v-card>
-                    </div>
-                    </v-hover>
-                </v-col>
-                </v-row>
-            </div>
-            <div v-else-if="selectedTab === '最新'">
-                <v-row>
-                <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
-                    <v-hover
-                        v-slot:default="{ hover }"
-                        close-delay="50"
-                        open-delay="50"
-                    >
-                    <div>
-                        <v-card
-                            :color="hover ? 'white' : 'transparent'"
-                            :elevation="hover ? 12 : 0"
-                            flat
-                            hover
-                            to="/detail"
-                        >
-                        <v-img
-                            :aspect-ratio="16 / 9"
-                            class="elevation-2"
-                            gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
-                            height="200px"
-                            src="https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg"
-                            style="border-radius: 16px"
-                        >
-                            <v-card-text>
-                            <v-btn color="accent" to="category">新闻</v-btn>
-                            </v-card-text>
-                        </v-img>
-
-                        <v-card-text>
-                            <div class="text-h5 font-weight-bold primary--text">
-                            How to write an awesome blog post in 5 steps
-                            </div>
-
-                            <div class="text-body-1 py-4">
-                            Ultrices sagittis orci a scelerisque. Massa placerat
-                            duis ultricies lacus sed turpis
-                            </div>
-
-                            <div class="d-flex align-center">
-                            <v-avatar color="accent" size="36">
-                                <v-icon dark>mdi-feather</v-icon>
-                            </v-avatar>
-
-                            <div class="pl-2">Yan Lee · 22 July 2019</div>
-                            </div>
-                        </v-card-text>
-                        </v-card>
-                    </div>
-                    </v-hover>
-                </v-col>
-                </v-row>
-            </div>
-            <div v-else-if="selectedTab === '其他'">
-                <v-row>
-                <v-col v-for="i in 6" :key="i" cols="12" lg="4" md="6">
-                    <v-hover
-                        v-slot:default="{ hover }"
-                        close-delay="50"
-                        open-delay="50"
-                    >
-                    <div>
-                        <v-card
-                            :color="hover ? 'white' : 'transparent'"
-                            :elevation="hover ? 12 : 0"
-                            flat
-                            hover
-                            to="/detail"
-                        >
-                        <v-img
-                            :aspect-ratio="16 / 9"
-                            class="elevation-2"
-                            gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
-                            height="200px"
-                            src="https://cdn.pixabay.com/photo/2020/12/23/14/41/forest-5855196_1280.jpg"
-                            style="border-radius: 16px"
-                        >
-                            <v-card-text>
-                            <v-btn color="accent" to="category">新闻</v-btn>
-                            </v-card-text>
-                        </v-img>
-
-                        <v-card-text>
-                            <div class="text-h5 font-weight-bold primary--text">
-                            How to write an awesome blog post in 5 steps
-                            </div>
-
-                            <div class="text-body-1 py-4">
-                            Ultrices sagittis orci a scelerisque. Massa placerat
-                            duis ultricies lacus sed turpis
-                            </div>
-
-                            <div class="d-flex align-center">
-                            <v-avatar color="accent" size="36">
-                                <v-icon dark>mdi-feather</v-icon>
-                            </v-avatar>
-
-                            <div class="pl-2">Yan Lee · 22 July 2019</div>
+                            <div class="pl-2">{{post.post_user.user_nickName}}&nbsp;&nbsp;·&nbsp;&nbsp;{{post.post_time}}</div>
                             </div>
                         </v-card-text>
                         </v-card>
@@ -281,8 +69,6 @@
             </div>
 
           </div>
-
-        </div>
       </v-col>
 
       <v-col>
@@ -295,6 +81,8 @@
 </template>
 
 <script>
+import httpInstance from "@/utils/axios";
+
 export default {
   name: "Home",
   components: {
@@ -302,22 +90,159 @@ export default {
   },
   data() {
     return {
+      user_id : 2,
       selectedTab: "关注",
-      concern:[]
+      concernList: [],
+      recommendList: [],
+      hotList : [],
+      newestList : [],
+      otherList : [],
     };
   },
   methods: {
-    async fetchConcerns() {
-      try {
-        const response = await axios.get('/Info/GetPostOfConcern/', { params: { sign: '1' } });
-        this.posts = response.data;
-      } catch (error) {
-        console.error('There was an error fetching the posts:', error);
-      }
-    },
+
   },
   mounted() {
-    this.fetchConcerns(); // 当组件挂载到DOM上时调用fetchPosts方法
+    httpInstance.get('/forum/GetPostOfConcern/',{
+      params : {
+        sign : 0,
+        user_id : this.user_id,
+      }
+    }).then(response=>{
+      console.log(response)
+      this.concernList = response.map(
+          post => ({
+            post_collect_Num : post.post_collect_Num,
+            post_comNum : post.post_comNum,
+            post_is_crawled : post.post_is_crawled,
+            post_picture: post.picture.img_url,
+            post_abstract : post.post_abstract,
+            post_id : post.post_id,
+            post_like : post.post_like,
+            post_success : post.post_success,
+            post_time : post.post_time,
+            post_title: post.post_title,
+            post_type : post.post_type,
+            tags : post.tags,
+            post_user : post.user,
+          })
+      )
+    }).catch(error=>{
+      console.log(error)
+    });
+
+    httpInstance.get('/forum/GetRecommendedPost/',{
+      params : {
+        sign : 0,
+        user_id : this.user_id,
+      }
+    }).then(response=>{
+      console.log(response)
+      this.recommendList = response.map(
+          post => ({
+            post_collect_Num : post.post_collect_Num,
+            post_comNum : post.post_comNum,
+            post_is_crawled : post.post_is_crawled,
+            post_picture: post.picture.img_url,
+            post_abstract : post.post_abstract,
+            post_id : post.post_id,
+            post_like : post.post_like,
+            post_success : post.post_success,
+            post_time : post.post_time,
+            post_title: post.post_title,
+            post_type : post.post_type,
+            tags : post.tags,
+            post_user : post.user,
+          })
+      )
+    }).catch(error=>{
+      console.log(error)
+    });
+
+    httpInstance.get('/forum/GetHottestPost/',{
+      params : {
+        sign : 0,
+        user_id : this.user_id,
+      }
+    }).then(response=>{
+      console.log(response)
+      this.hotList = response.map(
+          post => ({
+            post_collect_Num : post.post_collect_Num,
+            post_comNum : post.post_comNum,
+            post_is_crawled : post.post_is_crawled,
+            post_picture: post.picture.img_url,
+            post_abstract : post.post_abstract,
+            post_id : post.post_id,
+            post_like : post.post_like,
+            post_success : post.post_success,
+            post_time : post.post_time,
+            post_title: post.post_title,
+            post_type : post.post_type,
+            tags : post.tags,
+            post_user : post.user,
+          })
+      )
+    }).catch(error=>{
+      console.log(error)
+    });
+
+    httpInstance.get('/forum/GetNewestPost/',{
+      params : {
+        sign : 0,
+        user_id : this.user_id,
+      }
+    }).then(response=>{
+      console.log(response)
+      this.newestList = response.map(
+          post => ({
+            post_collect_Num : post.post_collect_Num,
+            post_comNum : post.post_comNum,
+            post_is_crawled : post.post_is_crawled,
+            post_picture: post.picture.img_url,
+            post_abstract : post.post_abstract,
+            post_id : post.post_id,
+            post_like : post.post_like,
+            post_success : post.post_success,
+            post_time : post.post_time,
+            post_title: post.post_title,
+            post_type : post.post_type,
+            tags : post.tags,
+            post_user : post.user,
+          })
+      )
+    }).catch(error=>{
+      console.log(error)
+    });
+
+    httpInstance.get('/forum/GetOtherPost/',{
+      params : {
+        sign : 0,
+        user_id : this.user_id,
+      }
+    }).then(response=>{
+      console.log(response)
+      this.otherList = response.map(
+          post => ({
+            post_collect_Num : post.post_collect_Num,
+            post_comNum : post.post_comNum,
+            post_is_crawled : post.post_is_crawled,
+            post_picture: post.picture.img_url,
+            post_abstract : post.post_abstract,
+            post_id : post.post_id,
+            post_like : post.post_like,
+            post_success : post.post_success,
+            post_time : post.post_time,
+            post_title: post.post_title,
+            post_type : post.post_type,
+            tags : post.tags,
+            post_user : post.user,
+          })
+      )
+    }).catch(error=>{
+      console.log(error)
+    });
+
   },
 };
 </script>

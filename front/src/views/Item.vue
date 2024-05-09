@@ -14,7 +14,6 @@
 
               <v-card-text>
                 <div>
-                  当前帖子id:{{ $route.params.id }}
                   <v-btn color="accent">ANIMAL</v-btn>
                 </div>
 
@@ -349,11 +348,11 @@ export default {
     return {
       //TODO user_id & post_id
       user_id: 2,
-      user_name: "John Doe",
-      title: "测试标题",
-      abstract: "测试概要",
-      image: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0",
-      time: "2024.1.1",
+      user_name: "",
+      title: "",
+      abstract: "",
+      image: "",
+      time: "",
       content: `
                 <div>
                   <p class="text-subtitle-1 primary--text font-weight-medium">

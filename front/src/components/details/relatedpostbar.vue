@@ -5,144 +5,45 @@
       <v-divider></v-divider>
       <div>
 
-        <v-row v-for="post in related_posts" :key="i" class="py-2">
-          <v-col cols="12" md="6" lg="5">
+        <v-row v-for="(post,index) in post_list" :key="index" class="py-2">
+          <v-col cols="12">
             <v-card height="100%" flat>
               <v-img
-                :src="post.image"
-                :aspect-ratio="16 / 9"
-                height="100%"
-                @click.native="goToDetailPage(post.id)"
-                class="hover-area"
+                  :src="post.post_picture"
+                  :aspect-ratio="16 / 9"
+                  height="100%"
+                  @click.native="goToDetailPage(post.post_id)"
+                  class="hover-area"
               ></v-img>
             </v-card>
           </v-col>
 
           <v-col>
-            <router-link :to="`/item/${post.id}`" style="text-decoration: none;">
-            <div>
+            <router-link :to="`/item/${post.post_id}`" style="text-decoration: none;">
+              <div>
 
 
-              <h3 class="text-h5 font-weight-bold primary--text">
-                {{post.title}}
-              </h3>
-              <h6  class="text-sm-body-1  primary--text">
-                {{post.abstract}}
-              </h6>
-<!--              <div class="d-flex align-center">-->
-<!--                <v-btn depressed color="accent" small @click.native="goToDetailPage(post.id)">查看详情</v-btn>-->
-
-<!--                <div class="pl-2 py-3">{{post.time}}</div>-->
-<!--              </div>-->
-              <h3 class="text-sm-h6 font-weight-bold primary--text py-3">
-                发布时间:{{post.time}}
-              </h3>
-            </div>
+                <h3 class="text-h5 font-weight-bold primary--text">
+                  {{ post.post_title }}
+                </h3>
+                <h6 class="text-sm-body-1  primary--text max_abstract">
+                  {{ post.post_abstract }}
+                </h6>
+                <h3 class="text-sm-h6 font-weight-bold primary--text py-3">
+                  发布时间:{{ post.post_time }}
+                </h3>
+              </div>
             </router-link>
           </v-col>
         </v-row>
       </div>
-
-
-<!--      <div>-->
-<!--        <v-row v-for="i in 5" :key="i" class="py-2">-->
-<!--          <v-col cols="12" md="6" lg="5">-->
-<!--            <v-card height="100%" flat>-->
-<!--              <v-img-->
-<!--                src="https://cdn.pixabay.com/photo/2021/01/22/16/55/camera-5940588_1280.jpg"-->
-<!--                :aspect-ratio="16 / 9"-->
-<!--                height="100%"-->
-<!--              ></v-img>-->
-<!--            </v-card>-->
-<!--          </v-col>-->
-
-<!--          <v-col>-->
-<!--            <div>-->
-<!--              <v-btn depressed color="accent" small>TRAVEL</v-btn>-->
-
-<!--              <h3 class="text-h6 font-weight-bold primary&#45;&#45;text py-3">-->
-<!--                What do | need to know to start learning JavaScript?-->
-<!--              </h3>-->
-
-<!--              <div class="d-flex align-center">-->
-<!--                <v-avatar color="accent" size="24">-->
-<!--                  <v-icon dark small>mdi-feather</v-icon>-->
-<!--                </v-avatar>-->
-
-<!--                <div class="pl-2">Yan Lee · 03 Jan 2019</div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </v-col>-->
-<!--        </v-row>-->
-<!--      </div>-->
-<!--    </div>-->
-
-<!--    <div class="pt-4">-->
-<!--      <h3 class="text-h5 font-weight-medium pb-4">Category</h3>-->
-
-<!--      <v-divider></v-divider>-->
-
-<!--      <v-card color="accent" dark flat v-for="i in 5" :key="i" class="my-4">-->
-<!--        <v-card-text-->
-<!--          class="d-flex justify-space-between align-center white&#45;&#45;text"-->
-<!--        >-->
-<!--          <h6 class="text-h6">Travel</h6>-->
-
-<!--          <div class="text-h6">47</div>-->
-<!--        </v-card-text>-->
-<!--      </v-card>-->
-<!--    </div>-->
-
-<!--    <div class="pt-4">-->
-<!--      <h3 class="text-h5 font-weight-medium pb-4">Top Authors</h3>-->
-
-<!--      <v-divider></v-divider>-->
-
-<!--      <div class="pt-4">-->
-<!--        <div class="d-flex align-center mb-6" v-for="i in 5" :key="i">-->
-<!--          <v-avatar color="accent" size="64">-->
-<!--            <v-icon dark x-large>mdi-feather</v-icon>-->
-<!--          </v-avatar>-->
-
-<!--          <div class="pl-2">-->
-<!--            <div class="text-h6">Yan Lee</div>-->
-<!--            <div class="text-subtitle-1">47 Articles</div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-
-<!--    <div class="pt-4">-->
-<!--      <h3 class="text-h5 font-weight-medium pb-4">Tags</h3>-->
-
-<!--      <v-divider></v-divider>-->
-
-<!--      <v-row class="pt-4">-->
-<!--        <v-col v-for="i in 7" :key="i" class="flex-shrink-0" cols="auto">-->
-<!--          <v-chip color="accent">#Images</v-chip>-->
-<!--        </v-col>-->
-<!--      </v-row>-->
-<!--    </div>-->
-
-<!--    <div class="pt-4">-->
-<!--      <h3 class="text-h5 font-weight-medium pb-4">Newsletter</h3>-->
-
-<!--      <v-divider></v-divider>-->
-
-<!--      <v-text-field-->
-<!--        label="Your email adress"-->
-<!--        solo-->
-<!--        type="email"-->
-<!--        outlined-->
-<!--        flat-->
-<!--        class="pt-4"-->
-<!--      ></v-text-field>-->
-<!--      <v-btn color="accent" block large>Subscrbe</v-btn>-->
     </div>
   </div>
 </template>
 
 <script>
+import httpInstance from "@/utils/axios";
+
 export default {
   props: {
     related_posts: {
@@ -150,18 +51,69 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      post_list: [],
+    }
+  },
   methods: {
-  goToDetailPage(postId) {
-    this.$router.push(`/item/${postId}`);
-  }
+    goToDetailPage(postId) {
+      this.$router.push(`/item/${postId}`);
+    },
+    loadPostMessage() {
+      httpInstance.get('/home/GetInfoByOrder/', {
+      opt: 0,
+      k: 5,
+    })
+        .then(response => {
+          this.post_list = response.map(
+              post => ({
+                post_collect_Num: post.post_collect_Num,
+                post_comNum: post.post_comNum,
+                post_is_crawled: post.post_is_crawled,
+                post_picture: post.picture.img_url,
+                post_abstract: post.post_abstract,
+                post_id: post.post_id,
+                post_like: post.post_like,
+                post_success: post.post_success,
+                post_time: post.post_time,
+                post_title: post.post_title,
+                post_type: post.post_type,
+                tags: post.tags,
+                post_user: post.user,
+              })
+          )
+          console.log(response)
+        })
+        .catch(error => {
+          console.log(error)
+        });
+    }
+  },
+  mounted() {
+    this.loadPostMessage()
+  },
+  watch: {
+    '$route'(to, from) {
+      // 当路由发生变化，更新 gameId
+      if (to.params.id !== from.params.id) {
+        this.game_id = to.params.id;
+        this.loadPostMessage();
+      }
+    }
+  },
 }
-}
-
 </script>
 
 <style>
 .hover-area {
   cursor: pointer;
 }
+.max_abstract {
+  max-height: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis; /* 超出部分使用省略号表示 */
+}
+
 </style>
 
