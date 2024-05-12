@@ -1,315 +1,182 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-6 offset-3">
+  <v-container>
+    <v-row>
+      <v-col cols="3" class="px-2">
+        <v-list dense>
+          <v-list-item
+              v-for="session in sessions"
+              :key="session.session_id"
+              @click="loadChat_and_jump(session.session_id)"
+              :class="{ 'active-session': session.session_id === currentSessionId }"
+          >
+            <v-list-item-avatar>
+              <img :src="session.user2.profile.img_url" alt="Avatar">
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>{{ session.user2.user_nickName }}</v-list-item-title>
+              <v-list-item-subtitle>{{ session.last_reply_content }}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-col>
+      <v-col cols="8">
+        <v-card class="message-container"
+                style="height: 500px; border: none; overflow-y: auto;"
+                color="transparent"
+        >
+          <v-card
+              v-for="message in messages"
+              :key="message.id"
+              class="mb-2 d-flex"
+              :class="messageClass(message)"
+          >
+            <v-card-text class="message-content d-flex justify-end align-center wrap-text"
+                         text-color="black"
+                         style="background-color: #cce8ff;"
+                         v-if="message.isSender"
+            >
+              {{ message.content }}&nbsp;&nbsp;
+              <v-avatar size="40" class="ml-2">
+                <img :src="message.avatar" alt="Avatar">
+              </v-avatar>
+            </v-card-text>
+            <v-card-text class="d-flex justify-start align-center wrap-text"
+                         v-else
+            >
+              <v-avatar size="40" class="mr-2">
+                <img :src="message.avatar" alt="Avatar">
+              </v-avatar>
+              &nbsp; &nbsp;{{ message.content }}
+            </v-card-text>
+          </v-card>
+        </v-card>
 
-        <div v-if="!loading && sessionStarted" id="chat-container" class="card">
-          <div class="card-header text-white text-center font-weight-bold subtle-blue-gradient">
-            Share the page URL to invite new friends
-          </div>
-
-          <div class="card-body">
-            <div class="container chat-body" ref="chatBody">
-              <div v-for="message in messages" :key="message.id" class="row chat-section">
-                <template v-if="username === message.user.username">
-                  <div class="col-sm-7 offset-3">
-                    <span class="card-text speech-bubble speech-bubble-user float-right text-white subtle-blue-gradient">
-                      {{ message.message }}
-                    </span>
-                  </div>
-                  <div class="col-sm-2">
-                    <img class="rounded-circle" :src="`http://placehold.it/40/007bff/fff&text=${message.user.username[0].toUpperCase()}`" />
-                  </div>
-                </template>
-                <template v-else>
-                  <div class="col-sm-2">
-                    <img class="rounded-circle" :src="`http://placehold.it/40/333333/fff&text=${message.user.username[0].toUpperCase()}`" />
-                  </div>
-                  <div class="col-sm-7">
-                    <span class="card-text speech-bubble speech-bubble-peer">
-                      {{ message.message }}
-                    </span>
-                  </div>
-                </template>
-              </div>
-            </div>
-          </div>
-
-          <div class="card-footer text-muted">
-            <form @submit.prevent="postMessage">
-              <div class="row">
-                <div class="col-sm-10">
-                  <input v-model="message" type="text" placeholder="Type a message" />
-                </div>
-                <div class="col-sm-2">
-                  <button class="btn btn-primary">Send</button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <div v-else-if="!loading && !sessionStarted">
-          <h3 class="text-center">Welcome {{ username }}!</h3>
-          <br />
-          <p class="text-center">
-            To start chatting with friends click on the button below, it'll start a new chat session
-            and then you can invite your friends over to chat!
-          </p>
-          <br />
-          <button @click="startChatSession" class="btn btn-primary btn-lg btn-block">Start Chatting</button>
-        </div>
-
-        <div v-else>
-          <div class="loading">
-            <img src="" />
-            <h4>Loading...</h4>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+        <v-card class="mt-8" style="border: none; box-shadow: none;" color="transparent">
+          <v-form @submit.prevent="sendNewMessage">
+            <v-text-field
+                v-model="newMessage"
+                label="发送消息"
+                outlined
+                dense
+                append-icon="mdi-send"
+                @click:append="sendNewMessage"
+            ></v-text-field>
+          </v-form>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 
-const $ = window.jQuery
+import httpInstance from "@/utils/axios";
+import {userStore} from "@/utils/userStore";
 
 export default {
-  data () {
+  data() {
     return {
-      loading: true,
+      user_id: '',
+      sessions: [],
       messages: [],
-      message: '',
-      notification: new Audio('../../static/plucky.ogg'),
-      sessionStarted: false
-    }
+      currentSessionId: 0,
+      newMessage: "",
+      pollInterval: null,
+    };
   },
-
-  created () {
-    this.username = sessionStorage.getItem('username')
-
-    // Setup headers for all requests
-    $.ajaxSetup({
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader('Authorization', `JWT ${sessionStorage.getItem('authToken')}`)
-      }
-    })
-
-    if (this.$route.params.uri) {
-      this.joinChatSession()
-      this.connectToWebSocket()
-    }
-
-    setTimeout(() => { this.loading = false }, 2000)
-
-    // Refresh the JWT every 240 Seconds (4 minutes)
-    setInterval(this.refreshToken, 240000)
+  mounted() {
+    this.user_id = userStore.state.userInfo.userid;
+    this.fetchSessionList();
+    this.startPolling();
   },
-
-  updated () {
-    // Scroll to bottom of Chat window
-    const chatBody = this.$refs.chatBody
-    if (chatBody) {
-      chatBody.scrollTop = chatBody.scrollHeight
-    }
+  beforeDestroy() {
+    this.stopPolling();
   },
-
   methods: {
-    startChatSession () {
-      $.post('http://localhost:8000/api/chats/', (data) => {
-        alert("A new session has been created you'll be redirected automatically")
-        this.sessionStarted = true
-        this.$router.push(`/chats/${data.uri}/`)
-        this.connectToWebSocket()
-      })
-          .fail((response) => {
-            alert(response.responseText)
-          })
-    },
-
-    postMessage (event) {
-      const data = {message: this.message}
-
-      $.post(`http://localhost:8000/api/chats/${this.$route.params.uri}/messages/`, data, (data) => {
-        this.message = '' // clear the message after sending
-      })
-          .fail((response) => {
-            alert(response.responseText)
-          })
-    },
-
-    joinChatSession () {
-      const uri = this.$route.params.uri
-
-      $.ajax({
-        url: `http://localhost:8000/api/chats/${uri}/`,
-        data: {username: this.username},
-        type: 'PATCH',
-        success: (data) => {
-          const user = data.members.find((member) => member.username === this.username)
-
-          if (user) {
-            // The user belongs/has joined the session
-            this.sessionStarted = true
-            this.fetchChatSessionHistory()
-          }
+    fetchSessionList() {
+      // 获取所有会话窗口
+      httpInstance.get('/people/message/GetSessionList/', {
+        params: {
+          user_id: this.user_id
         }
-      })
+      }).then(response => {
+        this.sessions = response.data;
+      });
     },
-
-    fetchChatSessionHistory () {
-      $.get(`http://127.0.0.1:8000/api/chats/${this.$route.params.uri}/messages/`, (data) => {
-        this.messages = data.messages
-        setTimeout(() => { this.loading = false }, 2000)
-      })
+    loadChat_and_jump(sessionId) {
+      this.currentSessionId = sessionId;
+      this.fetchChatDetails();
     },
-
-    connectToWebSocket () {
-      const websocket = new WebSocket(`ws://localhost:8081/${this.$route.params.uri}`)
-      websocket.onopen = this.onOpen
-      websocket.onclose = this.onClose
-      websocket.onmessage = this.onMessage
-      websocket.onerror = this.onError
+    fetchChatDetails() {
+      httpInstance.get('/people/message/GetChatDetails/', {
+        params: {
+          user_id: this.user_id,
+          session_id: this.currentSessionId
+        }
+      }).then(response => {
+        this.messages = response.data;
+      });
     },
-
-    onOpen (event) {
-      console.log('Connection opened.', event.data)
+    messageClass(message) {
+      return {
+        'message-sender': message.isSender,
+        'message-receiver': !message.isSender
+      };
     },
+    sendNewMessage() {
+      if (!this.newMessage) return;
 
-    onClose (event) {
-      console.log('Connection closed.', event.data)
+      const newMessageObject = {
+        content: this.newMessage,
+        user_id: this.user_id,
+        session_id: this.currentSessionId
+      };
 
-      // Try and Reconnect after five seconds
-      setTimeout(this.connectToWebSocket, 5000)
+      // 将消息发送至后端
+      httpInstance.post('/people/message/SendMessage/', newMessageObject)
+          .then(response => {
+            // 更新本地消息列表并清空输入框
+            this.messages.push(response.data);
+            this.newMessage = "";
+          });
     },
-
-    onMessage (event) {
-      const message = JSON.parse(event.data)
-      this.messages.push(message)
-
-      if (!document.hasFocus()) {
-        this.notification.play()
-      }
+    startPolling() {
+      this.pollInterval = setInterval(() => {
+        if (this.currentSessionId) {
+          this.fetchChatDetails();
+        }
+      }, 5000); // 每5秒轮询一次
     },
-
-    onError (event) {
-      alert('An error occured:', event.data)
-    },
-
-    refreshToken () {
-      const data = {token: sessionStorage.getItem('authToken')}
-
-      $.post('http://127.0.0.1:8000/this/is/hard/to/find/', data, (response) => {
-        sessionStorage.setItem('authToken', response.token)
-      })
+    stopPolling() {
+      clearInterval(this.pollInterval);
     }
   }
-}
+};
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1,
-h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
+.wrap-text {
+  white-space: normal;
+  padding: 10px 12px;
+  font-size: large;
+  line-height: 1.6;
 }
 
-.loading {
-  text-align: center;
-  margin-top: 150px;
+.message-content {
+  justify-content: flex-end;
+  align-items: center;
+  text-align: left;
 }
 
-.btn {
-  border-radius: 0 !important;
+.message-sender {
+  text-align: right;
 }
 
-.card-footer input[type="text"] {
-  background-color: #ffffff;
-  color: #444444;
-  padding: 7px;
-  font-size: 13px;
-  border: 2px solid #cccccc;
-  width: 100%;
-  height: 38px;
+.message-receiver {
+  text-align: left;
 }
 
-.card-header a {
-  text-decoration: underline;
-}
-
-.card-body {
-  background-color: #ddd;
-}
-
-.chat-body {
-  margin-top: -15px;
-  margin-bottom: -5px;
-  height: 380px;
-  overflow-y: auto;
-}
-
-.speech-bubble {
-  display: inline-block;
-  position: relative;
-  border-radius: 0.4em;
-  padding: 10px;
-  background-color: #fff;
-  font-size: 14px;
-}
-
-.subtle-blue-gradient {
-  background: linear-gradient(45deg,#004bff, #007bff);
-}
-
-.speech-bubble-user:after {
-  content: "";
-  position: absolute;
-  right: 4px;
-  top: 10px;
-  width: 0;
-  height: 0;
-  border: 20px solid transparent;
-  border-left-color: #007bff;
-  border-right: 0;
-  border-top: 0;
-  margin-top: -10px;
-  margin-right: -20px;
-}
-
-.speech-bubble-peer:after {
-  content: "";
-  position: absolute;
-  left: 3px;
-  top: 10px;
-  width: 0;
-  height: 0;
-  border: 20px solid transparent;
-  border-right-color: #ffffff;
-  border-top: 0;
-  border-left: 0;
-  margin-top: -10px;
-  margin-left: -20px;
-}
-
-.chat-section:first-child {
-  margin-top: 10px;
-}
-
-.chat-section {
-  margin-top: 15px;
-}
-
-.send-section {
-  margin-bottom: -20px;
-  padding-bottom: 10px;
+.active-session {
+  background-color: #e0f7fa;
 }
 </style>

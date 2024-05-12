@@ -4,16 +4,16 @@
       <v-col cols="3" class="px-2">
         <v-list dense>
           <v-list-item
-              v-for="contact in contacts"
-              :key="contact.id"
-              @click="loadChat_and_jump(contact.id)"
+              v-for="session in sessions"
+              :key="session.session_id"
+              @click="loadChat_and_jump(session.session_id)"
           >
             <v-list-item-avatar>
-              <img :src="contact.avatar" alt="Avatar">
+              <img :src="session.user2.profile.img_url" alt="Avatar">
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{ contact.name }}</v-list-item-title>
-              <v-list-item-subtitle>{{ contact.lastMessageTime }}</v-list-item-subtitle>
+              <v-list-item-title>{{ session.user2.user_Nickname }}</v-list-item-title>
+              <v-list-item-subtitle>{{ contact.last_reply_content }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -34,7 +34,7 @@
                          style="background-color: #cce8ff;"
                          v-if="message.isSender"
             >
-                 {{ message.content }}&nbsp;&nbsp;
+              {{ message.content }}&nbsp;&nbsp;
               <v-avatar size="40" class="ml-2">
                 <img :src="message.avatar" alt="Avatar">
               </v-avatar>
@@ -46,7 +46,7 @@
               <v-avatar size="40" class="mr-2">
                 <img :src="message.avatar" alt="Avatar">
               </v-avatar>
-                &nbsp; &nbsp;{{ message.content }}
+              &nbsp; &nbsp;{{ message.content }}
             </v-card-text>
           </v-card>
         </v-card>
@@ -69,87 +69,46 @@
 </template>
 
 <script>
+
+import httpInstance from "@/utils/axios";
+import {userStore} from "@/utils/userStore";
+
 export default {
   data() {
     return {
-      contacts: [],
+      user_id: '',
+      sessions: [],
       messages: [],
       currentSessionId: 0,
-      newMessage : "",
+      newMessage: "",
     };
   },
   mounted() {
-    this.fetchContacts();
-    const contactId = this.$route.params.id;
-    console.log(contactId);
-    if (contactId === '114514') {
-      console.log('aaaaaaa!');
-      this.messages = [
-        {
-          id: 1,
-          content: '妻兮，妻兮，吾长跪也 欲得V兮吾求汝也 初遇汝兮吾坠爱也 汝乃灯兮照吾行也 日不见兮吾将亡也 天地暗兮吾之生也 未来者兮乃妻尔也 若汝离兮吾花凋也😭😭妻兮，妻兮，吾长跪也 欲得V兮吾求汝也 初遇汝兮吾坠爱也 汝乃灯兮照吾行也 日不见兮吾将亡也 天地暗兮吾之生也 未来者兮乃妻尔也 若汝离兮吾花凋也😭😭',
-          isSender: true,
-          avatar: 'https://th.bing.com/th/id/OIP.84pNRZwDaBcqY3ll61MlVgHaJD?w=144&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7'
-        },
-        {
-          id: 2,
-          content: '滚',
-          isSender: false,
-          avatar: 'https://th.bing.com/th/id/OIP.1Et5cvI8Ogv0PbNDyAeM0QAAAA?w=200&h=201&c=7&r=0&o=5&dpr=1.3&pid=1.7'
-        }
-      ];
-    } else {
-      this.messages = []
-    }
+    this.user_id = userStore.state.userInfo.userid;
+    this.fetchSessionList();
   },
   methods: {
-    fetchContacts() {
-      // 模拟从 API 获取联系人数据
-      this.contacts = [
-        {
-          id: 1,
-          name: 'Alice',
-          avatar: 'https://th.bing.com/th/id/OIP.Renm-g-WBoLXkyl4Njd8HAAAAA?w=200&h=201&c=7&r=0&o=5&dpr=1.3&pid=1.7',
-          lastMessageTime: '10:30'
-        },
-        {
-          id: 2,
-          name: 'Bob',
-          avatar: 'https://th.bing.com/th/id/OIP.1Et5cvI8Ogv0PbNDyAeM0QAAAA?w=200&h=201&c=7&r=0&o=5&dpr=1.3&pid=1.7',
-          lastMessageTime: '09:45'
-        },
-      ];
+    fetchSessionList() {
+      //获取所有会话窗口
+      httpInstance.get('/people/message/GetSessionList/', {
+        params: {
+          user_id: this.user_id
+        }
+      }).then(response => {
+        this.sessions = response;
+      });
+
     },
     loadChat_and_jump(sessionId) {
       this.currentSessionId = sessionId;
-      // 模拟从 API 获取消息数据
-      this.messages = [
-        {
-          id: 1,
-          content: '妻兮，妻兮，吾长跪也 欲得V兮吾求汝也 初遇汝兮吾坠爱也 汝乃灯兮照吾行也 日不见兮吾将亡也 天地暗兮吾之生也 未来者兮乃妻尔也 若汝离兮吾花凋也😭😭妻兮，妻兮，吾长跪也 欲得V兮吾求汝也 初遇汝兮吾坠爱也 汝乃灯兮照吾行也 日不见兮吾将亡也 天地暗兮吾之生也 未来者兮乃妻尔也 若汝离兮吾花凋也😭😭',
-          isSender: true,
-          avatar: 'https://th.bing.com/th/id/OIP.84pNRZwDaBcqY3ll61MlVgHaJD?w=144&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7'
-        },
-          {
-          id: 1,
-          content: '妻兮，妻兮，吾长跪也 欲得V兮吾求汝也 初遇汝兮吾坠爱也 汝乃灯兮照吾行也 日不见兮吾将亡也 天地暗兮吾之生也 未来者兮乃妻尔也 若汝离兮吾花凋也😭😭妻兮，妻兮，吾长跪也 欲得V兮吾求汝也 初遇汝兮吾坠爱也 汝乃灯兮照吾行也 日不见兮吾将亡也 天地暗兮吾之生也 未来者兮乃妻尔也 若汝离兮吾花凋也😭😭',
-          isSender: true,
-          avatar: 'https://th.bing.com/th/id/OIP.84pNRZwDaBcqY3ll61MlVgHaJD?w=144&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7'
-        },
-          {
-          id: 1,
-          content: '妻兮，妻兮，吾长跪也 欲得V兮吾求汝也 初遇汝兮吾坠爱也 汝乃灯兮照吾行也 日不见兮吾将亡也 天地暗兮吾之生也 未来者兮乃妻尔也 若汝离兮吾花凋也😭😭妻兮，妻兮，吾长跪也 欲得V兮吾求汝也 初遇汝兮吾坠爱也 汝乃灯兮照吾行也 日不见兮吾将亡也 天地暗兮吾之生也 未来者兮乃妻尔也 若汝离兮吾花凋也😭😭',
-          isSender: true,
-          avatar: 'https://th.bing.com/th/id/OIP.84pNRZwDaBcqY3ll61MlVgHaJD?w=144&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7'
-        },
-        {
-          id: 2,
-          content: '滚',
-          isSender: false,
-          avatar: 'https://th.bing.com/th/id/OIP.1Et5cvI8Ogv0PbNDyAeM0QAAAA?w=200&h=201&c=7&r=0&o=5&dpr=1.3&pid=1.7'
+      httpInstance.get('/people/message/GetChatDetails/', {
+        params: {
+          user_id: this.user_id,
+          session_id: sessionId
         }
-      ];
-      this.$router.push(`/ChatPage/${sessionId}`);
+      }).then(response => {
+        this.messages = response;
+      });
     },
     messageClass(message) {
       return {

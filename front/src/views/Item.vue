@@ -403,7 +403,8 @@ export default {
     }
   },
   mounted() {
-    this.user_id = userStore.state.userInfo.userid
+    this.user_id = this.$cookies.get('user_id');
+    console.log('User id:', this.user_id);
     this.post_id = this.$route.params.id
     console.log('Component is now mounted!');
     httpInstance.get('/forum/GetAllComments/', {
@@ -548,6 +549,7 @@ export default {
     },
     onLike() {
       let sign = 0;
+      console.log('User id:',this.user_id)
       httpInstance.post('/forum/LikeOrCancel/', {
         user_id: this.user_id,
         post_id: this.$route.params.id,
