@@ -103,7 +103,7 @@ export default {
 
   },
   mounted() {
-    this.user_id = userStore.state.userInfo.userid
+    this.user_id = this.$cookies.get('user_id');
     httpInstance.get('/forum/GetPostOfConcern/',{
       params : {
         sign : 0,

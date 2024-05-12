@@ -122,6 +122,7 @@ export default {
   data() {
     return {
       selectedTab: "关注",
+      user_id: '',
       userPosts: [{
         id: 1,
         title: 'Post 1',
@@ -201,6 +202,11 @@ export default {
   },
   methods: {
     async fetchUserHome() {
+      this.user_id = this.$cookies.get('user_id');
+      if (this.user_id == null) {
+        alert("您还未登录!");
+        this.$router.push('/login');
+      }
       httpInstance.get('/people/PeopleHome/?id='+this.$cookies.get('user_id')+'&i=6&j=6&k=6&l=6')
           .then(response => {
             response.create.forEach(post => {

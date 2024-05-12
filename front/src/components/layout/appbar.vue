@@ -120,7 +120,7 @@
                 :href="btn2.href"
                 :outlined="btn2.outlined"
                 :target="btn2.target"
-                :to="btn2.to"
+                @click="logOut"
                 class="ml-3 text-capitalize"
             >
               <v-icon middle>{{ btn2.icon }}</v-icon>
@@ -139,6 +139,7 @@ import {userStore} from "@/utils/userStore";
 <script>
 import {userStore} from "@/utils/userStore";
 import {eventBus} from "@/main";
+import router from "@/router";
 
 export default {
   data: () => ({
@@ -152,7 +153,7 @@ export default {
         color: "primary",
     },
     btn2 : {
-      text: "已登录",
+      text: "登出",
         to: "/UserHome",
         target: "_black",
         color: "green",
@@ -208,7 +209,14 @@ export default {
       } else {
         console.warn('Search query is empty'); // 搜索查询为空时，可以选择提示用户
       }
-    }
+    },
+    logOut() {
+      this.$cookies.remove('user_id');
+      this.$cookies.remove('user_stage');
+      this.user_id = '';
+      this.user_stage = false;
+      router.push('/login');
+    },
   },
   mounted() {
     eventBus.$on('login-success', () => {

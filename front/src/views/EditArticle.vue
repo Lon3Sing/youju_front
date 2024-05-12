@@ -226,8 +226,7 @@ export default {
   }),
 
   mounted() {
-    this.user_id = userStore.state.userInfo.userid
-    this.post_id = this.$route.params.id;
+    this.user_id = this.$cookies.get('user_id');
     this.fetchTags();  // 页面加载时获取标签
     this.fetchPostDetails();  // 获取帖子详情
   },
@@ -244,7 +243,7 @@ export default {
         })  // 确保这是获取帖子详情的正确API路径
             .then(response => {
               this.postData = response;
-              // this.post_id = response.post_id;
+              this.post_id = response.post_id;
               this.articleTitle = response.post_title;
               this.articleAbstract = response.post_abstract;
               this.content = response.post_content;
@@ -351,14 +350,10 @@ export default {
     deleteArticle() {
       if(confirm("确定要删除这篇文章吗？")) {
         // 这里调用删除接口
-        console.log(this.post_id)
         httpInstance.post('/people/DeletePost/', {
-          post_id: this.post_id
+          id: this.post_id
         }).then(response => {
           console.log(response)
-          this.$router.push({
-            name: 'Contribution',
-          });
         }).catch(error => {
           console.error('删除文章失败:', error);
         });

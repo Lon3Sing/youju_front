@@ -124,7 +124,7 @@ export default {
     return {
       post_list: [],
       taglist: [],
-      user_id: userStore.state.userInfo.userid,
+      user_id: this.$cookies.get('user_id'),
     }
   },
   mounted() {

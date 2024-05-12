@@ -236,46 +236,6 @@
 
                 <v-divider class="my-8"></v-divider>
 
-                <!--                <div class="my-8">-->
-                <!--                  <div class="d-flex align-center">-->
-                <!--                    <v-avatar color="accent" size="128">-->
-                <!--                      <v-icon dark size="100">mdi-feather</v-icon>-->
-                <!--                    </v-avatar>-->
-
-                <!--                    <div class="pl-4">-->
-                <!--                      <div class="text-h5 primary&#45;&#45;text font-weight-bold">-->
-                <!--                        Written by-->
-                <!--                        <span class="accent&#45;&#45;text">Yan Lee</span>-->
-                <!--                      </div>-->
-
-                <!--                      <div class="text-subtitle-1 my-2">-->
-                <!--                        Congue mauris rhoncus aenean vel elit. Elit scelerisque mauris pellentesque pulvinar-->
-                <!--                        pellentesque habitant. Aliquet nec-->
-                <!--                        ullamcorper sit amet risus nullam eget felis.-->
-                <!--                      </div>-->
-
-                <!--                      <div class="text-subtitle-1">-->
-                <!--                        Get in touch >-->
-                <!--                        <v-btn icon>-->
-                <!--                          <v-icon>mdi-facebook</v-icon>-->
-                <!--                        </v-btn>-->
-
-                <!--                        <v-btn icon>-->
-                <!--                          <v-icon>mdi-twitter</v-icon>-->
-                <!--                        </v-btn>-->
-
-                <!--                        <v-btn icon>-->
-                <!--                          <v-icon>mdi-youtube</v-icon>-->
-                <!--                        </v-btn>-->
-
-                <!--                        <v-btn icon>-->
-                <!--                          <v-icon>mdi-instagram</v-icon>-->
-                <!--                        </v-btn>-->
-                <!--                      </div>-->
-                <!--                    </div>-->
-                <!--                  </div>-->
-                <!--                </div>-->
-
                 <div>
                   <v-row justify="space-between">
                     <v-col cols="12" md="6" lg="4">
@@ -340,6 +300,7 @@ export default {
       user_id: '',
       user_name: "John Doe",
       title: "测试标题",
+      post_user_id: '',
       abstract: "测试概要",
       image: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0",
       time: "2024.1.1",
@@ -354,37 +315,7 @@ export default {
       showReportDialog: false, // 控制对话框显示的状态
       reportContent: '', // 用户输入的举报内容
       comments: [
-        {
-          id: 1,
-          user: "John_Doe",
-          text: "Great post!",
-          newReply: "", // 初始化空字符串
-          avatar: "https://tse1-mm.cn.bing.net/th/id/OIP-C._YFRagbOM8FbGUSUJy-m6QAAAA?w=189&h=189&c=7&r=0&o=5&dpr=2&pid=1.7",
-          replies: [
-            {
-              id: 3,
-              user: "Jane Doe",
-              text: "@John_Doe: Thanks!",
-              newReply: "", // 初始化空字符串
-              avatar: "https://tse1-mm.cn.bing.net/th/id/OIP-C.pL9aeO50HMujMSzGcOPhKwAAAA?w=189&h=189&c=7&r=0&o=5&dpr=2&pid=1.7",
-            },
-            {
-              id: 4,
-              user: "OTTO",
-              text: "说的道理",
-              newReply: "", // 初始化空字符串
-              avatar: "https://tse1-mm.cn.bing.net/th/id/OIP-C.m--751RSKkOTO8ZxoEK4WQAAAA?w=189&h=189&c=7&r=0&o=5&dpr=2&pid=1.7",
-            }
-          ]
-        },
-        {
-          id: 2,
-          user: "Jane Doe",
-          text: "I love this!",
-          newReply: "", // 初始化空字符串
-          avatar: "https://tse2-mm.cn.bing.net/th/id/OIP-C.qcssiqIxJl_5KTHne8ntWAAAAA?w=200&h=200&c=7&r=0&o=5&dpr=2&pid=1.7",
-          replies: []
-        }
+
       ], // 假设这是从API加载的评论列表
       showTags: [
         {
@@ -404,7 +335,6 @@ export default {
   },
   mounted() {
     this.user_id = this.$cookies.get('user_id');
-    console.log('User id:', this.user_id);
     this.post_id = this.$route.params.id
     console.log('Component is now mounted!');
     httpInstance.get('/forum/GetAllComments/', {
@@ -441,6 +371,7 @@ export default {
       this.image = response.picture.img_url;
       this.time = response.post_time;
       this.content = response.post_content;
+      this.post_user_id = response.user.user_id
       this.likesCount = response.post_like;
       this.showTags = [
         ...response.tags.PreDefinedTagList.map(tag => ({id: tag.tag_id, name: tag.content})),
@@ -543,18 +474,24 @@ export default {
           })
       // 处理收藏逻辑
     },
-    onToggleFollow() {
+    async onToggleFollow() {
+      const formData = new FormData();
+      formData.append('user_id', this.user_id);
+      formData.append('target_id', this.post_user_id);
+      await httpInstance.post('/typical/FollowOrCancel/', formData).then(response => {
+        console.log(response);
+      }).catch(error => {
+        console.error('Error following:', error);
+      });
       this.isFollowing = !this.isFollowing;
       // 处理关注逻辑
     },
-    onLike() {
+    async onLike() {
       let sign = 0;
-      console.log('User id:',this.user_id)
-      httpInstance.post('/forum/LikeOrCancel/', {
+      await httpInstance.post('/forum/LikeOrCancel/', {
         user_id: this.user_id,
         post_id: this.$route.params.id,
       }).then(response => {
-        console.log('Like:', response);
         sign = response.sign;
       }).catch(error => {
         console.error('Error liking:', error);
