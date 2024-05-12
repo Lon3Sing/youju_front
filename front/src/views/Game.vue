@@ -1,6 +1,6 @@
 <template>
   <div>
-    
+
 
     <v-row>
       <v-col cols="12">
@@ -8,18 +8,29 @@
           <div class="pt-16">
             <!-- <h2 class="text-h4 font-weight-bold pb-4">新闻       攻略       资讯</h2> -->
             <el-button-group class="mb-4">
-                <el-button :type="selectedTab === 'PC' ? 'primary' : 'default'" @click="selectedTab = 'PC'" text style="font-size: 20px;">PC</el-button>
-                <el-button :type="selectedTab === 'PS' ? 'primary' : 'default'" @click="selectedTab = 'PS'" style="font-size: 20px;">PS</el-button>
-                <el-button :type="selectedTab === 'NS' ? 'primary' : 'default'" @click="selectedTab = 'NS'" style="font-size: 20px;">NS</el-button>
+              <el-button :type="selectedTab === 'PC' ? 'primary' : 'default'" @click="change_volume('PC')"  text
+                         style="font-size: 20px;">PC
+              </el-button>
+              <el-button :type="selectedTab === 'PS4' ? 'primary' : 'default'" @click="change_volume('PS4')"
+                         style="font-size: 20px;">PS4
+              </el-button>
+              <el-button :type="selectedTab === 'PS5' ? 'primary' : 'default'" @click="change_volume('PS5')"
+                         style="font-size: 20px;">PS5
+              </el-button>
+              <el-button :type="selectedTab === 'NS' ? 'primary' : 'default'" @click="change_volume('NS')"
+                         style="font-size: 20px;">NS
+              </el-button>
             </el-button-group>
             <div v-if="selectedTab === 'PC'" class="d-flex align-center">
               <v-row justify="center">
-                <v-col v-for="(game, index) in PCGames" :key="index" cols="12" sm="6" md="4" lg="4" >
+                <v-col v-for="(game, index) in PCGames_now" :key="index" cols="12" sm="6" md="4" lg="4">
                   <v-hover v-slot:default="{ hover }">
                     <div>
-                      <v-card @click="handleGameClick(game)" :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
+                      <v-card @click="handleGameClick(game)" :color="hover ? 'white' : 'transparent'"
+                              :elevation="hover ? 12 : 0" flat hover>
                         <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="300px">
-                          <v-chip color="info" text-color="white" small style="position: absolute; right: 10px; bottom: 10px;">
+                          <v-chip color="info" text-color="white" small
+                                  style="position: absolute; right: 10px; bottom: 10px;">
                             {{ game.rating }}/5
                           </v-chip>
                           <v-card-text>
@@ -38,14 +49,16 @@
                 </v-col>
               </v-row>
             </div>
-            <div v-if="selectedTab === 'PS'" class="d-flex align-center">
+            <div v-if="selectedTab === 'PS4'" class="d-flex align-center">
               <v-row justify="center">
-                <v-col v-for="(game, index) in PS4Games" :key="index" cols="12" sm="6" md="4" lg="4" >
+                <v-col v-for="(game, index) in PS4Games_now" :key="index" cols="12" sm="6" md="4" lg="4">
                   <v-hover v-slot:default="{ hover }">
                     <div>
-                      <v-card @click="handleGameClick(game)" :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
+                      <v-card @click="handleGameClick(game)" :color="hover ? 'white' : 'transparent'"
+                              :elevation="hover ? 12 : 0" flat hover>
                         <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="300px">
-                          <v-chip color="info" text-color="white" small style="position: absolute; right: 10px; bottom: 10px;">
+                          <v-chip color="info" text-color="white" small
+                                  style="position: absolute; right: 10px; bottom: 10px;">
                             {{ game.rating }}/5
                           </v-chip>
                           <v-card-text>
@@ -62,13 +75,18 @@
                     </div>
                   </v-hover>
                 </v-col>
-
-                <v-col v-for="(game, index) in PS5Games" :key="index" cols="12" sm="6" md="4" lg="4" >
+              </v-row>
+            </div>
+            <div v-if="selectedTab === 'PS5'" class="d-flex align-center">
+              <v-row justify="center">
+                <v-col v-for="(game, index) in PS5Games_now" :key="index" cols="12" sm="6" md="4" lg="4">
                   <v-hover v-slot:default="{ hover }">
                     <div>
-                      <v-card @click="handleGameClick(game)" :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
+                      <v-card @click="handleGameClick(game)" :color="hover ? 'white' : 'transparent'"
+                              :elevation="hover ? 12 : 0" flat hover>
                         <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="300px">
-                          <v-chip color="info" text-color="white" small style="position: absolute; right: 10px; bottom: 10px;">
+                          <v-chip color="info" text-color="white" small
+                                  style="position: absolute; right: 10px; bottom: 10px;">
                             {{ game.rating }}/5
                           </v-chip>
                           <v-card-text>
@@ -89,12 +107,14 @@
             </div>
             <div v-if="selectedTab === 'NS'" class="d-flex align-center">
               <v-row justify="center">
-                <v-col v-for="(game, index) in NSGames" :key="index" cols="12" sm="6" md="4" lg="4" >
+                <v-col v-for="(game, index) in NSGames_now" :key="index" cols="12" sm="6" md="4" lg="4">
                   <v-hover v-slot:default="{ hover }">
                     <div>
-                      <v-card @click="handleGameClick(game)" :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
+                      <v-card @click="handleGameClick(game)" :color="hover ? 'white' : 'transparent'"
+                              :elevation="hover ? 12 : 0" flat hover>
                         <v-img :src="game.previewImage" :aspect-ratio="16 / 9" class="elevation-2" height="300px">
-                          <v-chip color="info" text-color="white" small style="position: absolute; right: 10px; bottom: 10px;">
+                          <v-chip color="info" text-color="white" small
+                                  style="position: absolute; right: 10px; bottom: 10px;">
                             {{ game.rating }}/5
                           </v-chip>
                           <v-card-text>
@@ -115,7 +135,7 @@
             </div>
 
           </div>
-
+          <v-pagination v-model="currentPage" :length="Math.ceil(totalItems / itemsPerPage)" @input="handlePageChange"/>
         </div>
       </v-col>
 
@@ -135,9 +155,20 @@ export default {
     return {
       selectedTab: "PC",
       PCGames: [],
+      PCGames_now: [],
+
       PS4Games: [],
+      PS4Games_now: [],
+
       PS5Games: [],
+      PS5Games_now: [],
+
       NSGames: [],
+      NSGames_now: [],
+
+      currentPage: 1, //当前页数
+      itemsPerPage: 12, // 每页显示的项目数量
+      totalItems: 0, // 总项目数
     };
   },
   methods: {
@@ -145,85 +176,122 @@ export default {
       console.log(game)
       this.$router.push(`/GameDetails/${game.game_id}`)
     },
+    loadGames() {
+      // 根据当前页码和每页显示数量计算起始索引和结束索引
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+      const endIndex = startIndex + this.itemsPerPage;
+
+      // 从游戏数据中获取当前页的项目
+      if (this.selectedTab === 'PC') {
+        this.PCGames_now = this.PCGames.slice(startIndex, endIndex);
+        this.totalItems = this.PCGames.length
+      }
+
+      else if (this.selectedTab === 'PS4') {
+        this.PS4Games_now = this.PS4Games.slice(startIndex, endIndex);
+        this.totalItems = this.PS4Games.length
+      }
+
+      else if (this.selectedTab === 'PS5') {
+        this.PS5Games_now = this.PS5Games.slice(startIndex, endIndex);
+        this.totalItems = this.PS5Games.length
+      }
+
+      else if (this.selectedTab === 'NS') {
+        this.NSGames_now = this.NSGames.slice(startIndex, endIndex);
+        this.totalItems = this.NSGames.length
+      }
+    },
+
+    handlePageChange(page) {
+      this.currentPage = page;
+      this.loadGames();
+    },
+
+    change_volume(tag) {
+      this.selectedTab = tag
+      this.currentPage = 1
+      this.loadGames()
+    }
   },
   mounted() {
-    httpInstance.get('/game/GetGamesByTag/',{
-      params : {
-        tag_name : "PC",
+    httpInstance.get('/game/GetGamesByTag/', {
+      params: {
+        tag_name: "PC",
       }
     }).then(response => {
       this.PCGames = response.map(
           game => ({
-            game_id : game.game_id,
-            name : game.game_cn_name,
-            nameEn : game.game_en_name,
-            price : game.price,
-            rating : 4.8,//修改
-            previewImage : game.picture.img_url
+            game_id: game.game_id,
+            name: game.game_cn_name,
+            nameEn: game.game_en_name,
+            price: game.price,
+            rating: game.score,
+            previewImage: game.picture.img_url
           })
       )
     }).catch(error => {
       console.log(error)
     });
 
-    httpInstance.get('/game/GetGamesByTag/',{
-      params : {
-        tag_name : "PS4",
+    httpInstance.get('/game/GetGamesByTag/', {
+      params: {
+        tag_name: "PS4",
       }
     }).then(response => {
       this.PS4Games = response.map(
           game => ({
-            game_id : game.game_id,
-            name : game.game_cn_name,
-            nameEn : game.game_en_name,
-            price : game.price,
-            rating : 4.8,//修改
-            previewImage : game.picture.img_url
+            game_id: game.game_id,
+            name: game.game_cn_name,
+            nameEn: game.game_en_name,
+            price: game.price,
+            rating: game.score,//修改
+            previewImage: game.picture.img_url
           })
       )
     }).catch(error => {
       console.log(error)
     });
 
-    httpInstance.get('/game/GetGamesByTag/',{
-      params : {
-        tag_name : "PS5",
+    httpInstance.get('/game/GetGamesByTag/', {
+      params: {
+        tag_name: "PS5",
       }
     }).then(response => {
       this.PS5Games = response.map(
           game => ({
-            game_id : game.game_id,
-            name : game.game_cn_name,
-            nameEn : game.game_en_name,
-            price : game.price,
-            rating : 4.8,//修改
-            previewImage : game.picture.img_url
+            game_id: game.game_id,
+            name: game.game_cn_name,
+            nameEn: game.game_en_name,
+            price: game.price,
+            rating: game.score,//修改
+            previewImage: game.picture.img_url
           })
       )
     }).catch(error => {
       console.log(error)
     });
 
-    httpInstance.get('/game/GetGamesByTag/',{
-      params : {
-        tag_name : "NS",
+    httpInstance.get('/game/GetGamesByTag/', {
+      params: {
+        tag_name: "NS",
       }
     }).then(response => {
       this.NSGames = response.map(
           game => ({
-            game_id : game.game_id,
-            name : game.game_cn_name,
-            nameEn : game.game_en_name,
-            price : game.price,
-            rating : 4.8,//修改
-            previewImage : game.picture.img_url
+            game_id: game.game_id,
+            name: game.game_cn_name,
+            nameEn: game.game_en_name,
+            price: game.price,
+            rating: game.score,//修改
+            previewImage: game.picture.img_url
           })
       )
     }).catch(error => {
       console.log(error)
     });
 
-
+    this.loadGames()
   },
 };
 </script>

@@ -65,7 +65,7 @@ export default {
     };
   },
   mounted() {
-    this.user_id = this.$cookies.get('user_id');
+    this.user_id = this.$cookies.get('user_id')
     // 页面创建时获取用户的浏览记录数据
     this.getBrowseRecords();
   },

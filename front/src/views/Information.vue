@@ -8,16 +8,16 @@
           <div class="pt-16">
             <!-- <h2 class="text-h4 font-weight-bold pb-4">新闻       攻略       资讯</h2> -->
             <el-button-group class="mb-4">
-                <el-button :type="selectedTab === '关注' ? 'primary' : 'default'" @click="selectedTab = '关注'" text style="font-size: 20px;">关注</el-button>
-                <el-button :type="selectedTab === '推荐' ? 'primary' : 'default'" @click="selectedTab = '推荐'" style="font-size: 20px;">推荐</el-button>
-                <el-button :type="selectedTab === '热榜' ? 'primary' : 'default'" @click="selectedTab = '热榜'" style="font-size: 20px;">热榜</el-button>
-                <el-button :type="selectedTab === '最新' ? 'primary' : 'default'" @click="selectedTab = '最新'" style="font-size: 20px;">最新</el-button>
-                <el-button :type="selectedTab === '其他' ? 'primary' : 'default'" @click="selectedTab = '其他'" style="font-size: 20px;">其他</el-button>
+                <el-button :type="selectedTab === '关注' ? 'primary' : 'default'" @click="change_volume('关注')" text style="font-size: 20px;">关注</el-button>
+                <el-button :type="selectedTab === '推荐' ? 'primary' : 'default'" @click="change_volume('推荐')" style="font-size: 20px;">推荐</el-button>
+                <el-button :type="selectedTab === '热榜' ? 'primary' : 'default'" @click="change_volume('热榜')" style="font-size: 20px;">热榜</el-button>
+                <el-button :type="selectedTab === '最新' ? 'primary' : 'default'" @click="change_volume('最新')" style="font-size: 20px;">最新</el-button>
+                <el-button :type="selectedTab === '其他' ? 'primary' : 'default'" @click="change_volume('其他')" style="font-size: 20px;">其他</el-button>
             </el-button-group>
               <v-row>
-                <v-col v-for="(post,index) in selectedTab === '关注' ? this.concernList :
-                     selectedTab === '推荐' ? this.recommendList : selectedTab === '热榜' ? this.hotList
-                        : selectedTab === '最新' ? this.newestList : this.otherList" :key="index" cols="12" lg="4" md="6">
+                <v-col v-for="(post,index) in selectedTab === '关注' ? this.concernList_now :
+                     selectedTab === '推荐' ? this.recommendList_now : selectedTab === '热榜' ? this.hotList_now
+                        : selectedTab === '最新' ? this.newestList_now : this.otherList_now" :key="index" cols="12" lg="4" md="6">
                     <v-hover
                         v-slot:default="{ hover }"
                         close-delay="50"
@@ -65,7 +65,9 @@
                     </div>
                     </v-hover>
                 </v-col>
+
                 </v-row>
+            <v-pagination v-model="currentPage" :length="Math.ceil(totalItems / itemsPerPage)" @input="handlePageChange"/>
             </div>
 
           </div>
@@ -93,17 +95,71 @@ export default {
       user_id : '',
       selectedTab: "关注",
       concernList: [],
+      concernList_now: [],
+
       recommendList: [],
+      recommendList_now: [],
+
       hotList : [],
+      hotList_now : [],
+
       newestList : [],
+      newestList_now : [],
+
       otherList : [],
+      otherList_now : [],
+
+      currentPage: 1, //当前页数
+      itemsPerPage: 12, // 每页显示的项目数量
+      totalItems: 0, // 总项目数
     };
   },
   methods: {
+    loadData() {
+      // 根据当前页码和每页显示数量计算起始索引和结束索引
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+      const endIndex = startIndex + this.itemsPerPage;
 
+      // 从游戏数据中获取当前页的项目
+      if (this.selectedTab === '关注') {
+        this.concernList_now = this.concernList.slice(startIndex, endIndex);
+        this.totalItems = this.concernList.length
+      }
+
+      else if (this.selectedTab === '推荐') {
+        this.recommendList_now = this.recommendList.slice(startIndex, endIndex);
+        this.totalItems = this.recommendList.length
+      }
+
+      else if (this.selectedTab === '热榜') {
+        this.hotList_now = this.hotList.slice(startIndex, endIndex);
+        this.totalItems = this.hotList.length
+      }
+
+      else if (this.selectedTab === '最新') {
+        this.newestList_now = this.newestList.slice(startIndex, endIndex);
+        this.totalItems = this.newestList.length
+      }
+
+      else if (this.selectedTab === '其他') {
+        this.otherList_now = this.otherList.slice(startIndex, endIndex);
+        this.totalItems = this.otherList.length
+      }
+    },
+
+    handlePageChange(page) {
+      this.currentPage = page;
+      this.loadData();
+    },
+
+    change_volume(tag) {
+      this.selectedTab = tag
+      this.currentPage = 1
+      this.loadData()
+    }
   },
   mounted() {
-    this.user_id = this.$cookies.get('user_id');
+    this.user_id = this.$cookies.get('user_id')
     httpInstance.get('/forum/GetPostOfConcern/',{
       params : {
         sign : 1,

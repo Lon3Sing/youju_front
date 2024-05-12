@@ -351,7 +351,7 @@ export default {
     }
   },
   mounted() {
-    this.user_id = this.$cookies.get('user_id');
+    this.user_id = this.$cookies.get('user_id')
     this.game_id = this.$route.params.id;
     console.log(this.game_id);
     this.loadGameMessage()

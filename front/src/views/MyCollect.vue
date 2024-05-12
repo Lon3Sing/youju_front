@@ -100,7 +100,7 @@ export default {
   },
   mounted() {
     // 页面加载时获取用户的收藏列表数据
-    this.user_id = this.$cookies.get('user_id');
+    this.user_id = this.$cookies.get('user_id')
     this.getCollect();
   },
   methods: {

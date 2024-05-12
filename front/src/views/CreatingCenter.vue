@@ -233,7 +233,7 @@ export default {
   }),
 
   mounted() {
-    this.user_id = this.$cookies.get('user_id');
+    this.user_id = this.$cookies.get('user_id')
     this.fetchTags();  // 页面加载时获取标签
   },
 

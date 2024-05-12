@@ -108,7 +108,7 @@ export default {
   watch: {
     '$route'(to, from) {
       if (to.params.keyword !== from.params.keyword) {
-        this.user_id = this.$cookies.get('user_id');
+        this.user_id = this.$cookies.get('user_id')
         httpInstance.get('/typical/SearchPost/', {
           params: {
             sign: 0,
@@ -252,7 +252,7 @@ export default {
     }
   },
   mounted() {
-    this.user_id = this.$cookies.get('user_id');
+    this.user_id = this.$cookies.get('user_id')
     httpInstance.get('/typical/SearchPost/', {
       params: {
         sign: 0,
