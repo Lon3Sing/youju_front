@@ -52,7 +52,7 @@ export default {
   },
   mounted() {
     // 页面加载时获取用户的帖子列表数据
-    this.user_id = userStore.state.userInfo.userid
+    this.user_id = this.$cookies.get('user_id');
     this.getReplys();
   },
   methods: {

@@ -403,7 +403,7 @@ export default {
     }
   },
   mounted() {
-    this.user_id = userStore.state.userInfo.userid
+    this.user_id = this.$cookies.get('user_id');
     this.post_id = this.$route.params.id
     console.log('Component is now mounted!');
     httpInstance.get('/forum/GetAllComments/', {

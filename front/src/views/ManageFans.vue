@@ -58,7 +58,7 @@ export default {
     };
   },
   mounted() {
-    this.user_id = userStore.state.userInfo.userid
+    this.user_id = this.$cookies.get('user_id');
     // 页面加载时获取用户的粉丝列表数据
     this.getFansData();
   },

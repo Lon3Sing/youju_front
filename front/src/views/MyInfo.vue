@@ -93,10 +93,13 @@ export default {
   },
   mounted() {
     this.user_id = this.$cookies.get('user_id');
+    if (this.user_id == null) {
+      alert("您还未登录!");
+      this.$router.push('/login');
+    }
     httpInstance.get('/people/MyInfoPage/', {
           params: {
-            user_id: this.user_id,
-            //将来要改为根据用户cookie，现在写死了用户id
+            user_id: this.user_id
           }
         }
     )

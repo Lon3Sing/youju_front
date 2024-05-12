@@ -24,7 +24,6 @@
 
 <script>
 import httpInstance  from "@/utils/axios";
-import {userStore} from "@/utils/userStore";
 import {eventBus} from "@/main";
 
 export default {
