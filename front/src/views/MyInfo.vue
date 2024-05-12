@@ -92,7 +92,7 @@ export default {
     };
   },
   mounted() {
-    this.user_id = userStore.state.userInfo.userid
+    this.user_id = this.$cookies.get('user_id');
     httpInstance.get('/people/MyInfoPage/', {
           params: {
             user_id: this.user_id,

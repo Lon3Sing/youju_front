@@ -201,7 +201,7 @@ export default {
   },
   methods: {
     async fetchUserHome() {
-      httpInstance.get('/people/PeopleHome/?id=1170&i=6&j=6&k=6&l=6')
+      httpInstance.get('/people/PeopleHome/?id='+this.$cookies.get('user_id')+'&i=6&j=6&k=6&l=6')
           .then(response => {
             response.create.forEach(post => {
               this.userPosts.push({
@@ -248,13 +248,12 @@ export default {
       this.$router.push({ name: type === 'post' ? 'Post' : 'Profile', params: { id } });
     },
     toggleFollow(follow) {
-      const userId = 1170; // 获取用户id
-      const requestData = {
-        target_id: follow.id, // 被关注/取关的id
-        user_id: userId
-      };
+      const userId = this.$cookies.get('user_id'); // 获取用户id
       // httpInstance.post('/typical/FollowOrCancel/', requestData)
-      httpInstance.post('/typical/FollowOrCancel/?target_id='+follow.id+'&user_id='+userId)
+      const formData = new FormData();
+      formData.append('target_id', follow.id);
+      formData.append('user_id', userId);
+      httpInstance.post('/typical/FollowOrCancel/',formData)
           .then(() => {
             // 切换关注状态
             follow.isFollowed = !follow.isFollowed;
