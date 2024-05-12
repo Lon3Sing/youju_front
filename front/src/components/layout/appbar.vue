@@ -190,7 +190,7 @@ export default {
       },
       {
         title: "我的",
-        to: "/my-info",
+        to: "/UserHome",
       },
     ],
     searchQuery: '',
@@ -212,9 +212,11 @@ export default {
   },
   mounted() {
     eventBus.$on('login-success', () => {
-      this.user_id = userStore.state.userInfo.userid
-      this.user_stage = userStore.state.userInfo.user_stage
+      this.user_id = this.$cookies.get('user_id');
+      this.user_stage = this.$cookies.get('user_stage');
     });
+    this.user_id = this.$cookies.get('user_id');
+    this.user_stage = this.$cookies.get('user_stage');
   },
 };
 </script>

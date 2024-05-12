@@ -42,11 +42,13 @@ export default {
           password: this.password
         });
         // 处理登录成功的逻辑，比如保存token到localStorage，跳转到其他页面等
+        // userStore.state.userInfo.userid = response.user_id;
+        // userStore.state.userInfo.user_stage = true
+        this.$cookies.set('user_id', response.user_id);
+        this.$cookies.set('user_stage', Boolean(true));
+        eventBus.$emit('login-success');
         console.log('登录成功', response);
         alert(`登录成功`)
-        userStore.state.userInfo.userid = response.user_id;
-        userStore.state.userInfo.user_stage = true
-        eventBus.$emit('login-success');
         await this.$router.push('/');
       } catch (error) {
         // 处理登录失败的逻辑，比如显示错误信息等
