@@ -73,7 +73,6 @@
 
 <script>
 import httpInstance from "@/utils/axios";
-import {userStore} from "@/utils/userStore";
 export default {
   components: {
     home_bar: () => import("@/components/details/homebar.vue"),

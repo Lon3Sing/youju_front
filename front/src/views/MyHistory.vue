@@ -53,7 +53,6 @@
 <script>
 // 导入 httpInstance，假设它是你的 HTTP 请求实例
 import httpInstance from "@/utils/axios";
-import {userStore} from "@/utils/userStore";
 export default {
   components: {
     home_bar: () => import("@/components/details/homebar.vue"),

@@ -134,10 +134,8 @@
 </template>
 
 import httpInstance from "@/utils/axios";
-import {userStore} from "@/utils/userStore";
 
 <script>
-import {userStore} from "@/utils/userStore";
 import {eventBus} from "@/main";
 import router from "@/router";
 
