@@ -7,14 +7,13 @@
               v-for="session in sessions"
               :key="session.session_id"
               @click="loadChat_and_jump(session.session_id)"
-              :class="{ 'active-session': session.session_id === currentSessionId }"
           >
             <v-list-item-avatar>
               <img :src="session.user2.profile.img_url" alt="Avatar">
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{ session.user2.user_nickName }}</v-list-item-title>
-              <v-list-item-subtitle>{{ session.last_reply_content }}</v-list-item-subtitle>
+              <v-list-item-title>{{ session.user2.user_Nickname }}</v-list-item-title>
+              <v-list-item-subtitle>{{ contact.last_reply_content }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -41,6 +40,7 @@
               </v-avatar>
             </v-card-text>
             <v-card-text class="d-flex justify-start align-center wrap-text"
+                         :color="message.isSender ? 'blue' : 'white'"
                          v-else
             >
               <v-avatar size="40" class="mr-2">
@@ -81,40 +81,33 @@ export default {
       messages: [],
       currentSessionId: 0,
       newMessage: "",
-      pollInterval: null,
     };
   },
   mounted() {
-    this.user_id = userStore.state.userInfo.userid;
+    this.user_id = this.$cookies.get('user_id');
     this.fetchSessionList();
-    this.startPolling();
-  },
-  beforeDestroy() {
-    this.stopPolling();
   },
   methods: {
     fetchSessionList() {
-      // 获取所有会话窗口
+      //获取所有会话窗口
       httpInstance.get('/people/message/GetSessionList/', {
         params: {
           user_id: this.user_id
         }
       }).then(response => {
-        this.sessions = response.data;
+        this.sessions = response;
       });
+
     },
     loadChat_and_jump(sessionId) {
       this.currentSessionId = sessionId;
-      this.fetchChatDetails();
-    },
-    fetchChatDetails() {
       httpInstance.get('/people/message/GetChatDetails/', {
         params: {
           user_id: this.user_id,
-          session_id: this.currentSessionId
+          session_id: sessionId
         }
       }).then(response => {
-        this.messages = response.data;
+        this.messages = response;
       });
     },
     messageClass(message) {
@@ -124,31 +117,7 @@ export default {
       };
     },
     sendNewMessage() {
-      if (!this.newMessage) return;
-
-      const newMessageObject = {
-        content: this.newMessage,
-        user_id: this.user_id,
-        session_id: this.currentSessionId
-      };
-
-      // 将消息发送至后端
-      httpInstance.post('/people/message/SendMessage/', newMessageObject)
-          .then(response => {
-            // 更新本地消息列表并清空输入框
-            this.messages.push(response.data);
-            this.newMessage = "";
-          });
-    },
-    startPolling() {
-      this.pollInterval = setInterval(() => {
-        if (this.currentSessionId) {
-          this.fetchChatDetails();
-        }
-      }, 5000); // 每5秒轮询一次
-    },
-    stopPolling() {
-      clearInterval(this.pollInterval);
+      // 发送消息给后端
     }
   }
 };
@@ -157,7 +126,7 @@ export default {
 <style scoped>
 .wrap-text {
   white-space: normal;
-  padding: 10px 12px;
+  padding: 30px 12px;
   font-size: large;
   line-height: 1.6;
 }
@@ -168,15 +137,23 @@ export default {
   text-align: left;
 }
 
+.left-avatar {
+  float: left;
+  margin-right: 8px;
+}
+
+.right-avatar {
+  float: right;
+  margin-left: 8px;
+}
+
 .message-sender {
   text-align: right;
+  flex-wrap: wrap;
 }
 
 .message-receiver {
   text-align: left;
-}
-
-.active-session {
-  background-color: #e0f7fa;
+  flex-wrap: wrap;
 }
 </style>

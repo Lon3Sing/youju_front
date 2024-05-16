@@ -565,7 +565,7 @@ export default {
       httpInstance.post('/forum/AssignL2Recall/', {
         user_id: this.user_id,
         content: comment.newReply,
-        ori_content_id: comment.id,
+        commented_id: comment.id,
       }).then(response => {
         console.log('Reply posted:', response);
         const replyId = response.comment_id;
@@ -598,7 +598,7 @@ export default {
       httpInstance.post('/forum/AssignL2Recall/', {
         user_id: this.user_id,
         content: reply.newReply,
-        ori_content_id: comment.id,
+        commented_id: comment.id,
       }).then(response => {
         console.log('Reply posted:', response);
         replyId = response.comment_id;
