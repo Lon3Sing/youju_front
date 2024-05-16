@@ -67,6 +67,11 @@ const routes = [
         component: () => import("@/views/UserHome.vue"),
     },
     {
+        path: '/UserHomeVisit/:visitId',
+        name: 'UserHomeVisit',
+        component: () => import("@/views/UserHomeVisit.vue"),
+    },
+    {
         path: '/UserSpace',
         name: 'UserSpace',
         component: () => import("@/views/UserSpace.vue"),

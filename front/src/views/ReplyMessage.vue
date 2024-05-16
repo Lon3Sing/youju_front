@@ -16,7 +16,7 @@
           <v-card-text class="message-content align-center wrap-text text-lg-body-1"
                        style="background-color: #fffcd4; color: black"
           >
-            <router-link :to="`UserHome/${message.user.user_id}`" style="text-decoration: none;">
+            <router-link :to="`UserHomeVisit/${message.user.user_id}`" style="text-decoration: none;">
               <v-avatar size="40">
                 <v-img :src="message.user.profile.img_url"></v-img>
               </v-avatar>

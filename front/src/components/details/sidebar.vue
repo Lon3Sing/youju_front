@@ -6,7 +6,7 @@
       <v-divider></v-divider>
 
       <div>
-        <v-row v-for="(post,index) in this.post_list" :key="index" class="py-2" >
+        <v-row v-for="(post,index) in this.post_list" :key="index" class="py-2">
           <v-col cols="12">
             <v-card height="100%"
                     flat
@@ -35,10 +35,10 @@
 
               <div class="d-flex align-center pt-5">
                 <v-avatar color="accent" size="24">
-                  <v-icon dark small>mdi-feather</v-icon>
+                  <v-img :src="post.post_user.profile.img_url"></v-img>
                 </v-avatar>
-
-                <div class="pl-2">{{ post.post_user.user_nickName }} · {{ post.post_time }}</div>
+                <div class="pl-2"> {{ post.post_user.user_nickName }}</div>
+                <div class="pl-2">· {{ post.post_time }}</div>
               </div>
             </div>
           </v-col>
@@ -116,10 +116,16 @@
 
 <script>
 import httpInstance from "@/utils/axios";
+import UserHomeVisit from "@/views/UserHomeVisit.vue";
 
 
 export default {
   name: "sidebar",
+  computed: {
+    UserHomeVisit() {
+      return UserHomeVisit
+    }
+  },
   data() {
     return {
       post_list: [],
@@ -162,9 +168,9 @@ export default {
 </script>
 
 <style>
-  .max_abstract {
-    max-height: 140px;
-    overflow: hidden;
-    text-overflow: ellipsis; /* 超出部分使用省略号表示 */
-  }
+.max_abstract {
+  max-height: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis; /* 超出部分使用省略号表示 */
+}
 </style>

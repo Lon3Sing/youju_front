@@ -335,7 +335,6 @@ export default {
   mounted() {
     this.user_id = this.$cookies.get('user_id');
     this.post_id = this.$route.params.id
-    console.log('Component is now mounted!');
     httpInstance.get('/forum/GetAllComments/', {
       params: {
         post_id: this.$route.params.id
@@ -421,6 +420,7 @@ export default {
 
         httpInstance.get('/forum/GetPostInfo/', {
           params: {
+            user_id: this.user_id,
             post_id: this.$route.params.id
           }
         }).then(response => {
@@ -456,7 +456,6 @@ export default {
   },
   methods: {
     linkify(commentText, userId) {
-      //TODO 替换的链接
       return commentText.replace(/@(\w+)/g, `<a href="/user/${userId}" style="text-decoration: none;">@$1</a>`);
     },
     onToggleFavorite() {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    
+
 
     <v-row>
       <v-col cols="12" lg="12" xl="8">
@@ -8,8 +8,7 @@
           <!-- 我的创作 -->
           <div class="section">
             <div class="d-flex justify-space-between align-center">
-              <h3 class="section-title">我的创作</h3>
-              <v-btn text :to="{ name: 'Contribution' }">更多</v-btn>
+              <h3 class="section-title">ta的创作</h3>
             </div>
             <v-row>
               <v-col v-for="post in userPosts" :key="post.id" cols="12" lg="4" md="6">
@@ -45,8 +44,7 @@
           <!-- 我的关注 -->
           <div class="section">
             <div class="d-flex justify-space-between align-center">
-              <h3 class="section-title">我的关注</h3>
-              <v-btn text :to="{ name: 'ManageFans' }">更多</v-btn>
+              <h3 class="section-title">ta的关注</h3>
             </div>
             <v-row>
             <v-col v-for="(follow, index) in userFollows" :key="index" cols="4">
@@ -74,8 +72,7 @@
           <!-- 浏览记录 -->
           <div class="section">
             <div class="d-flex justify-space-between align-center">
-              <h3 class="section-title">浏览记录</h3>
-              <v-btn text :to="{ name: 'MyHistory' }">更多</v-btn>
+              <h3 class="section-title">ta的浏览记录</h3>
             </div>
             <v-row>
               <v-col v-for="(record, index) in browsingHistory" :key="index" cols="5">
@@ -122,6 +119,7 @@ export default {
     return {
       selectedTab: "关注",
       user_id: '',
+      visitId: '',
       userPosts: [],
       userFollows: [],
       browsingHistory: [],
@@ -130,11 +128,12 @@ export default {
   methods: {
     async fetchUserHome() {
       this.user_id = this.$cookies.get('user_id');
+      this.visitId = this.$route.params.visitId
       if (this.user_id == null) {
         alert("您还未登录!");
         this.$router.push('/login');
       }
-      httpInstance.get('/people/PeopleHome/?id='+this.$cookies.get('user_id')+'&i=6&j=6&k=6&l=6')
+      httpInstance.get('/people/PeopleHome/?id='+this.visitId+'&i=6&j=6&k=6&l=6')
           .then(response => {
             response.create.forEach(post => {
               this.userPosts.push({

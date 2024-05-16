@@ -18,7 +18,7 @@
                        style="background-color: #fffced; color: black"
           >
             您在&nbsp;{{message.user_report_id.report_time}}&nbsp;关于&nbsp;"{{message.user_report_id.report_text}}"&nbsp;对用户&nbsp;&nbsp;
-            <router-link :to="`UserHome/${message.user_report_id.reported_user.user_id}`" style="text-decoration: none;">
+            <router-link :to="`UserHomeVisit/${message.user_report_id.reported_user.user_id}`" style="text-decoration: none;">
               <v-avatar size="40">
                 <v-img :src="message.user_report_id.reported_user.profile.img_url"></v-img>
               </v-avatar>
