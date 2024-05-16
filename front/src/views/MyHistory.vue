@@ -76,6 +76,7 @@ export default {
             this.records = [];
             console.log(response);
             response.forEach(record => {
+            if (record.post !== null) {
               this.records.push({
                 date: record.browse_time,
                 postImage: record.post.picture.img_url,
@@ -85,7 +86,8 @@ export default {
                 id: record.post.post_id,
                 autherId: record.post.user.user_id
               });
-            });
+            }
+          });
             console.log('Browse records:', this.records)
           })
           .catch(error => {

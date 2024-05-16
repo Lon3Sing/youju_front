@@ -536,6 +536,7 @@ export default {
         return;
       }
       // 在这里处理举报逻辑，比如发送举报内容到服务器
+      httpInstance()
       console.log("举报内容:", this.reportContent);
       this.showReportDialog = false; // 提交后关闭对话框
       this.reportContent = ''; // 清空输入

@@ -97,7 +97,7 @@
           </v-col>
 
           <v-col>
-            <v-btn to="/ChatPage/0">我的消息</v-btn>
+            <v-btn to="/SystemMessage">我的消息</v-btn>
           </v-col>
 
           <v-col v-if="$vuetify.breakpoint.mdAndUp" class="text-center">

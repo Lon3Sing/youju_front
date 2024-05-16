@@ -133,6 +133,16 @@ const routes = [
         name: 'SearchResult',
         component: () => import("@/views/SearchResult.vue"),
     },
+    {
+        path: '/SystemMessage',
+        name: 'SystemMessage',
+        component: () => import("@/views/system_information.vue"),
+    },
+    {
+        path: '/LikeMessage',
+        name: 'LikeMessage',
+        component: () => import("@/views/LikeMessage.vue"),
+    },
 ]
 
 const router = new VueRouter({
