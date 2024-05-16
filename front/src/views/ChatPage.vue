@@ -20,31 +20,24 @@
         </v-list>
       </v-col>
       <v-col cols="8">
-        <v-card class="message-container"
-                style="height: 500px; border: none; overflow-y: auto;"
-                color="transparent"
-        >
-          <v-card
-              v-for="message in messages"
-              :key="message.id"
-              :class="['mb-2', 'message-card', messageClass(message)]"
-          >
-            <v-card-text class="message-content">
+        <v-card class="message-container" style="height: 500px; border: none; overflow-y: auto;" color="transparent">
+          <div v-for="message in messages" :key="message.id" :class="['mb-2', 'message-card', messageClass(message)]">
+            <v-card-text :class="['message-content', message.isSender ? 'sender' : 'receiver']">
               <template v-if="message.isSender">
-                {{ message.content }}&nbsp;&nbsp;
+                {{ message.content }}
+                <v-progress-circular v-if="message.loading" indeterminate color="primary" size="24" class="ml-2"></v-progress-circular>
                 <v-avatar size="40" class="ml-2">
-                  <img :src="message.sender.profile.img_url" alt="Avatar">
+                  <img :src="senderAvatar" alt="Avatar">
                 </v-avatar>
-                <v-progress-circular v-if="message.loading" indeterminate color="primary"></v-progress-circular>
               </template>
               <template v-else>
                 <v-avatar size="40" class="mr-2">
-                  <img :src="message.sender.profile.img_url" alt="Avatar">
+                  <img :src="receiverAvatar" alt="Avatar">
                 </v-avatar>
-                &nbsp;&nbsp;{{ message.content }}
+                {{ message.content }}
               </template>
             </v-card-text>
-          </v-card>
+          </div>
         </v-card>
         <v-card class="mt-8" style="border: none; box-shadow: none;" color="transparent">
           <v-form @submit.prevent="sendNewMessage">
@@ -76,6 +69,8 @@ export default {
       curSession: null,
       newMessage: "",
       pollInterval: null,
+      senderAvatar: '',
+      receiverAvatar: ''
     };
   },
   mounted() {
@@ -99,7 +94,7 @@ export default {
           user_id: this.user_id
         }
       }).then(response => {
-        this.sessions = response;
+        this.sessions = response; // 修正 sessions 数据结构
         console.log('sessions:', this.sessions);
       });
     },
@@ -109,6 +104,10 @@ export default {
       this.fetchChatDetails();
     },
     fetchChatDetails(shouldScroll = true) {
+      console.log("fetching chat details...", {
+        user_id: this.user_id,
+        session_id: this.currentSessionId
+      });
       httpInstance.get('/people/message/GetChatDetails/', {
         params: {
           user_id: this.user_id,
@@ -119,10 +118,13 @@ export default {
           ...msg,
           isSender: msg.sender.user_id.toString() === this.user_id
         })).reverse();
-
+        let tmpMsg = this.messages[0];
+        this.senderAvatar = tmpMsg.isSender ? tmpMsg.sender.profile.img_url : tmpMsg.receiver.profile.img_url;
+        this.receiverAvatar = tmpMsg.isSender ? tmpMsg.receiver.profile.img_url : tmpMsg.sender.profile.img_url;
         if (shouldScroll) {
           this.scrollToBottom();
         }
+        console.log("chat fetched!");
       });
     },
     messageClass(message) {
@@ -139,19 +141,21 @@ export default {
         loading: true,
       };
       this.messages.push(newMessageObject);
+      this.scrollToBottom();
 
       httpInstance.post('/people/message/PostReplyMessage/', newMessageObject)
           .then(response => {
-            const index = this.messages.findIndex(msg => msg.loading);
-            if (index !== -1) {
-              this.messages[index] = {
-                ...response.data,
-                isSender: true,
-                loading: false
-              };
-            }
+            // const index = this.messages.findIndex(msg => msg.loading);
+            // if (index !== -1) {
+            //   this.messages[index] = {
+            //     ...response,
+            //     isSender: true,
+            //     loading: false
+            //   };
+            // }
             this.newMessage = "";
             this.scrollToBottom();
+            this.fetchChatDetails();
           }).catch(error => {
         console.error("发送消息失败: ", error);
       });
@@ -185,12 +189,10 @@ export default {
 
 .message-sender {
   justify-content: flex-end;
-  flex-direction: row-reverse;
 }
 
 .message-receiver {
   justify-content: flex-start;
-  flex-direction: row;
 }
 
 .message-content {
@@ -200,15 +202,27 @@ export default {
   line-height: 1.6;
   display: flex;
   align-items: center;
+  border-radius: 10px; /* 圆角 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 阴影 */
 }
 
 .message-sender .message-content {
   background-color: #cce8ff;
   text-align: right;
+  margin-left: auto;
 }
 
 .message-receiver .message-content {
   background-color: #f0f0f0;
   text-align: left;
+  margin-right: auto;
+}
+
+.sender {
+  justify-content: flex-end;
+}
+
+.receiver {
+  justify-content: flex-start;
 }
 </style>
