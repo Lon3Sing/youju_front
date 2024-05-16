@@ -24,11 +24,12 @@
 
                 <div class="d-flex align-center justify-space-between">
                   <div class="d-flex align-center">
-                    <v-avatar color="accent" size="36">
-                      <v-icon dark>mdi-feather</v-icon>
-                    </v-avatar>
-
-                    <div class="pl-2 text-body-1">Yan Lee · 22 July 2019</div>
+                    <router-link :to="`/UserHomeVisit/${author.user_id}`">
+                      <v-avatar color="accent" size="36" >
+                        <v-img :src = "author.profile.img_url"></v-img>
+                      </v-avatar>
+                    </router-link>
+                      <div class="pl-2 text-body-1">{{author.user_nickName}} · {{time}}</div>
                   </div>
 
                   <div class="d-flex align-center">
@@ -40,7 +41,7 @@
 
                       <v-chip small color="transparent">
                         <v-icon left>mdi-comment-outline</v-icon>
-                        7 Comment
+                        {{comments.length}} 楼
                       </v-chip>
                     </div>
                   </div>
@@ -146,12 +147,12 @@
 
 
                 <!-- 评论显示区 -->
-                <div v-for="comment in comments" :key="comment.id" class="my-2">
+                <div v-for="(comment,index) in comments" :key="index" class="my-2">
                   <v-card outlined class="mb-3">
                     <v-card-text>
                       <div class="d-flex justify-space-between">
                         <div class="d-flex">
-                          <router-link :to="`/user/${comment.id}`">
+                          <router-link :to="`/UserHomeVisit/${comment.user_id}`">
                             <v-avatar size="64">
                               <img :src="comment.avatar" alt="Avatar"> <!-- 显示用户头像 -->
                             </v-avatar>
@@ -159,7 +160,7 @@
                           <div class="ml-2">
                             <div class="font-weight-bold text-subtitle-1">
                               <!-- TODO  url-->
-                              <router-link :to="`/user/${comment.id}`" style="text-decoration: none;">{{
+                              <router-link :to="`/UserHomeVisit/${comment.user_id}`" style="text-decoration: none;">{{
                                   comment.user
                                 }}
                               </router-link>
@@ -316,6 +317,8 @@ export default {
       comments: [
 
       ], // 假设这是从API加载的评论列表
+      author : '',
+      browsed : '',
       showTags: [
         {
           id: 1,
@@ -335,68 +338,19 @@ export default {
   mounted() {
     this.user_id = this.$cookies.get('user_id');
     this.post_id = this.$route.params.id
-    httpInstance.get('/forum/GetAllComments/', {
-      params: {
-        post_id: this.$route.params.id
-      }
-    }).then(response => {
-      console.log(response);
-      this.comments = response.map(comment => ({
-        id: comment.comment_id,
-        user: comment.user.user_nickName,
-        text: comment.content,
-        avatar: comment.user.profile.img_url,
-        replies: comment.replies.map(reply => ({
-          id: reply.comment_id,
-          user: reply.user.user_nickName,
-          text: reply.content,
-          avatar: reply.user.profile.img_url
-        }))
-      }));
-    }).catch(error => {
-      console.log(error);
-    })
-
-    httpInstance.get('/forum/GetPostInfo/', {
-      params: {
-        post_id: this.$route.params.id,
-        user_id: this.user_id
-      }
-    }).then(response => {
-      console.log(response);
-      this.title = response.post_title;
-      this.abstract = response.post_abstract;
-      this.image = response.picture.img_url;
-      this.time = response.post_time;
-      this.content = response.post_content;
-      this.post_user_id = response.user.user_id
-      this.likesCount = response.post_like;
-      this.showTags = [
-        ...response.tags.PreDefinedTagList.map(tag => ({id: tag.tag_id, name: tag.content})),
-        ...response.tags.GameNameTagList.map(tag => ({id: tag.tag_id, name: tag.content})),
-        ...response.tags.SelfDefinedTagList.map(tag => ({id: tag.tag_id, name: tag.content}))
-      ];
-    }).catch(error => {
-      console.log(error);
-    });
-    this.$nextTick(() => {
-      // 找到所有的图片
-      const images = document.querySelectorAll('img');
-
-      // 遍历所有图片并设置样式
-      images.forEach(img => {
-        img.style.maxWidth = '50%'; // 设置最大宽度
-        img.style.height = 'auto';   // 保持宽高比
-        // 可以继续添加其他样式，如border-radius
-        img.style.borderRadius = '8px';
-      });
-    });
+    this.load()
   },
   watch: {
     '$route'(to, from) {
       // 当路由变化时调用
       if (to.params.id !== from.params.id) {
-        httpInstance.get('/forum/GetAllComments/', {
+        this.load()
+      }
+    }
+  },
+  methods: {
+    load () {
+       httpInstance.get('/forum/GetAllComments/', {
           params: {
             post_id: this.$route.params.id
           }
@@ -405,6 +359,7 @@ export default {
           this.comments = response.map(comment => ({
             id: comment.comment_id,
             user: comment.user.user_nickName,
+            user_id: comment.user.user_id,
             text: comment.content,
             avatar: comment.user.profile.img_url,
             replies: comment.replies.map(reply => ({
@@ -424,13 +379,18 @@ export default {
             post_id: this.$route.params.id
           }
         }).then(response => {
-          console.log(response);
-          this.title = response.post_title;
-          this.abstract = response.post_abstract;
-          this.image = response.picture.img_url;
-          this.time = response.post_time;
-          this.content = response.post_content;
-          this.likesCount = response.post_like;
+          console.log(response)
+          this.title = response.post_title
+          this.abstract = response.post_abstract
+          this.image = response.picture.img_url
+          this.time = response.post_time
+          this.content = response.post_content
+          this.likesCount = response.post_like
+          this.author = response.user
+          this.browsed = response.browsed
+          this.isFavorite = response.collected === 1
+          this.isFollowing = response.followed === 1
+          this.hasLiked = response.liked === 1
           this.showTags = [
             ...response.tags.PreDefinedTagList.map(tag => ({id: tag.tag_id, name: tag.content})),
             ...response.tags.GameNameTagList.map(tag => ({id: tag.tag_id, name: tag.content})),
@@ -451,10 +411,7 @@ export default {
             img.style.borderRadius = '8px';
           });
         });
-      }
-    }
-  },
-  methods: {
+    },
     linkify(commentText, userId) {
       return commentText.replace(/@(\w+)/g, `<a href="/user/${userId}" style="text-decoration: none;">@$1</a>`);
     },
@@ -465,7 +422,7 @@ export default {
       formData.append('user_id', this.user_id)
       httpInstance.post('/typical/FavOrUnFav/', formData)
           .then(response => {
-            alert(response.sign)
+            alert(response.sign === 1 ? '收藏成功!' : '收藏失败，请重试')
           })
           .catch(error => {
             console.log(error)

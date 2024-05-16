@@ -92,7 +92,7 @@
 
                         <div class="d-flex align-center">
                           <v-avatar color="accent" size="36">
-                            <v-icon dark>mdi-feather</v-icon>
+                            <v-img :src = "post.post_user.profile.img_url"></v-img>
                           </v-avatar>
 
                           <div class="pl-2">{{post.post_user.user_nickName}}&nbsp;&nbsp;·&nbsp;&nbsp;{{post.post_time}}</div>

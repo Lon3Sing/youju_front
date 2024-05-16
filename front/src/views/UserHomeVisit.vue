@@ -60,7 +60,7 @@
                     <div class="caption">{{ follow.fansCount }} 粉丝</div>
                   </v-col>
                   <v-col cols="1">
-                    <v-btn v-if="follow.isFollowed" large outlined color="success" class="mt-2" @click="toggleFollow(follow)">已关注</v-btn>
+                    <v-btn v-if="follow.isFollowed" large outlined color="success" class="mt-2">已关注</v-btn>
                     <v-btn v-else large outlined color="primary" class="mt-2" @click="toggleFollow(follow)">+ 关注</v-btn>
                   </v-col>
                 </v-row>
