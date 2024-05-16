@@ -143,6 +143,11 @@ const routes = [
         name: 'LikeMessage',
         component: () => import("@/views/LikeMessage.vue"),
     },
+    {
+        path: '/ReplyMessage',
+        name: 'ReplyMessage',
+        component: () => import("@/views/ReplyMessage.vue"),
+    },
 ]
 
 const router = new VueRouter({

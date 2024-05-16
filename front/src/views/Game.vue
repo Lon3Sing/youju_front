@@ -40,7 +40,6 @@
                         <v-card-text>
                           <div class="text-h5 font-weight-bold primary--text">{{ game.name }}</div>
                           <div class="text-body-1 py-4">{{ game.nameEn }}</div>
-                          <div>价格: {{ game.price }}</div>
                           <div>评分: {{ game.rating }}/5</div>
                         </v-card-text>
                       </v-card>
@@ -68,7 +67,6 @@
                         <v-card-text>
                           <div class="text-h5 font-weight-bold primary--text">{{ game.name }}</div>
                           <div class="text-body-1 py-4">{{ game.nameEn }}</div>
-                          <div>价格: {{ game.price }}</div>
                           <div>评分: {{ game.rating }}/5</div>
                         </v-card-text>
                       </v-card>
@@ -96,7 +94,6 @@
                         <v-card-text>
                           <div class="text-h5 font-weight-bold primary--text">{{ game.name }}</div>
                           <div class="text-body-1 py-4">{{ game.nameEn }}</div>
-                          <div>价格: {{ game.price }}</div>
                           <div>评分: {{ game.rating }}/5</div>
                         </v-card-text>
                       </v-card>
@@ -124,7 +121,6 @@
                         <v-card-text>
                           <div class="text-h5 font-weight-bold primary--text">{{ game.name }}</div>
                           <div class="text-body-1 py-4">{{ game.nameEn }}</div>
-                          <div>价格: {{ game.price }}</div>
                           <div>评分: {{ game.rating }}/5</div>
                         </v-card-text>
                       </v-card>

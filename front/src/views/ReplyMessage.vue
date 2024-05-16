@@ -22,17 +22,17 @@
               </v-avatar>
               {{message.user.user_nickName}}
             </router-link>
-            &nbsp;&nbsp;点赞了你在&nbsp;{{message.post.post_time}}&nbsp;发布的帖子
+            &nbsp;&nbsp;回复了你在&nbsp;
             <router-link :to="`item/${message.post.post_id}`" style="text-decoration: none;">
-              "{{message.post.post_title}}"
+              "{{message.post_title}}"
             </router-link>
-            !
-            <v-card-text class="message-content d-flex justify-end align-center wrap-text text-lg-body-2"
+            &nbsp;的评论&nbsp;"{{message.ori_content}}"&nbsp;:&nbsp;{{message.content}}
+          </v-card-text>
+          <v-card-text class="message-content d-flex justify-end align-center wrap-text text-lg-body-2"
                          text-color="black"
                          style="background-color: #fffcd4;"
           >
-            点赞时间：{{message.time}}
-          </v-card-text>
+            评论时间：{{message.comment_time}}
           </v-card-text>
         </v-card>
       </v-card>
@@ -61,7 +61,7 @@ export default {
   },
   mounted() {
     this.user_id = this.$cookies.get('user_id')
-    httpInstance.get('/people/message/GetLikeList/', {
+    httpInstance.get('/people/message/GetReplyNotice/', {
       params: {
         user_id: this.user_id,
       }
@@ -69,8 +69,12 @@ export default {
       this.message_list = response.map(
           item => ({
             user : item.user,
+            post_title : item.post_title,
+            content : item.content,
+            comment_time : item.comment_time,
+            ori_content : item.ori_content,
+            ori_time : item.ori_time,
             post : item.post,
-            time : item.time,
           })
       )
       console.log(this.message_list)

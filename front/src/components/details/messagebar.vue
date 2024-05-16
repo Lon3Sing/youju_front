@@ -25,10 +25,10 @@ export default {
       this.$router.push(`/LikeMessage`);
     },
     goToReply() {
-      this.$router.push(`/myHistory`);
+      this.$router.push(`/ReplyMessage`);
     },
     goToTalk() {
-      this.$router.push(`/my-follows`);
+      this.$router.push(`/Chat`);
     },
   },
 };
