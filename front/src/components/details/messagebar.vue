@@ -28,7 +28,7 @@ export default {
       this.$router.push(`/ReplyMessage`);
     },
     goToTalk() {
-      this.$router.push(`/Chat`);
+      this.$router.push(`/ChatPage`);
     },
   },
 };

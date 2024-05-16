@@ -6,14 +6,15 @@
           <v-list-item
               v-for="session in sessions"
               :key="session.session_id"
-              @click="loadChat_and_jump(session.session_id)"
+              @click="loadChat_and_jump(session.session_id, session)"
+              :class="{ 'active-session': session.session_id === currentSessionId }"
           >
             <v-list-item-avatar>
               <img :src="session.user2.profile.img_url" alt="Avatar">
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title>{{ session.user2.user_Nickname }}</v-list-item-title>
-              <v-list-item-subtitle>{{ contact.last_reply_content }}</v-list-item-subtitle>
+              <v-list-item-title>{{ session.user2.user_nickName }}</v-list-item-title>
+              <v-list-item-subtitle>{{ session.last_reply_content }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -23,34 +24,28 @@
                 style="height: 500px; border: none; overflow-y: auto;"
                 color="transparent"
         >
-          <v-card
+          <div
               v-for="message in messages"
               :key="message.id"
-              class="mb-2 d-flex"
-              :class="messageClass(message)"
+              :class="['mb-2', 'message-card', messageClass(message)]"
           >
-            <v-card-text class="message-content d-flex justify-end align-center wrap-text"
-                         text-color="black"
-                         style="background-color: #cce8ff;"
-                         v-if="message.isSender"
-            >
-              {{ message.content }}&nbsp;&nbsp;
-              <v-avatar size="40" class="ml-2">
-                <img :src="message.avatar" alt="Avatar">
-              </v-avatar>
+            <v-card-text :class="['message-content', message.isSender ? 'sender' : 'receiver']">
+              <template v-if="message.isSender">
+                {{ message.content }}&nbsp;&nbsp;
+                <v-avatar size="40" class="ml-2">
+                  <img :src="message.sender.profile.img_url" alt="Avatar">
+                </v-avatar>
+                <v-progress-circular v-if="message.loading" indeterminate color="primary"></v-progress-circular>
+              </template>
+              <template v-else>
+                <v-avatar size="40" class="mr-2">
+                  <img :src="message.sender.profile.img_url" alt="Avatar">
+                </v-avatar>
+                &nbsp;&nbsp;{{ message.content }}
+              </template>
             </v-card-text>
-            <v-card-text class="d-flex justify-start align-center wrap-text"
-                         :color="message.isSender ? 'blue' : 'white'"
-                         v-else
-            >
-              <v-avatar size="40" class="mr-2">
-                <img :src="message.avatar" alt="Avatar">
-              </v-avatar>
-              &nbsp; &nbsp;{{ message.content }}
-            </v-card-text>
-          </v-card>
+          </div>
         </v-card>
-
         <v-card class="mt-8" style="border: none; box-shadow: none;" color="transparent">
           <v-form @submit.prevent="sendNewMessage">
             <v-text-field
@@ -69,9 +64,7 @@
 </template>
 
 <script>
-
 import httpInstance from "@/utils/axios";
-import {userStore} from "@/utils/userStore";
 
 export default {
   data() {
@@ -80,80 +73,157 @@ export default {
       sessions: [],
       messages: [],
       currentSessionId: 0,
+      curSession: null,
       newMessage: "",
+      pollInterval: null,
     };
   },
   mounted() {
     this.user_id = this.$cookies.get('user_id');
     this.fetchSessionList();
+    this.startPolling();
+  },
+  beforeDestroy() {
+    this.stopPolling();
   },
   methods: {
+    scrollToBottom() {
+      this.$nextTick(() => {
+        const container = this.$el.querySelector(".message-container");
+        container.scrollTop = container.scrollHeight;
+      });
+    },
     fetchSessionList() {
-      //获取所有会话窗口
       httpInstance.get('/people/message/GetSessionList/', {
         params: {
           user_id: this.user_id
         }
       }).then(response => {
         this.sessions = response;
+        console.log('sessions:', this.sessions);
       });
-
     },
-    loadChat_and_jump(sessionId) {
+    loadChat_and_jump(sessionId, curSession) {
+      this.curSession = curSession;
       this.currentSessionId = sessionId;
+      this.fetchChatDetails();
+    },
+    fetchChatDetails(shouldScroll = true) {
+      console.log("fetching chat details......", {
+        user_id: this.user_id,
+        session_id: this.currentSessionId
+      })
       httpInstance.get('/people/message/GetChatDetails/', {
         params: {
           user_id: this.user_id,
-          session_id: sessionId
+          session_id: this.currentSessionId
         }
       }).then(response => {
-        this.messages = response;
+        this.messages = response.map(msg => ({
+          ...msg,
+          isSender: msg.sender.user_id.toString() === this.user_id
+        })).reverse();
+
+        if (shouldScroll) {
+          this.scrollToBottom();
+        }
+        console.log("chat fetched!")
       });
     },
     messageClass(message) {
-      return {
-        'message-sender': message.isSender,
-        'message-receiver': !message.isSender
-      };
+      return message.isSender ? 'message-sender' : 'message-receiver';
     },
     sendNewMessage() {
-      // 发送消息给后端
+      if (!this.newMessage) return;
+
+      const newMessageObject = {
+        content: this.newMessage,
+        user1_id: this.user_id,
+        user2_id: this.curSession.user2.user_id,
+        isSender: true,
+        loading: true,
+      };
+      this.messages.push(newMessageObject);
+
+      httpInstance.post('/people/message/PostReplyMessage/', newMessageObject)
+          .then(response => {
+            const index = this.messages.findIndex(msg => msg.loading);
+            if (index !== -1) {
+              this.messages[index] = {
+                ...response.data,
+                isSender: true,
+                loading: false
+              };
+            }
+            this.newMessage = "";
+            this.scrollToBottom();
+          }).catch(error => {
+        console.error("发送消息失败: ", error);
+      });
+    },
+    startPolling() {
+      this.pollInterval = setInterval(() => {
+        if (this.currentSessionId) {
+          this.fetchChatDetails(false);
+        }
+      }, 5000);
+    },
+    stopPolling() {
+      clearInterval(this.pollInterval);
     }
   }
 };
 </script>
 
 <style scoped>
-.wrap-text {
-  white-space: normal;
-  padding: 30px 12px;
-  font-size: large;
-  line-height: 1.6;
+.message-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
-.message-content {
-  justify-content: flex-end;
-  align-items: center;
-  text-align: left;
-}
-
-.left-avatar {
-  float: left;
-  margin-right: 8px;
-}
-
-.right-avatar {
-  float: right;
-  margin-left: 8px;
+.message-card {
+  display: flex;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .message-sender {
-  text-align: right;
-  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .message-receiver {
+  justify-content: flex-start;
+}
+
+.message-content {
+  max-width: 60%;
+  padding: 10px 12px;
+  font-size: large;
+  line-height: 1.6;
+  display: flex;
+  align-items: center;
+  border-radius: 10px; /* 圆角 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 阴影 */
+}
+
+.message-sender .message-content {
+  background-color: #cce8ff;
+  text-align: right;
+  margin-left: auto;
+}
+
+.message-receiver .message-content {
+  background-color: #f0f0f0;
   text-align: left;
-  flex-wrap: wrap;
+  margin-right: auto;
+}
+
+.sender {
+  justify-content: flex-end;
+}
+
+.receiver {
+  justify-content: flex-start;
 }
 </style>

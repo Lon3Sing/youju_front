@@ -41,6 +41,7 @@
         label="选择发布类型"
         solo
         outlined
+        @click="openDialog"
         @change="openDialog"
     ></v-select>
     <v-dialog v-model="dialog" persistent width="100%" max-width="800px">
@@ -76,8 +77,14 @@
           <v-divider></v-divider>
           <div class="my-2">
             <span class="subtitle-1">游戏名标签:</span>
+            <v-text-field
+                v-model="searchGameNameTag"
+                label="搜索标签"
+                class="ma-2 search-input"
+                solo
+            ></v-text-field>
             <v-chip
-                v-for="tag in gameNameTags"
+                v-for="tag in filteredGameNameTags"
                 :key="tag.name"
                 :value="tag.name"
                 :color="tag.selected ? 'blue' : 'grey'"
@@ -95,8 +102,14 @@
             <!--                v-model="selectedPredefinedTags"-->
             <!--                multiple-->
             <!--            >-->
+            <v-text-field
+                v-model="searchPreDefinedTag"
+                label="搜索标签"
+                class="ma-2 search-input"
+                solo
+            ></v-text-field>
             <v-chip
-                v-for="tag in preDefinedTags"
+                v-for="tag in filteredPreDefinedTags"
                 :key="tag.name"
                 :value="tag.name"
                 :color="tag.selected ? 'blue' : 'grey'"
@@ -163,16 +176,18 @@
 
 <script>
 import {VueEditor} from "vue2-editor";
+import {MessageBox} from 'element-ui';
 import httpInstance from "@/utils/axios";
+
 export default {
   components: {
     VueEditor
   },
 
   data: () => ({
-    user_id : '',
+    user_id: '',
     dialog: false,
-    alertNoGameTag : false,
+    alertNoGameTag: false,
     content: "<h1></h1>",
     articleTitle: '',  // 文章标题
     articleAbstract: '',  // 文章摘要
@@ -229,6 +244,8 @@ export default {
     selectedPreDefinedTags: [],
     newTag: '',  // 新标签输入
     selectedSelfDefinedTags: [],  // 已添加的自定义标签
+    searchGameNameTag: '',
+    searchPreDefinedTag: '',
   }),
 
   mounted() {
@@ -236,13 +253,25 @@ export default {
     this.fetchTags();  // 页面加载时获取标签
   },
 
+  computed: {
+    filteredGameNameTags() {
+      return this.gameNameTags.filter(tag =>
+          tag.name.toLowerCase().includes(this.searchGameNameTag.toLowerCase())
+      );
+    },
+    filteredPreDefinedTags() {
+      return this.preDefinedTags.filter(tag =>
+          tag.name.toLowerCase().includes(this.searchPreDefinedTag.toLowerCase())
+      );
+    },
+  },
   methods: {
     fetchTags() {
       // 获取游戏名标签
       httpInstance.get('/typical/GetGameNameTag/')
           .then(response => {
             this.gameNameTags = response.map(tag => {
-              return {name: tag.content, selected : false};
+              return {name: tag.content, selected: false};
             });
           })
           .catch(error => {
@@ -253,7 +282,7 @@ export default {
       httpInstance.get('/typical/GetPredefineTag/')
           .then(response => {
             this.preDefinedTags = response.map(tag => {
-              return {name: tag.content, selected : false};
+              return {name: tag.content, selected: false};
             });
           })
           .catch(error => {
@@ -297,7 +326,7 @@ export default {
       formData.append('post_abstract', this.articleAbstract);
       formData.append('post_content', this.content);
 
-      if(this.postTypeTag === '帖子') {
+      if (this.postTypeTag === '帖子') {
         formData.append('post_type', 0);
       } else { //发布文章的类型是资讯、新闻或攻略
         formData.append('post_type', 1);
@@ -312,8 +341,21 @@ export default {
             }
           }
       ).then(response => {
-        console.log(response)
-      }) //上传文章
+        console.log(response);
+        this.showSuccessMessage();
+      }).catch(error => {
+        console.error(error);
+        // 处理错误情况
+      });//上传文章
+    },
+    showSuccessMessage() {
+      MessageBox.alert('上传成功', '成功', {
+        confirmButtonText: '确定',
+        type: 'success',
+        callback: () => {
+          this.$router.push('/');
+        }
+      });
     },
     openDialog() { //点开标签选择窗口的逻辑
       if (this.postTypeTag) {
@@ -371,3 +413,10 @@ export default {
 };
 
 </script>
+
+<style scoped>
+.search-input {
+  width: 200px; /* 设置输入框的宽度 */
+  float: right; /* 将输入框靠右显示 */
+}
+</style>
