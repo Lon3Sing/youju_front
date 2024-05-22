@@ -45,6 +45,7 @@
               </v-card>
           </v-timeline-item>
         </v-timeline>
+        <v-btn @click="getBrowseRecords" class="justify-center">显示更多浏览记录</v-btn>
       </v-container>
     </v-col>
   </v-row>
@@ -61,6 +62,8 @@ export default {
     return {
       user_id : '',
       records: [],
+      page : -1,
+      size : 5,
     };
   },
   mounted() {
@@ -70,10 +73,10 @@ export default {
   },
   methods: {
     getBrowseRecords() {
-      const apiUrl = `/people/GetBrowseList/?id=${this.user_id}`; // 接口URL
+      this.page = this.page + 1
+      const apiUrl = `/people/GetBrowseList/?id=${this.user_id}&page=${this.page}&size=${this.size}`; // 接口URL
       httpInstance.get(apiUrl)
           .then(response => {
-            this.records = [];
             console.log(response);
             response.forEach(record => {
             if (record.post !== null) {

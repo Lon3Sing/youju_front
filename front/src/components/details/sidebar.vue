@@ -135,8 +135,10 @@ export default {
   },
   mounted() {
     httpInstance.get('/home/GetInfoByOrder/', {
-      opt: 0,
-      k: 5,
+      params : {
+        opt: 0,
+        k: 5,
+      }
     })
         .then(response => {
           this.post_list = response.map(

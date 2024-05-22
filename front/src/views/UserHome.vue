@@ -1,6 +1,6 @@
 <template>
   <div>
-    
+
 
     <v-row>
       <v-col cols="12" lg="12" xl="8">
@@ -17,7 +17,8 @@
                   <v-hover v-slot:default="{ hover }" close-delay="50" open-delay="50">
                     <div>
                       <v-card :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
-                        <v-img :aspect-ratio="16 / 9" class="elevation-2" gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
+                        <v-img :aspect-ratio="16 / 9" class="elevation-2"
+                               gradient="to top, rgba(25,32,72,.4), rgba(25,32,72,.0)"
                                height="200px" :src="post.image" style="border-radius: 16px">
                           <v-card-text>
                             <v-btn color="accent" to="category">帖子</v-btn>
@@ -49,25 +50,28 @@
               <v-btn text :to="{ name: 'ManageFans' }">更多</v-btn>
             </div>
             <v-row>
-            <v-col v-for="(follow, index) in userFollows" :key="index" cols="4">
-              <v-card class="pa-3" outlined>
-                <v-row>
-                  <v-col cols="2">
-                    <v-avatar size="56" class="elevation-6">
-                      <img :src="follow.avatar" alt="Avatar">
-                    </v-avatar>
-                  </v-col>
-                  <v-col cols="6">
-                    <div class="subtitle-1 font-weight-bold">{{ follow.name }}</div>
-                    <div class="caption">{{ follow.fansCount }} 粉丝</div>
-                  </v-col>
-                  <v-col cols="1">
-                    <v-btn v-if="follow.isFollowed" large outlined color="success" class="mt-2" @click="toggleFollow(follow)">已关注</v-btn>
-                    <v-btn v-else large outlined color="primary" class="mt-2" @click="toggleFollow(follow)">+ 关注</v-btn>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-col>
+              <v-col v-for="(follow, index) in userFollows" :key="index" cols="4">
+                <v-card class="pa-3" outlined>
+                  <v-row>
+                    <v-col cols="2">
+                      <v-avatar size="56" class="elevation-6">
+                        <img :src="follow.avatar" alt="Avatar">
+                      </v-avatar>
+                    </v-col>
+                    <v-col cols="6">
+                      <div class="subtitle-1 font-weight-bold">{{ follow.name }}</div>
+                      <div class="caption">{{ follow.fansCount }} 粉丝</div>
+                    </v-col>
+                    <v-col cols="1">
+                      <v-btn v-if="follow.isFollowed" large outlined color="success" class="mt-2"
+                             @click="toggleFollow(follow)">已关注
+                      </v-btn>
+                      <v-btn v-else large outlined color="primary" class="mt-2" @click="toggleFollow(follow)">+ 关注
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </v-col>
             </v-row>
           </div>
 
@@ -79,7 +83,7 @@
             </div>
             <v-row>
               <v-col v-for="(record, index) in browsingHistory" :key="index" cols="5">
-                <v-card class="d-flex history-card" :to = "`/item/${record.post.post_id}`">
+                <v-card class="d-flex history-card" :to="`/item/${record.post.post_id}`">
                   <v-img :src="record.post.picture.img_url" class="history-img" width="120"></v-img>
                   <div class="history-content">
                     <div class="history-title">{{ record.post.post_title }}</div>
@@ -87,7 +91,7 @@
                       <v-avatar size="24" class="history-author-avatar">
                         <img :src="record.post.user.profile.img_url" alt="Avatar">
                       </v-avatar>
-                      <span class="history-author-name">{{ record.post.user.user_nickName}}&nbsp;&nbsp;</span>
+                      <span class="history-author-name">{{ record.post.user.user_nickName }}&nbsp;&nbsp;</span>
                       <div class="history-date">{{ record.post.post_time }}</div>
                     </div>
                   </div>
@@ -99,12 +103,17 @@
 
         </div>
       </v-col>
-
+      <v-col cols = "12">
+        <h3 class="section-title">用户云词图</h3>
+        <v-img :src = "character" class="mx-10 my-10"></v-img>
+      </v-col>
       <v-col>
         <div class="pt-16" style="position:sticky; top:0;">
           <ccbar/>
         </div>
       </v-col>
+
+
     </v-row>
   </div>
 </template>
@@ -125,6 +134,7 @@ export default {
       userPosts: [],
       userFollows: [],
       browsingHistory: [],
+      character : '',
     };
   },
   methods: {
@@ -134,7 +144,7 @@ export default {
         alert("您还未登录!");
         this.$router.push('/login');
       }
-      httpInstance.get('/people/PeopleHome/?id='+this.$cookies.get('user_id')+'&i=6&j=6&k=6&l=6')
+      httpInstance.get('/people/PeopleHome/?id=' + this.$cookies.get('user_id') + '&i=6&j=6&k=6&l=6')
           .then(response => {
             response.create.forEach(post => {
               this.userPosts.push({
@@ -150,13 +160,13 @@ export default {
                 id: follow.subscribed_to.user_id,
                 name: follow.subscribed_to.user_nickName,
                 avatar: follow.subscribed_to.profile.img_url,
-                isFollowed : true,
+                isFollowed: true,
               });
             });
             response.browse.forEach(record => {
               this.browsingHistory.push({
-                post : record.post,
-                browse_time : record.browse_time,
+                post: record.post,
+                browse_time: record.browse_time,
               });
             });
           })
@@ -165,13 +175,13 @@ export default {
           });
     },
     goToPost(postId) {
-      this.$router.push({ name: 'Post', params: { id: postId } });
+      this.$router.push({name: 'Post', params: {id: postId}});
     },
     goToProfile(userId) {
-      this.$router.push({ name: 'Profile', params: { id: userId } });
+      this.$router.push({name: 'Profile', params: {id: userId}});
     },
     goToRecord(type, id) {
-      this.$router.push({ name: type === 'post' ? 'Post' : 'Profile', params: { id } });
+      this.$router.push({name: type === 'post' ? 'Post' : 'Profile', params: {id}});
     },
     toggleFollow(follow) {
       const userId = this.$cookies.get('user_id'); // 获取用户id
@@ -179,7 +189,7 @@ export default {
       const formData = new FormData();
       formData.append('target_id', follow.id);
       formData.append('user_id', userId);
-      httpInstance.post('/typical/FollowOrCancel/',formData)
+      httpInstance.post('/typical/FollowOrCancel/', formData)
           .then(() => {
             // 切换关注状态
             follow.isFollowed = !follow.isFollowed;
@@ -189,10 +199,22 @@ export default {
             console.error('Error toggling follow:', error);
           });
     },
-
+    getPeopleCharacter() {
+      httpInstance.get('/people/MyInterestView/',{
+        params : {
+          user_id : this.user_id
+        }
+      }).then(response => {
+        console.log(response)
+        this.character = response.image
+      }).catch(error=>{
+        console.log(error)
+      })
+    },
   },
   mounted() {
-    this.fetchUserHome();
+    this.fetchUserHome()
+    this.getPeopleCharacter()
   },
 };
 </script>
@@ -206,9 +228,11 @@ export default {
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
+
 .caption {
   color: #757575; /* 深灰色文本，提供足够的对比度 */
 }
+
 .history-card {
   cursor: pointer;
   transition: box-shadow 0.3s ease-in-out;
@@ -219,7 +243,7 @@ export default {
 }
 
 .history-card:hover {
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .history-img {
@@ -253,6 +277,7 @@ export default {
   font-size: 0.8rem;
   align-self: flex-end; /* 日期文本靠右对齐 */
 }
+
 .link-no-underline {
   text-decoration: none; /* 去掉下划线 */
   color: inherit; /* 保持链接文字的颜色与其他文本一致 */
