@@ -5,15 +5,15 @@
     <v-row>
       <v-col cols="12" lg="12" xl="8">
         <div>
-          <div class="pt-16">
+          <div class="pt-4">
             <!-- <h2 class="text-h4 font-weight-bold pb-4">新闻       攻略       资讯</h2> -->
-            <el-button-group class="mb-4">
-                <el-button :type="selectedTab === '关注' ? 'primary' : 'default'" @click="change_volume('关注')" text style="font-size: 20px;">关注</el-button>
-                <el-button :type="selectedTab === '推荐' ? 'primary' : 'default'" @click="change_volume('推荐')" style="font-size: 20px;">推荐</el-button>
-                <el-button :type="selectedTab === '热榜' ? 'primary' : 'default'" @click="change_volume('热榜')" style="font-size: 20px;">热榜</el-button>
-                <el-button :type="selectedTab === '最新' ? 'primary' : 'default'" @click="change_volume('最新')" style="font-size: 20px;">最新</el-button>
-                <el-button :type="selectedTab === '其他' ? 'primary' : 'default'" @click="change_volume('其他')" style="font-size: 20px;">其他</el-button>
-            </el-button-group>
+            <div class="mb-4">
+                <v-btn :type="selectedTab === '关注' ? '' : 'default'" @click="change_volume('关注')" text style="font-size: 20px;">关注</v-btn>
+                <v-btn :type="selectedTab === '推荐' ? 'primary' : 'default'" @click="change_volume('推荐')" text style="font-size: 20px;">推荐</v-btn>
+                <v-btn :type="selectedTab === '热榜' ? 'primary' : 'default'" @click="change_volume('热榜')" text style="font-size: 20px;">热榜</v-btn>
+                <v-btn :type="selectedTab === '最新' ? 'primary' : 'default'" @click="change_volume('最新')" text style="font-size: 20px;">最新</v-btn>
+                <v-btn :type="selectedTab === '其他' ? 'primary' : 'default'" @click="change_volume('其他')" text style="font-size: 20px;">其他</v-btn>
+            </div>
               <v-row>
                 <v-col v-for="(post,index) in selectedTab === '关注' ? this.concernList_now :
                      selectedTab === '推荐' ? this.recommendList_now : selectedTab === '热榜' ? this.hotList_now
