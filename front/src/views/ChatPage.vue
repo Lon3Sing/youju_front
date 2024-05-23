@@ -21,8 +21,10 @@
       </v-col>
       <v-col cols="8">
         <v-card class="message-container" style="height: 500px; border: none; overflow-y: auto;" color="transparent">
-          <div v-for="message in messages" :key="message.id" :class="['mb-2', 'message-card', messageClass(message)]">
-            <v-card-text :class="['message-content', message.isSender ? 'sender' : 'receiver']">
+          <div v-for="message in messages" :key="message.id" :class="['mb-2', 'message-card', messageClass(message)]"
+               :style="{ minLength: 'auto' }">
+
+          <v-card-text :class="['message-content', message.isSender ? 'sender' : 'receiver']">
               <template v-if="message.isSender">
                 {{ message.content }}
                 <v-progress-circular v-if="message.loading" indeterminate color="primary" size="24" class="ml-2"></v-progress-circular>
@@ -82,6 +84,11 @@ export default {
     this.stopPolling();
   },
   methods: {
+    getMessageMinHeight(content) {
+      // 根据内容长度计算最小高度，这里可以根据实际需要进行调整
+       // 如果消息内容超过50个字符，使用自动高度
+      return content.length > 50 ? 'auto' : '40px';
+    },
     scrollToBottom() {
       this.$nextTick(() => {
         const container = this.$el.querySelector(".message-container");
