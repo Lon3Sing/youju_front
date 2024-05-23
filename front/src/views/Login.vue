@@ -36,10 +36,10 @@ export default {
   methods: {
     async login() {
       try {
-        const response = await httpInstance.post('/auth/Login/', {
-          username: this.username,
-          password: this.password
-        });
+        const formData = new FormData();
+        formData.append('username', this.username);
+        formData.append('password', this.password);
+        const response = await httpInstance.post('/auth/Login/', formData);
         // 处理登录成功的逻辑，比如保存token到localStorage，跳转到其他页面等
         // userStore.state.userInfo.userid = response.user_id;
         // userStore.state.userInfo.user_stage = true
