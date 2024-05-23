@@ -45,6 +45,7 @@
         solo
         outlined
         @change="openDialog"
+        @click="openDialog"
     ></v-select>
     <v-dialog v-model="dialog" persistent width="100%" max-width="800px">
       <v-card>
@@ -177,11 +178,11 @@ export default {
   },
 
   data: () => ({
-    user_id : '',
-    post_id : null,
+    user_id: '',
+    post_id: null,
     isLoading: false,
     dialog: false,
-    alertNoGameTag : false,
+    alertNoGameTag: false,
     content: "<h1></h1>",
     articleTitle: '',  // 文章标题
     articleAbstract: '',  // 文章摘要
@@ -235,9 +236,9 @@ export default {
       const postId = this.$route.params.id;
       if (postId) {
         this.isLoading = true;
-        httpInstance.get('/forum/GetForEditPost/',{
-          params :{
-            post_id : postId
+        httpInstance.get('/forum/GetForEditPost/', {
+          params: {
+            post_id: postId
           }
         })  // 确保这是获取帖子详情的正确API路径
             .then(response => {
@@ -246,16 +247,20 @@ export default {
               this.articleTitle = response.post_title;
               this.articleAbstract = response.post_abstract;
               this.content = response.post_content;
+              const foundTag = response.tags.TypeTagList.find(tag => tag.status === 1);
+              this.postTypeTag = foundTag ? foundTag.content : '';
+
               this.gameNameTags = response.tags.GameNameTagList.map(tag => {
-                return {name: tag.content, selected : tag.status === 1};
+                return {name: tag.content, selected: tag.status === 1};
               });
               this.preDefinedTags = response.tags.PreDefinedTagList.map(tag => {
-                return {name: tag.content, selected : tag.status === 1};
+                return {name: tag.content, selected: tag.status === 1};
               });
               this.selectedSelfDefinedTags = response.tags.SelfDefinedTagList.map(tag => tag.content);
               this.selectedGameNameTags = this.gameNameTags.filter(t => t.selected).map(t => t.name);
               this.selectedPreDefinedTags = this.preDefinedTags.filter(t => t.selected).map(t => t.name);
               this.isLoading = false;
+
               // this.$nextTick(() => {
               //   this.$refs.myTextEditor.quill.root.innerHTML = this.content; // 直接操作 Quill 编辑器的根元素
               // });
@@ -272,7 +277,7 @@ export default {
       httpInstance.get('/typical/GetGameNameTag/')
           .then(response => {
             this.gameNameTags = response.map(tag => {
-              return {name: tag.content, selected : false};
+              return {name: tag.content, selected: false};
             });
           })
           .catch(error => {
@@ -283,7 +288,7 @@ export default {
       httpInstance.get('/typical/GetPredefineTag/')
           .then(response => {
             this.preDefinedTags = response.map(tag => {
-              return {name: tag.content, selected : false};
+              return {name: tag.content, selected: false};
             });
           })
           .catch(error => {
@@ -328,7 +333,7 @@ export default {
       formData.append('post_abstract', this.articleAbstract);
       formData.append('post_content', this.content);
 
-      if(this.postTypeTag === '帖子') {
+      if (this.postTypeTag === '帖子') {
         formData.append('post_type', 0);
       } else { //发布文章的类型是资讯、新闻或攻略
         formData.append('post_type', 1);
@@ -347,7 +352,7 @@ export default {
       }) //上传文章
     },
     deleteArticle() {
-      if(confirm("确定要删除这篇文章吗？")) {
+      if (confirm("确定要删除这篇文章吗？")) {
         // 这里调用删除接口
         httpInstance.post('/people/DeletePost/', {
           id: this.post_id

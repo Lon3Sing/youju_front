@@ -121,13 +121,12 @@ export default {
           session_id: this.currentSessionId
         }
       }).then(response => {
-        this.messages = response.map(msg => ({
+        this.messages = response.chat.map(msg => ({
           ...msg,
           isSender: msg.sender.user_id.toString() === this.user_id
         })).reverse();
-        let tmpMsg = this.messages[0];
-        this.senderAvatar = tmpMsg.isSender ? tmpMsg.sender.profile.img_url : tmpMsg.receiver.profile.img_url;
-        this.receiverAvatar = tmpMsg.isSender ? tmpMsg.receiver.profile.img_url : tmpMsg.sender.profile.img_url;
+        this.senderAvatar = response.user.profile.img_url;
+        this.receiverAvatar = response.oppo_user.profile.img_url;
         if (shouldScroll) {
           this.scrollToBottom();
         }
