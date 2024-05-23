@@ -322,7 +322,7 @@ export default {
   background-color: transparent !important;
 }
 .max_abstract {
-  max-height: 140px;
+  height: 140px;
   overflow: hidden;
   text-overflow: ellipsis; /* 超出部分使用省略号表示 */
 }

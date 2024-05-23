@@ -286,7 +286,7 @@ export default {
   height: 500px; /* 根据实际轮播图高度调整 */
 }
 .max_abstract {
-  max-height: 140px;
+  height: 140px;
   overflow: hidden;
   text-overflow: ellipsis; /* 超出部分使用省略号表示 */
 }

@@ -136,8 +136,9 @@ export default {
   mounted() {
     httpInstance.get('/home/GetInfoByOrder/', {
       params : {
-        opt: 0,
+        opt: 2,
         k: 5,
+        user_id : this.user_id
       }
     })
         .then(response => {
