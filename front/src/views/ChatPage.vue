@@ -21,7 +21,7 @@
       </v-col>
       <v-col cols="8">
         <v-card class="message-container" style="height: 500px; border: none; overflow-y: auto;" color="transparent">
-          <div v-for="message in messages" :key="message.id" :class="['mb-2', 'message-card', messageClass(message)]"
+          <div v-for="message in messages" :key="message.id" :class="['my-3', 'message-card', messageClass(message)]"
                :style="{ minLength: 'auto' }">
 
           <v-card-text :class="['message-content', message.isSender ? 'sender' : 'receiver']">

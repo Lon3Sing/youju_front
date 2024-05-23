@@ -199,7 +199,7 @@ export default {
             post_collect_Num : post.post_collect_Num,
             post_comNum : post.post_comNum,
             post_is_crawled : post.post_is_crawled,
-            post_picture: post.picture.img_url,
+            post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
             post_abstract : post.post_abstract,
             post_id : post.post_id,
             post_like : post.post_like,
@@ -211,6 +211,8 @@ export default {
             post_user : post.user,
           })
       )
+      console.log('推荐！！！！！')
+      console.log(this.recommendList)
     }).catch(error=>{
       console.log(error)
     });
@@ -227,7 +229,7 @@ export default {
             post_collect_Num : post.post_collect_Num,
             post_comNum : post.post_comNum,
             post_is_crawled : post.post_is_crawled,
-            post_picture: post.picture.img_url,
+            post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
             post_abstract : post.post_abstract,
             post_id : post.post_id,
             post_like : post.post_like,
@@ -255,7 +257,7 @@ export default {
             post_collect_Num : post.post_collect_Num,
             post_comNum : post.post_comNum,
             post_is_crawled : post.post_is_crawled,
-            post_picture: post.picture.img_url,
+            post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
             post_abstract : post.post_abstract,
             post_id : post.post_id,
             post_like : post.post_like,
@@ -282,7 +284,7 @@ export default {
             post_collect_Num : post.post_collect_Num,
             post_comNum : post.post_comNum,
             post_is_crawled : post.post_is_crawled,
-            post_picture: post.picture.img_url,
+            post_picture: (post.picture === null || post.picture.img_url == null) ? "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg" : post.picture.img_url,
             post_abstract : post.post_abstract,
             post_id : post.post_id,
             post_like : post.post_like,

@@ -16,7 +16,7 @@
               <v-card class="pa-3 mb-2 full">
                 <v-row align="center">
                   <v-col cols="auto">
-                    <router-link :to="`UserHome/${user.id}`" style="text-decoration: none;">
+                    <router-link :to="`UserHomeVisit/${user.id}`" style="text-decoration: none;">
                       <v-avatar size="40" >
                         <v-img :src="user.profile"></v-img>
                       </v-avatar>

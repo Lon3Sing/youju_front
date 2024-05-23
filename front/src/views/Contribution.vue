@@ -86,7 +86,7 @@ export default {
               id: post.post_id,
               title: post.post_title,
               image: post.picture.img_url,
-              status: post.post_seccess ? '已过审' : '审核中'
+              status: post.post_success === 1 ? '已过审' : '审核中'
             });
           });
         })
