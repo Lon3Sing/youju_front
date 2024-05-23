@@ -49,7 +49,7 @@
                               {{post.post_title}}
                             </div>
 
-                            <div class="text-body-1 py-4">
+                            <div class="text-body-1 py-4 max_abstract">
                               {{post.post_abstract}}
                             </div>
 
@@ -322,5 +322,10 @@ export default {
 
 .v-btn--active {
   background-color: transparent !important;
+}
+.max_abstract {
+  max-height: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis; /* 超出部分使用省略号表示 */
 }
 </style>

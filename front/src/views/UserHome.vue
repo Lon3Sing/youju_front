@@ -214,7 +214,7 @@ export default {
   },
   mounted() {
     this.fetchUserHome()
-    this.getPeopleCharacter()
+    //this.getPeopleCharacter()
   },
 };
 </script>
