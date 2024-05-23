@@ -28,7 +28,7 @@
                         <v-card-text>
                           <div class="text-h5 font-weight-bold primary--text">{{ post.title }}</div>
 
-                          <div class="text-body-1 py-4">{{ post.abstract }}</div>
+                          <div class="text-body-1 py-4 max_abstract">{{ post.abstract }}</div>
 
                           <div class="d-flex align-center">
                             <div class="pl-2">{{ post.date }}</div>
@@ -214,7 +214,7 @@ export default {
   },
   mounted() {
     this.fetchUserHome()
-    //this.getPeopleCharacter()
+    this.getPeopleCharacter()
   },
 };
 </script>
@@ -282,6 +282,10 @@ export default {
   text-decoration: none; /* 去掉下划线 */
   color: inherit; /* 保持链接文字的颜色与其他文本一致 */
 }
-
+.max_abstract {
+  height: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis; /* 超出部分使用省略号表示 */
+}
 
 </style>

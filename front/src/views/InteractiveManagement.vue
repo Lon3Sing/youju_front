@@ -14,7 +14,7 @@
             <v-row>
               <Crbar></Crbar>
             </v-row>
-            <v-row v-for="replyItem in replys" class="py-3">
+            <v-row v-for="(replyItem,index) in replys" :key="index" class="py-3">
               <reply class="reply"
                      :comment-content="replyItem.content"
                      :article-url="replyItem.post_url"

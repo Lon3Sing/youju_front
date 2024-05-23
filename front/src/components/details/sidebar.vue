@@ -159,9 +159,6 @@ export default {
                 post_user: post.user,
               })
           )
-
-          console.log("推荐！！！！！！！！")
-          console.log(response)
         })
         .catch(error => {
           console.log(error)
@@ -172,7 +169,7 @@ export default {
 
 <style>
 .max_abstract {
-  max-height: 140px;
+  height: 140px;
   overflow: hidden;
   text-overflow: ellipsis; /* 超出部分使用省略号表示 */
 }
