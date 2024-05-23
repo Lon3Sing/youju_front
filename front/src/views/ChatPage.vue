@@ -121,13 +121,14 @@ export default {
           session_id: this.currentSessionId
         }
       }).then(response => {
+        let oldMessages = this.messages;
         this.messages = response.chat.map(msg => ({
           ...msg,
           isSender: msg.sender.user_id.toString() === this.user_id
         })).reverse();
         this.senderAvatar = response.user.profile.img_url;
         this.receiverAvatar = response.oppo_user.profile.img_url;
-        if (shouldScroll) {
+        if (shouldScroll || oldMessages !== this.messages) {
           this.scrollToBottom();
         }
         console.log("chat fetched!");
