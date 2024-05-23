@@ -48,11 +48,11 @@
       <v-col cols="12" lg="9" xl="9">
         <div>
           <div class="pt-16">
-            <el-button-group class="mb-4">
-                <el-button :type="tag === '新闻' ? 'primary' : 'default'" @click="changeHome('新闻')" text style="font-size: 20px;">新闻</el-button>
-                <el-button :type="tag === '攻略' ? 'primary' : 'default'" @click="changeHome('攻略')" style="font-size: 20px;">攻略</el-button>
-                <el-button :type="tag === '资讯' ? 'primary' : 'default'" @click="changeHome('资讯')" style="font-size: 20px;">资讯</el-button>
-            </el-button-group>
+            <div class="mb-4">
+                <v-btn :type="tag === '新闻' ? 'primary' : 'default'" @click="changeHome('新闻')" text style="font-size: 20px;">新闻</v-btn>
+                <v-btn :type="tag === '攻略' ? 'primary' : 'default'" @click="changeHome('攻略')" text style="font-size: 20px;">攻略</v-btn>
+                <v-btn :type="tag === '资讯' ? 'primary' : 'default'" @click="changeHome('资讯')" text style="font-size: 20px;">资讯</v-btn>
+            </div>
             <v-row>
               <v-col v-for="(post,index) in tag==='新闻' ? this.newsLists : tag === '攻略' ? this.strategyLists : this.infoLists" :key="index" cols="12" lg="4" md="6">
                 <v-hover
@@ -290,4 +290,5 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis; /* 超出部分使用省略号表示 */
 }
+
 </style>

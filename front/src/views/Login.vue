@@ -9,7 +9,11 @@
         </v-card-title>
         <v-card-text>
           <v-text-field v-model="username" label="账号" outlined></v-text-field>
-          <v-text-field v-model="password" label="密码" outlined></v-text-field>
+          <v-text-field
+              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show1 ? 'text' : 'password'"
+              @click:append="show1 = !show1"
+              v-model="password" label="密码" outlined></v-text-field>
           <div class="text-right">
             <v-btn color="primary" @click="login">登录</v-btn>
           </div>
@@ -30,7 +34,13 @@ export default {
   data() {
     return {
       username: '',
-      password: ''
+      password: '',
+      show1: false,
+      rules: {
+        required: value => !!value || 'Required.',
+        min: v => v.length >= 8 || 'Min 8 characters',
+        emailMatch: () => (`The email and password you entered don't match`),
+      },
     };
   },
   methods: {

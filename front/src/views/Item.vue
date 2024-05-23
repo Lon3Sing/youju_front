@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="12" lg="8" xl="8">
+      <v-col  cols="12" lg="8" xl="8">
         <div>
           <div>
             <v-card flat color="transparent">
@@ -277,7 +277,7 @@
         </div>
       </v-col>
 
-      <v-col>
+      <v-col >
         <div class="pt-16" style="position:sticky; top:0;">
           <re_bar :related_posts="related_posts"/>
         </div>
@@ -603,15 +603,8 @@ export default {
   display: block; /* 去除图片下方的空白间隙 */
 }
 
-.vjs-tech {
-  width: 100%; /* 图片宽度自适应容器 */
-  height: auto; /* 高度自动，保持图片原有比例 */
-  display: block; /* 去除图片下方的空白间隙 */
+.left-content {
+  position: fixed;
 }
 
-.widget-article-banner {
-  width: 100%; /* 图片宽度自适应容器 */
-  height: auto; /* 高度自动，保持图片原有比例 */
-  display: block; /* 去除图片下方的空白间隙 */
-}
 </style>
