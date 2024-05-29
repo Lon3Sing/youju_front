@@ -47,16 +47,18 @@
           <div class="section">
             <div class="d-flex justify-space-between align-center">
               <h3 class="section-title">我的关注</h3>
-              <v-btn text :to="{ name: 'ManageFans' }">更多</v-btn>
+              <v-btn text :to="{ name: 'my-follows' }">更多</v-btn>
             </div>
             <v-row>
               <v-col v-for="(follow, index) in userFollows" :key="index" cols="4">
                 <v-card class="pa-3" outlined>
                   <v-row>
                     <v-col cols="2">
+                      <router-link :to="`/UserHomeVisit/${follow.id}`" style="text-decoration: none;">
                       <v-avatar size="56" class="elevation-6">
                         <img :src="follow.avatar" alt="Avatar">
                       </v-avatar>
+                      </router-link>
                     </v-col>
                     <v-col cols="6">
                       <div class="subtitle-1 font-weight-bold">{{ follow.name }}</div>
