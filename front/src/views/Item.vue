@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row>
-      <v-col  cols="12" lg="8" xl="8">
+      <v-col cols="12" lg="8" xl="8">
         <div>
           <div>
             <v-card flat color="transparent">
@@ -25,23 +25,23 @@
                 <div class="d-flex align-center justify-space-between">
                   <div class="d-flex align-center">
                     <router-link :to="`/UserHomeVisit/${author.user_id}`">
-                      <v-avatar color="accent" size="36" >
-                        <v-img :src = "author.profile.img_url"></v-img>
+                      <v-avatar color="accent" size="36">
+                        <v-img :src="author.profile.img_url"></v-img>
                       </v-avatar>
                     </router-link>
-                    <div class="pl-2 text-body-1">{{author.user_nickName}} · {{time}}</div>
+                    <div class="pl-2 text-body-1">{{ author.user_nickName }} · {{ time }}</div>
                   </div>
 
                   <div class="d-flex align-center">
                     <div>
                       <v-chip small color="transparent">
                         <v-icon left>mdi-eye</v-icon>
-                        {{this.browseNum}}
+                        {{ this.browseNum }}
                       </v-chip>
 
                       <v-chip small color="transparent">
                         <v-icon left>mdi-comment-outline</v-icon>
-                        {{comments.length}} 楼
+                        {{ comments.length }} 楼
                       </v-chip>
                     </div>
                   </div>
@@ -194,14 +194,14 @@
                           <v-card-text>
                             <div class="d-flex justify-space-between">
                               <div class="d-flex">
-                                <router-link :to="`/user/${reply.id}`">
+                                <router-link :to="`/UserHomeVisit/${reply.id}`">
                                   <v-avatar size="32">
                                     <img :src="reply.avatar" alt="Avatar"> <!-- 显示用户头像 -->
                                   </v-avatar>
                                 </router-link>
                                 <div class="ml-2">
                                   <div class="font-weight-bold text-subtitle-1">
-                                    <router-link :to="`/user/${reply.id}`" style="text-decoration: none;">{{
+                                    <router-link :to="`/UserHomeVisit/${reply.id}`" style="text-decoration: none;">{{
                                         reply.user
                                       }}
                                     </router-link>
@@ -277,7 +277,7 @@
         </div>
       </v-col>
 
-      <v-col >
+      <v-col>
         <div class="pt-16" style="position:sticky; top:0;">
           <re_bar :related_posts="related_posts"/>
         </div>
@@ -314,11 +314,9 @@ export default {
       commentText: '',
       showReportDialog: false, // 控制对话框显示的状态
       reportContent: '', // 用户输入的举报内容
-      comments: [
-
-      ], // 假设这是从API加载的评论列表
-      author : '',
-      browseNum : '',
+      comments: [], // 假设这是从API加载的评论列表
+      author: '',
+      browseNum: '',
       showTags: [
         {
           id: 1,
@@ -349,7 +347,7 @@ export default {
     }
   },
   methods: {
-    load () {
+    load() {
       httpInstance.get('/forum/GetAllComments/', {
         params: {
           post_id: this.$route.params.id

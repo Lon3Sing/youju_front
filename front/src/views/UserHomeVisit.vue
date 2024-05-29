@@ -28,7 +28,7 @@
             </div>
             <v-row>
               <v-col v-for="post in userPosts" :key="post.id" cols="12" lg="4" md="6">
-                <router-link :to="'/item/' + post.id" class="link-no-underline">
+                <router-link :to="'/item/' + post.id" style="text-decoration: none;">
                   <v-hover v-slot:default="{ hover }" close-delay="50" open-delay="50">
                     <div>
                       <v-card :color="hover ? 'white' : 'transparent'" :elevation="hover ? 12 : 0" flat hover>
@@ -65,9 +65,11 @@
                 <v-card class="pa-3" outlined>
                   <v-row>
                     <v-col cols="2">
+                      <router-link :to="`/UserHomeVisit/${follow.id}`" style="text-decoration: none;">
                       <v-avatar size="56" class="elevation-6">
                         <img :src="follow.avatar" alt="Avatar">
                       </v-avatar>
+                      </router-link>
                     </v-col>
                     <v-col cols="6">
                       <div class="subtitle-1 font-weight-bold">{{ follow.name }}</div>

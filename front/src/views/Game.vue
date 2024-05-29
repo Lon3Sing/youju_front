@@ -7,20 +7,51 @@
         <div>
           <div class="pt-16">
             <!-- <h2 class="text-h4 font-weight-bold pb-4">新闻       攻略       资讯</h2> -->
-            <el-button-group class="mb-4">
-              <el-button :type="selectedTab === 'PC' ? 'primary' : 'default'" @click="change_volume('PC')"  text
-                         style="font-size: 20px;">PC
-              </el-button>
-              <el-button :type="selectedTab === 'PS4' ? 'primary' : 'default'" @click="change_volume('PS4')"
-                         style="font-size: 20px;">PS4
-              </el-button>
-              <el-button :type="selectedTab === 'PS5' ? 'primary' : 'default'" @click="change_volume('PS5')"
-                         style="font-size: 20px;">PS5
-              </el-button>
-              <el-button :type="selectedTab === 'NS' ? 'primary' : 'default'" @click="change_volume('NS')"
-                         style="font-size: 20px;">NS
-              </el-button>
-            </el-button-group>
+            <div class="mb-4">
+              <v-btn
+                  :color="selectedTab === 'PC' ? '#ebd4ff' : 'default'"
+                  @click="change_volume('PC')"
+                  :style="{'font-size': '20px','font-weight': 'bold',color : textColor('PC')}"
+                  class="borderless"
+              >PC
+              </v-btn>
+              <v-btn
+                  :color="selectedTab === 'PS4' ? '#ebd4ff' : 'default'"
+                     @click="change_volume('PS4')"
+                     :style="{'font-size': '20px','font-weight': 'bold',color : textColor('PS4')}"
+                  class="borderless"
+              >PS4
+              </v-btn>
+              <v-btn
+                  :color="selectedTab === 'PS5' ? '#ebd4ff' : 'default'"
+                  @click="change_volume('PS5')"
+                  :style="{'font-size': '20px','font-weight': 'bold',color : textColor('PS5')}"
+                  class="borderless"
+              >PS5
+              </v-btn>
+              <v-btn
+                  :color="selectedTab === 'NS' ? '#ebd4ff' : 'default'"
+                  @click="change_volume('NS')"
+                  :style="{'font-size': '20px','font-weight': 'bold',color : textColor('NS')}"
+                  class="borderless"
+              >NS
+              </v-btn>
+            </div>
+
+<!--            <el-button-group class="mb-4">-->
+<!--              <el-button :type="selectedTab === 'PC' ? 'primary' : 'default'" @click="change_volume('PC')"  text-->
+<!--                         style="font-size: 20px;">PC-->
+<!--              </el-button>-->
+<!--              <el-button :type="selectedTab === 'PS4' ? 'primary' : 'default'" @click="change_volume('PS4')"-->
+<!--                         style="font-size: 20px;">PS4-->
+<!--              </el-button>-->
+<!--              <el-button :type="selectedTab === 'PS5' ? 'primary' : 'default'" @click="change_volume('PS5')"-->
+<!--                         style="font-size: 20px;">PS5-->
+<!--              </el-button>-->
+<!--              <el-button :type="selectedTab === 'NS' ? 'primary' : 'default'" @click="change_volume('NS')"-->
+<!--                         style="font-size: 20px;">NS-->
+<!--              </el-button>-->
+<!--            </el-button-group>-->
             <div v-if="selectedTab === 'PC'" class="d-flex align-center">
               <v-row justify="center">
                 <v-col v-for="(game, index) in PCGames_now" :key="index" cols="12" sm="6" md="4" lg="4">
@@ -168,6 +199,10 @@ export default {
     };
   },
   methods: {
+    textColor(tag) {
+      // 根据`selectedTab`的值动态返回颜色
+      return this.selectedTab=== tag ? '#9635ff' : '#000000';
+    },
     handleGameClick(game) {
       console.log(game)
       this.$router.push(`/GameDetails/${game.game_id}`)
@@ -310,5 +345,9 @@ export default {
 
 .v-btn--active {
   background-color: transparent !important;
+}
+.borderless {
+  border: none !important; /* 移除边框 */
+  box-shadow: none !important; /* 移除阴影 */
 }
 </style>
