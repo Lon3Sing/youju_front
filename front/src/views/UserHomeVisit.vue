@@ -210,6 +210,11 @@ export default {
     },
   },
   mounted() {
+    this.user_id = this.$cookies.get('user_id');
+    this.visitId = this.$route.params.visitId;
+    if (this.user_id === this.visitId) {
+      this.$router.push('/UserHome');
+    }
     this.fetchUserHome();
   },
 };

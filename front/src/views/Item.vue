@@ -298,7 +298,7 @@ export default {
     return {
       post_id: '',
       user_id: '',
-      user_name: "John Doe",
+      user_name: "",
       title: "测试标题",
       post_user_id: '',
       abstract: "测试概要",
