@@ -1,40 +1,40 @@
 <template>
   <div>
-    <v-navigation-drawer
-        v-model="drawer"
+<!--    <v-navigation-drawer-->
+<!--        v-model="drawer"-->
 
-        :clipped="false"
-        app
-        color="primary"
-        dark
-    >
-      <v-list color="primary" nav>
-        <!--        <v-list-item-->
-        <!--            v-for="(item, i) in btnItems"-->
-        <!--            :key="i"-->
-        <!--            :href="item.href"-->
-        <!--            :target="item.target"-->
-        <!--            :to="item.to"-->
-        <!--            link-->
-        <!--        >-->
-        <!--          <v-list-item-content>-->
-        <!--            <v-list-item-title>{{ item.text }}</v-list-item-title>-->
-        <!--          </v-list-item-content>-->
-        <!--        </v-list-item>-->
-        <v-list-item
-            v-for="(item, i) in barItems"
-            :key="i"
-            :href="item.href"
-            :target="item.target"
-            :to="item.to"
-            link
-        >
-          <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
+<!--        :clipped="false"-->
+<!--        app-->
+<!--        color="primary"-->
+<!--        dark-->
+<!--    >-->
+<!--      <v-list color="primary" nav>-->
+<!--        &lt;!&ndash;        <v-list-item&ndash;&gt;-->
+<!--        &lt;!&ndash;            v-for="(item, i) in btnItems"&ndash;&gt;-->
+<!--        &lt;!&ndash;            :key="i"&ndash;&gt;-->
+<!--        &lt;!&ndash;            :href="item.href"&ndash;&gt;-->
+<!--        &lt;!&ndash;            :target="item.target"&ndash;&gt;-->
+<!--        &lt;!&ndash;            :to="item.to"&ndash;&gt;-->
+<!--        &lt;!&ndash;            link&ndash;&gt;-->
+<!--        &lt;!&ndash;        >&ndash;&gt;-->
+<!--        &lt;!&ndash;          <v-list-item-content>&ndash;&gt;-->
+<!--        &lt;!&ndash;            <v-list-item-title>{{ item.text }}</v-list-item-title>&ndash;&gt;-->
+<!--        &lt;!&ndash;          </v-list-item-content>&ndash;&gt;-->
+<!--        &lt;!&ndash;        </v-list-item>&ndash;&gt;-->
+<!--        <v-list-item-->
+<!--            v-for="(item, i) in barItems"-->
+<!--            :key="i"-->
+<!--            :href="item.href"-->
+<!--            :target="item.target"-->
+<!--            :to="item.to"-->
+<!--            link-->
+<!--        >-->
+<!--          <v-list-item-content>-->
+<!--            <v-list-item-title>{{ item.title }}</v-list-item-title>-->
+<!--          </v-list-item-content>-->
+<!--        </v-list-item>-->
+<!--      </v-list>-->
+<!--    </v-navigation-drawer>-->
 
     <v-app-bar
         :clipped-left="!$vuetify.breakpoint.lgAndUp"
