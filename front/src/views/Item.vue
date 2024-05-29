@@ -29,14 +29,14 @@
                         <v-img :src = "author.profile.img_url"></v-img>
                       </v-avatar>
                     </router-link>
-                      <div class="pl-2 text-body-1">{{author.user_nickName}} · {{time}}</div>
+                    <div class="pl-2 text-body-1">{{author.user_nickName}} · {{time}}</div>
                   </div>
 
                   <div class="d-flex align-center">
                     <div>
                       <v-chip small color="transparent">
                         <v-icon left>mdi-eye</v-icon>
-                        1.4k
+                        {{this.browseNum}}
                       </v-chip>
 
                       <v-chip small color="transparent">
@@ -60,24 +60,24 @@
                     </v-row>
                   </div>
 
-<!--                  <div class="text-h5">-->
-<!--                    Share >-->
-<!--                    <v-btn icon large>-->
-<!--                      <v-icon large color="primary">mdi-facebook</v-icon>-->
-<!--                    </v-btn>-->
+                  <!--                  <div class="text-h5">-->
+                  <!--                    Share >-->
+                  <!--                    <v-btn icon large>-->
+                  <!--                      <v-icon large color="primary">mdi-facebook</v-icon>-->
+                  <!--                    </v-btn>-->
 
-<!--                    <v-btn icon large>-->
-<!--                      <v-icon large color="primary">mdi-twitter</v-icon>-->
-<!--                    </v-btn>-->
+                  <!--                    <v-btn icon large>-->
+                  <!--                      <v-icon large color="primary">mdi-twitter</v-icon>-->
+                  <!--                    </v-btn>-->
 
-<!--                    <v-btn icon large>-->
-<!--                      <v-icon large color="primary">mdi-linkedin</v-icon>-->
-<!--                    </v-btn>-->
+                  <!--                    <v-btn icon large>-->
+                  <!--                      <v-icon large color="primary">mdi-linkedin</v-icon>-->
+                  <!--                    </v-btn>-->
 
-<!--                    <v-btn icon large>-->
-<!--                      <v-icon large color="primary">mdi-instagram</v-icon>-->
-<!--                    </v-btn>-->
-<!--                  </div>-->
+                  <!--                    <v-btn icon large>-->
+                  <!--                      <v-icon large color="primary">mdi-instagram</v-icon>-->
+                  <!--                    </v-btn>-->
+                  <!--                  </div>-->
                 </div>
 
                 <v-divider class="my-4"></v-divider>
@@ -237,37 +237,37 @@
 
                 <v-divider class="my-8"></v-divider>
 
-<!--                <div>-->
-<!--                  <v-row justify="space-between">-->
-<!--                    <v-col cols="12" md="6" lg="4">-->
-<!--                      <div class="d-flex align-center">-->
-<!--                        <div>-->
-<!--                          <v-icon>mdi-arrow-left</v-icon>-->
-<!--                        </div>-->
+                <!--                <div>-->
+                <!--                  <v-row justify="space-between">-->
+                <!--                    <v-col cols="12" md="6" lg="4">-->
+                <!--                      <div class="d-flex align-center">-->
+                <!--                        <div>-->
+                <!--                          <v-icon>mdi-arrow-left</v-icon>-->
+                <!--                        </div>-->
 
-<!--                        <div class="text-h6 primary&#45;&#45;text pl-2">-->
-<!--                          <div class="text-subtitle-1">Previous Post</div>-->
-<!--                          Photos of Jeep models that will change-->
-<!--                          your mood-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </v-col>-->
+                <!--                        <div class="text-h6 primary&#45;&#45;text pl-2">-->
+                <!--                          <div class="text-subtitle-1">Previous Post</div>-->
+                <!--                          Photos of Jeep models that will change-->
+                <!--                          your mood-->
+                <!--                        </div>-->
+                <!--                      </div>-->
+                <!--                    </v-col>-->
 
-<!--                    <v-col cols="12" md="6" lg="4">-->
-<!--                      <div class="d-flex align-center text-right">-->
-<!--                        <div class="text-h6 primary&#45;&#45;text pr-2">-->
-<!--                          <div class="text-subtitle-1">Next Post</div>-->
-<!--                          What do I need to know to start learning-->
-<!--                          JavaScript?-->
-<!--                        </div>-->
+                <!--                    <v-col cols="12" md="6" lg="4">-->
+                <!--                      <div class="d-flex align-center text-right">-->
+                <!--                        <div class="text-h6 primary&#45;&#45;text pr-2">-->
+                <!--                          <div class="text-subtitle-1">Next Post</div>-->
+                <!--                          What do I need to know to start learning-->
+                <!--                          JavaScript?-->
+                <!--                        </div>-->
 
-<!--                        <div>-->
-<!--                          <v-icon>mdi-arrow-right</v-icon>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </v-col>-->
-<!--                  </v-row>-->
-<!--                </div>-->
+                <!--                        <div>-->
+                <!--                          <v-icon>mdi-arrow-right</v-icon>-->
+                <!--                        </div>-->
+                <!--                      </div>-->
+                <!--                    </v-col>-->
+                <!--                  </v-row>-->
+                <!--                </div>-->
               </v-card-text>
             </v-card>
 
@@ -318,7 +318,7 @@ export default {
 
       ], // 假设这是从API加载的评论列表
       author : '',
-      browsed : '',
+      browseNum : '',
       showTags: [
         {
           id: 1,
@@ -350,67 +350,67 @@ export default {
   },
   methods: {
     load () {
-       httpInstance.get('/forum/GetAllComments/', {
-          params: {
-            post_id: this.$route.params.id
-          }
-        }).then(response => {
-          console.log(response);
-          this.comments = response.map(comment => ({
-            id: comment.comment_id,
-            user: comment.user.user_nickName,
-            user_id: comment.user.user_id,
-            text: comment.content,
-            avatar: comment.user.profile.img_url,
-            replies: comment.replies.map(reply => ({
-              id: reply.comment_id,
-              user: reply.user.user_nickName,
-              text: reply.content,
-              avatar: reply.user.profile.img_url
-            }))
-          }));
-        }).catch(error => {
-          console.log(error);
-        })
+      httpInstance.get('/forum/GetAllComments/', {
+        params: {
+          post_id: this.$route.params.id
+        }
+      }).then(response => {
+        console.log(response);
+        this.comments = response.map(comment => ({
+          id: comment.comment_id,
+          user: comment.user.user_nickName,
+          user_id: comment.user.user_id,
+          text: comment.content,
+          avatar: comment.user.profile.img_url,
+          replies: comment.replies.map(reply => ({
+            id: reply.comment_id,
+            user: reply.user.user_nickName,
+            text: reply.content,
+            avatar: reply.user.profile.img_url
+          }))
+        }));
+      }).catch(error => {
+        console.log(error);
+      })
 
-        httpInstance.get('/forum/GetPostInfo/', {
-          params: {
-            user_id: this.user_id,
-            post_id: this.$route.params.id
-          }
-        }).then(response => {
-          console.log(response)
-          this.title = response.post_title
-          this.abstract = response.post_abstract
-          this.image = response.picture.img_url
-          this.time = response.post_time
-          this.content = response.post_content
-          this.likesCount = response.post_like
-          this.author = response.user
-          this.browsed = response.browsed
-          this.isFavorite = response.collected === 1
-          this.isFollowing = response.followed === 1
-          this.hasLiked = response.liked === 1
-          this.showTags = [
-            ...response.tags.PreDefinedTagList.map(tag => ({id: tag.tag_id, name: tag.content})),
-            ...response.tags.GameNameTagList.map(tag => ({id: tag.tag_id, name: tag.content})),
-            ...response.tags.SelfDefinedTagList.map(tag => ({id: tag.tag_id, name: tag.content}))
-          ];
-        }).catch(error => {
-          console.log(error);
-        });
-        this.$nextTick(() => {
-          // 找到所有的图片
-          const images = document.querySelectorAll('img');
+      httpInstance.get('/forum/GetPostInfo/', {
+        params: {
+          user_id: this.user_id,
+          post_id: this.$route.params.id
+        }
+      }).then(response => {
+        console.log(response)
+        this.title = response.post_title
+        this.abstract = response.post_abstract
+        this.image = response.picture.img_url
+        this.time = response.post_time
+        this.content = response.post_content
+        this.likesCount = response.post_like
+        this.author = response.user
+        this.browseNum = response.browseNum
+        this.isFavorite = response.collected === 1
+        this.isFollowing = response.followed === 1
+        this.hasLiked = response.liked === 1
+        this.showTags = [
+          ...response.tags.PreDefinedTagList.map(tag => ({id: tag.tag_id, name: tag.content})),
+          ...response.tags.GameNameTagList.map(tag => ({id: tag.tag_id, name: tag.content})),
+          ...response.tags.SelfDefinedTagList.map(tag => ({id: tag.tag_id, name: tag.content}))
+        ];
+      }).catch(error => {
+        console.log(error);
+      });
+      this.$nextTick(() => {
+        // 找到所有的图片
+        const images = document.querySelectorAll('img');
 
-          // 遍历所有图片并设置样式
-          images.forEach(img => {
-            img.style.maxWidth = '50%'; // 设置最大宽度
-            img.style.height = 'auto';   // 保持宽高比
-            // 可以继续添加其他样式，如border-radius
-            img.style.borderRadius = '8px';
-          });
+        // 遍历所有图片并设置样式
+        images.forEach(img => {
+          img.style.maxWidth = '50%'; // 设置最大宽度
+          img.style.height = 'auto';   // 保持宽高比
+          // 可以继续添加其他样式，如border-radius
+          img.style.borderRadius = '8px';
         });
+      });
     },
     linkify(commentText, userId) {
       return commentText.replace(/@(\w+)/g, `<a href="/user/${userId}" style="text-decoration: none;">@$1</a>`);
