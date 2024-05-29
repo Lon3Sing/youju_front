@@ -24,10 +24,11 @@
           <div v-for="message in messages" :key="message.id" :class="['my-3', 'message-card', messageClass(message)]"
                :style="{ minLength: message.content.length }">
 
-          <v-card-text :class="['message-content', message.isSender ? 'sender' : 'receiver']">
+            <v-card-text :class="['message-content', message.isSender ? 'sender' : 'receiver']">
               <template v-if="message.isSender">
                 {{ message.content }}
-                <v-progress-circular v-if="message.loading" indeterminate color="primary" size="24" class="ml-2"></v-progress-circular>
+                <v-progress-circular v-if="message.loading" indeterminate color="primary" size="24"
+                                     class="ml-2"></v-progress-circular>
                 <v-avatar size="40" class="ml-2">
                   <img :src="senderAvatar" alt="Avatar">
                 </v-avatar>
@@ -72,7 +73,8 @@ export default {
       newMessage: "",
       pollInterval: null,
       senderAvatar: '',
-      receiverAvatar: ''
+      receiverAvatar: '',
+      switched: false,
     };
   },
   mounted() {
@@ -90,7 +92,7 @@ export default {
   methods: {
     getMessageMinHeight(content) {
       // 根据内容长度计算最小高度，这里可以根据实际需要进行调整
-       // 如果消息内容超过50个字符，使用自动高度
+      // 如果消息内容超过50个字符，使用自动高度
       return content.length > 50 ? 'auto' : '40px';
     },
     scrollToBottom() {
@@ -110,6 +112,7 @@ export default {
       });
     },
     loadChat_and_jump(sessionId, curSession) {
+      this.switched = true;
       this.curSession = curSession;
       this.currentSessionId = sessionId;
       this.fetchChatDetails();
@@ -126,16 +129,51 @@ export default {
         }
       }).then(response => {
         let oldMessages = this.messages;
-        this.messages = response.chat.map(msg => ({
+        let newMessages = response.chat.map(msg => ({
           ...msg,
           isSender: msg.sender.user_id.toString() === this.user_id
         })).reverse();
-        this.senderAvatar = response.user.profile.img_url;
-        this.receiverAvatar = response.oppo_user.profile.img_url;
-        if (shouldScroll || oldMessages !== this.messages) {
+
+        //以下处理是否更新消息列表
+        if (this.switched && response.oppo_user.user_id === this.curSession.user2.user_id) {
+          this.messages = newMessages;
+          this.senderAvatar = response.user.profile.img_url;
+          this.receiverAvatar = response.oppo_user.profile.img_url;
+          this.switched = false;
+          console.log("chat fetched!(1)");
+        } else if(response.oppo_user.user_id !== this.curSession.user2.user_id) {
+          //如果接收消息的对方用户不是当前会话的对方用户，说明会话已经切换，不做处理
+        }else {
+          let oldLength = oldMessages.length;
+          let newLength = newMessages.length;
+          if (newLength > oldLength) {
+            this.messages = newMessages;
+            this.senderAvatar = response.user.profile.img_url;
+            this.receiverAvatar = response.oppo_user.profile.img_url;
+          } else if (oldLength === newLength) {
+            if (oldLength > 0 && newLength > 0 && oldMessages[oldLength - 1].isSender !== newMessages[newLength - 1].isSender) {
+              //最后一条消息的发送人不一样且长度相等，说明对方消息被插入但是我的消息未被插入
+              let loadingMessages = oldMessages.filter(msg => msg.loading);
+              this.messages = newMessages;
+              this.senderAvatar = response.user.profile.img_url;
+              this.receiverAvatar = response.oppo_user.profile.img_url;
+              this.messages.push(...loadingMessages);
+            } else {
+              this.messages = newMessages;
+              this.senderAvatar = response.user.profile.img_url;
+              this.receiverAvatar = response.oppo_user.profile.img_url;
+            }
+          } else {
+            //本地消息列表长度大于远程的，说明远程还未更新，不做处理
+          }
+          console.log("chat fetched!(3)");
+        }
+
+        //以下处理是否滚动
+        if (shouldScroll || oldMessages.length !== this.messages.length) {
           this.scrollToBottom();
         }
-        console.log("chat fetched!");
+
       });
     },
     messageClass(message) {
@@ -176,6 +214,7 @@ export default {
         if (this.currentSessionId) {
           this.fetchChatDetails(false);
         }
+        this.fetchSessionList();
       }, 5000);
     },
     stopPolling() {
