@@ -194,14 +194,6 @@ export default {
 
       httpInstance.post('/people/message/PostReplyMessage/', newMessageObject)
           .then(response => {
-            // const index = this.messages.findIndex(msg => msg.loading);
-            // if (index !== -1) {
-            //   this.messages[index] = {
-            //     ...response,
-            //     isSender: true,
-            //     loading: false
-            //   };
-            // }
             this.newMessage = "";
             this.scrollToBottom();
             this.fetchChatDetails();
@@ -245,15 +237,27 @@ export default {
   justify-content: flex-start;
 }
 
+.sender {
+  justify-content: flex-end;
+}
+
+.receiver {
+  justify-content: flex-start;
+}
+
 .message-content {
-  max-width: 60%;
+  max-width: 60%; /* 最大宽度 */
+  min-width: 100px; /* 最小宽度，确保卡片不会过于狭窄 */
   padding: 10px 12px;
   font-size: large;
   line-height: 1.6;
-  display: flex;
+  display: inline-block; /* 修改为 inline-block 以便自适应宽度 */
   align-items: center;
   border-radius: 10px; /* 圆角 */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 阴影 */
+  word-wrap: break-word; /* 增加这个属性以确保英文长单词能够换行 */
+  word-break: break-all; /* 增加这个属性以确保长文本能够正确换行 */
+  white-space: pre-wrap; /* 保留空格和换行符 */
 }
 
 .message-sender .message-content {
@@ -266,13 +270,5 @@ export default {
   background-color: #f0f0f0;
   text-align: left;
   margin-right: auto;
-}
-
-.sender {
-  justify-content: flex-end;
-}
-
-.receiver {
-  justify-content: flex-start;
 }
 </style>

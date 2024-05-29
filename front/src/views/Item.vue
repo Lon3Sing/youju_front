@@ -603,6 +603,12 @@ export default {
   display: block; /* 去除图片下方的空白间隙 */
 }
 
+img {
+  max-width: 100%;
+  display: block;
+  margin: 0 auto;
+}
+
 .left-content {
   position: fixed;
 }

@@ -171,6 +171,7 @@
 <script>
 import {VueEditor} from "vue2-editor";
 import httpInstance from "@/utils/axios";
+import {MessageBox} from "element-ui";
 
 export default {
   components: {
@@ -312,6 +313,15 @@ export default {
             console.log(err)
           })
     },
+    setMaxWidth(imageUrl) {
+      this.$nextTick(() => {
+        const imgElement = this.$refs.myTextEditor.quill.root.querySelector(`img[src="${imageUrl}"]`);
+        if (imgElement) {
+          imgElement.style.maxWidth = '60%';
+          console.log('设置图片宽度成功')
+        }
+      });
+    },
     handleArticleUpload() {
       //TODO 上传文章
       let formData = new FormData()
@@ -349,7 +359,11 @@ export default {
           }
       ).then(response => {
         console.log(response)
-      }) //上传文章
+        this.showSuccessMessage();
+      }).catch(error => {
+        console.error(error);
+        // 处理错误情况
+      });//上传文章
     },
     deleteArticle() {
       if (confirm("确定要删除这篇文章吗？")) {
@@ -363,6 +377,15 @@ export default {
         });
         // 可能还需要处理如重定向或更新列表等
       }
+    },
+    showSuccessMessage() {
+      MessageBox.alert('上传成功', '成功', {
+        confirmButtonText: '确定',
+        type: 'success',
+        callback: () => {
+          this.$router.push('/');
+        }
+      });
     },
     openDialog() { //点开标签选择窗口的逻辑
       if (this.postTypeTag) {
