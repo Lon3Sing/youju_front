@@ -287,7 +287,7 @@ export default {
     submitRating() {
       const formData = new FormData()
       formData.append("rating",this.rating)
-      formData.append("user_id",this.user_id)
+      formData.append("id",this.user_id)
       formData.append("game_id",this.game_id)
       httpInstance.post('/game/SubmitRating/',formData)
           .then(response => {

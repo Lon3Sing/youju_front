@@ -49,9 +49,24 @@
         <div>
           <div class="pt-16">
             <div class="mb-4">
-                <v-btn :type="tag === '新闻' ? 'primary' : 'default'" @click="changeHome('新闻')" text style="font-size: 20px;">新闻</v-btn>
-                <v-btn :type="tag === '攻略' ? 'primary' : 'default'" @click="changeHome('攻略')" text style="font-size: 20px;">攻略</v-btn>
-                <v-btn :type="tag === '资讯' ? 'primary' : 'default'" @click="changeHome('资讯')" text style="font-size: 20px;">资讯</v-btn>
+                <v-btn
+                    :color="tag === '新闻' ? '#ebd4ff' : 'default'"
+                    @click="changeHome('新闻')"
+                    :style="{'font-size': '20px','font-weight': 'bold',color : textColor('新闻')}"
+                    class="borderless"
+                >新闻</v-btn>
+                <v-btn
+                    :color="tag === '攻略' ? '#ebd4ff' : 'default'"
+                    @click="changeHome('攻略')"
+                    :style="{'font-size': '20px','font-weight': 'bold',color : textColor('攻略')}"
+                    class="borderless"
+                >攻略</v-btn>
+                <v-btn
+                    :color="tag === '资讯' ? '#ebd4ff' : 'default'"
+                    @click="changeHome('资讯')"
+                    :style="{'font-size': '20px','font-weight': 'bold',color : textColor('资讯')}"
+                    class="borderless"
+                >资讯</v-btn>
             </div>
             <v-row>
               <v-col v-for="(post,index) in tag==='新闻' ? this.newsLists : tag === '攻略' ? this.strategyLists : this.infoLists" :key="index" cols="12" lg="4" md="6">
@@ -259,6 +274,10 @@ export default {
 
   },
   methods: {
+    textColor(tag) {
+      // 根据`selectedTab`的值动态返回颜色
+      return this.tag === tag ? '#9635ff' : '#000000';
+    },
     goToDetailPage(routePath) {
       // 使用编程式导航跳转到对应页面
       routePath = "/item/"+routePath
@@ -290,5 +309,8 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis; /* 超出部分使用省略号表示 */
 }
-
+.borderless {
+  border: none !important; /* 移除边框 */
+  box-shadow: none !important; /* 移除阴影 */
+}
 </style>
