@@ -88,7 +88,7 @@
 
       <v-row class="pt-4">
         <v-col v-for="(post, index) in post_list" :key="index" class="flex-shrink-0" cols="auto">
-          <v-chip color="accent" v-for="(tag, tagIndex) in post.tags.GameNameTagList" :key="tagIndex">
+          <v-chip color="accent" v-for="(tag, tagIndex) in post.tags.SelfDefinedTagList" :key="tagIndex">
             #{{ tag.content }}
           </v-chip>
         </v-col>
