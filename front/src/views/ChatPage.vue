@@ -22,7 +22,7 @@
       <v-col cols="8">
         <v-card class="message-container" style="height: 500px; border: none; overflow-y: auto;" color="transparent">
           <div v-for="message in messages" :key="message.id" :class="['my-3', 'message-card', messageClass(message)]"
-               :style="{ minLength: 'auto' }">
+               :style="{ minLength: message.content.length }">
 
           <v-card-text :class="['message-content', message.isSender ? 'sender' : 'receiver']">
               <template v-if="message.isSender">
@@ -76,6 +76,10 @@ export default {
     };
   },
   mounted() {
+    if (!this.$cookies.isKey('user_id')) {
+      alert('您还未登录!')
+      this.$router.push('/login')
+    }
     this.user_id = this.$cookies.get('user_id');
     this.fetchSessionList();
     this.startPolling();

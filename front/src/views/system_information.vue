@@ -54,6 +54,10 @@ export default {
     }
   },
   mounted() {
+    if (!this.$cookies.isKey('user_id')) {
+      alert('您还未登录!')
+      this.$router.push('/login')
+    }
     this.user_id = this.$cookies.get('user_id')
     httpInstance.get('/people/message/GetSystemNotice/', {
       params: {
