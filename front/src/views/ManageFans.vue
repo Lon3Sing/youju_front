@@ -71,8 +71,8 @@ export default {
             this.fans = data.map(item => ({
               id: item.user_id,
               name: item.user_nickName,
-              avatar: item.img_url,
-              isFollowed: false // 假设初始状态都未关注
+              avatar: item.profile.img_url,
+              isFollowed: item.concerned // 假设初始状态都未关注
             }));
           })
           .catch(error => {
