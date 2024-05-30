@@ -315,7 +315,7 @@ export default {
       showReportDialog: false, // 控制对话框显示的状态
       reportContent: '', // 用户输入的举报内容
       comments: [], // 假设这是从API加载的评论列表
-      author: '',
+      author: {profile: {img_url: 'https://pic4.zhimg.com/v2-efd4f4517d5bdb43858a04f7e4ff5f7f_r.jpg'}},
       browseNum: '',
       showTags: [
         {
