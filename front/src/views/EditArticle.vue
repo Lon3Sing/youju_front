@@ -171,10 +171,23 @@
       </v-card>
     </v-dialog>
 
-    <v-btn @click="handleArticleUpload">提交文章</v-btn>
-
-    <v-spacer></v-spacer> <!-- 用于推动按钮使其分散开来 -->
-    <v-btn color="red" @click="deleteArticle">删除文章</v-btn> <!-- 删除文章按钮 -->
+    <v-container>
+      <v-row justify="space-between" align="center">
+        <v-btn
+            class="custom-btn primary-btn mr-2"
+            @click="handleArticleUpload"
+        >
+          提交文章
+        </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn
+            class="custom-btn delete-btn"
+            @click="deleteArticle"
+        >
+          删除文章
+        </v-btn>
+      </v-row>
+    </v-container>
 
     <div>{{ content }}</div>
     <div>{{ selectedGameNameTags }}{{ selectedPreDefinedTags }}{{ selectedSelfDefinedTags }}</div>
@@ -457,7 +470,38 @@ export default {
 </script>
 
 <style>
-.v-img {
-  display: block;
+.custom-btn {
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 15px 30px; /* 增大内边距 */
+  font-size: 18px; /* 增大字体 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.primary-btn {
+  background-color: #1976d2;
+  color: white;
+  border: 1px solid #1976d2;
+}
+
+.primary-btn:hover {
+  background-color: #115293;
+  border-color: #115293;
+}
+
+.delete-btn {
+  background-color: #e53935;
+  color: white;
+  border: 1px solid #e53935;
+}
+
+.delete-btn:hover {
+  background-color: #b71c1c;
+  border-color: #b71c1c;
+}
+
+.v-btn {
+  margin: 10px;
 }
 </style>
