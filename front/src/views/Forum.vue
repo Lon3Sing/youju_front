@@ -213,7 +213,9 @@ export default {
             tags: post.tags,
             post_user: post.user,
           })
-      )
+      );
+      this.loadData()
+
     }).catch(error => {
       console.log(error)
     });
@@ -330,7 +332,6 @@ export default {
       console.log(error)
     });
 
-    this.loadData()
   },
 };
 </script>

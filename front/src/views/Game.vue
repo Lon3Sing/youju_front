@@ -260,7 +260,9 @@ export default {
             rating: game.score,
             previewImage: game.picture.img_url
           })
-      )
+      );
+      this.loadGames()
+
     }).catch(error => {
       console.log(error)
     });
@@ -322,7 +324,6 @@ export default {
       console.log(error)
     });
 
-    this.loadGames()
   },
 };
 </script>
