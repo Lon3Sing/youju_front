@@ -65,10 +65,10 @@
                 <v-card class="pa-3" outlined>
                   <v-row>
                     <v-col cols="2">
-                      <router-link :to="`/UserHomeVisit/${follow.id}`" style="text-decoration: none;">
-                      <v-avatar size="56" class="elevation-6">
-                        <img :src="follow.avatar" alt="Avatar">
-                      </v-avatar>
+                      <router-link :to="getProfileRoute(follow)" style="text-decoration: none;">
+                        <v-avatar size="56" class="elevation-6">
+                          <img :src="follow.avatar" alt="Avatar">
+                        </v-avatar>
                       </router-link>
                     </v-col>
                     <v-col cols="6">
@@ -120,6 +120,13 @@ export default {
     };
   },
   methods: {
+    getProfileRoute(follow) {
+      if (this.user_id === follow.id.toString()) {
+        return '/UserHome';
+      } else {
+        return `/UserHomeVisit/${follow.id}`;
+      }
+    },
     async fetchUserHome() {
       this.user_id = this.$cookies.get('user_id');
       this.visitId = this.$route.params.visitId;
@@ -166,12 +173,13 @@ export default {
       httpInstance.get('/people/PeopleHomeVisitor/', {
         params: {
           id: this.visitId,
-          i: 1
+          i: 1,
+          visitor_id: this.user_id,
         }
       }).then(response => {
         this.visitAvatar = response.user[0].profile.img_url;
         this.visitNickname = response.user[0].user_nickName;
-        this.isFollowed = response.user[0].is_followed; // 根据返回值设置是否已关注
+        this.isFollowed = response.is_concerned; // 根据返回值设置是否已关注
       }).catch(error => {
         console.error('There was an error fetching the posts:', error);
       });
@@ -216,6 +224,7 @@ export default {
     this.visitId = this.$route.params.visitId;
     if (this.user_id === this.visitId) {
       this.$router.push('/UserHome');
+      return;
     }
     this.fetchUserHome();
   },

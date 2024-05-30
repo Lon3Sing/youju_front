@@ -115,7 +115,7 @@
                         <v-icon>{{ isFavorite ? 'mdi-heart' : 'mdi-heart-outline' }}</v-icon>
                       </v-btn>
                     </template>
-                    <span>收藏</span>
+                    <span>{{ isFavorite ? '取消收藏':'收藏' }}</span>
                   </v-tooltip>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -123,7 +123,7 @@
                         <v-icon>{{ isFollowing ? 'mdi-account-check' : 'mdi-account-plus' }}</v-icon>
                       </v-btn>
                     </template>
-                    <span>关注作者</span>
+                    <span>{{isFollowing ? '取消关注' : '关注作者'}}</span>
                   </v-tooltip>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -132,7 +132,7 @@
                       </v-btn>
 
                     </template>
-                    <span>点赞</span>
+                    <span>{{ hasLiked ? '取消点赞' : '点赞' }}</span>
 
                   </v-tooltip>
                 </div>
@@ -385,6 +385,7 @@ export default {
         this.content = response.post_content
         this.likesCount = response.post_like
         this.author = response.user
+        this.post_user_id = response.user.user_id
         this.browseNum = response.browseNum
         this.isFavorite = response.collected === 1
         this.isFollowing = response.followed === 1
@@ -414,6 +415,11 @@ export default {
       return commentText.replace(/@(\w+)/g, `<a href="/user/${userId}" style="text-decoration: none;">@$1</a>`);
     },
     onToggleFavorite() {
+      if (this.user_id === null) {
+        alert('请先登录！')
+        this.$router.push('/login')
+        return;
+      }
       this.isFavorite = !this.isFavorite;
       const formData = new FormData()
       formData.append('post_id', this.post_id)
@@ -428,6 +434,11 @@ export default {
       // 处理收藏逻辑
     },
     async onToggleFollow() {
+      if (this.user_id === null) {
+        alert('请先登录！')
+        this.$router.push('/login')
+        return;
+      }
       const formData = new FormData();
       formData.append('user_id', this.user_id);
       formData.append('target_id', this.post_user_id);
@@ -441,6 +452,11 @@ export default {
     },
     async onLike() {
       let sign = 0;
+      if (this.user_id === null) {
+        alert('请先登录！')
+        this.$router.push('/login')
+        return;
+      }
       await httpInstance.post('/forum/LikeOrCancel/', {
         user_id: this.user_id,
         post_id: this.$route.params.id,
@@ -458,6 +474,11 @@ export default {
       // 根据this.hasLiked的值来进行点赞或取消点赞的逻辑处理
     },
     submitComment() {
+      if (this.user_id === null) {
+        alert('请先登录！')
+        this.$router.push('/login')
+        return;
+      }
       let newCommentId = null;
       if (this.commentText.trim() === '') return;
       // 你可以在这里添加逻辑来将评论提交到服务器
@@ -485,20 +506,47 @@ export default {
       });
     },
     submitReport() {
+      if (this.user_id === null) {
+        alert('请先登录！')
+        this.$router.push('/login')
+        return;
+      }
       if (!this.reportContent) {
         alert("请输入举报理由。");
         return;
       }
       // 在这里处理举报逻辑，比如发送举报内容到服务器
-      httpInstance()
+      const formData = new FormData();
+      formData.append('user_id', this.user_id);
+      formData.append('reported_user_id', this.post_user_id);
+      formData.append('report_text', this.reportContent);
+      httpInstance.post('/typical/ReportUser/', formData)
+          .then(response => {
+            alert('举报成功！');
+            console.log('Report submitted:', response);
+            this.showReportDialog = false; // 提交后关闭对话框
+            this.reportContent = ''; // 清空输入
+          })
+          .catch(error => {
+            alert('举报失败，请重试。');
+            console.error('Error submitting report:', error);
+          });
       console.log("举报内容:", this.reportContent);
-      this.showReportDialog = false; // 提交后关闭对话框
-      this.reportContent = ''; // 清空输入
     },
     toggleL1ReplyInput(commentId) {
+      if (this.user_id === null) {
+        alert('请先登录！')
+        this.$router.push('/login')
+        return;
+      }
       this.replyingToId = this.replyingToId === commentId ? null : commentId;
     },
     toggleL2ReplyInput(commentId, replyUserName, comment) {
+      if (this.user_id === null) {
+        alert('请先登录！')
+        this.$router.push('/login')
+        return;
+      }
       this.replyingToId = this.replyingToId === commentId ? null : commentId;
 
 
@@ -511,6 +559,7 @@ export default {
 
     },
     submitReply(comment) {
+
       if (!comment.newReply || comment.newReply.trim() === '') {
         alert("Please enter a reply.");
         return;
