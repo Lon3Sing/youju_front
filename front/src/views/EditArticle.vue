@@ -7,6 +7,19 @@
         label="点击上传封面"
         accept="image/*"
     ></v-file-input>
+    <v-container>
+      <v-row justify="center">
+        <v-col cols="12" md="6" class="text-center">
+          <v-img
+              :src="oldCoverage"
+              alt="以上是你之前的封面"
+              max-width="100%"
+              class="mx-auto"
+          ></v-img>
+          <p>这是你之前的封面</p>
+        </v-col>
+      </v-row>
+    </v-container>
     <!-- 标题编辑区域 -->
     <v-text-field
         v-model="articleTitle"
@@ -205,6 +218,7 @@ export default {
       // ['video'] // 上传视频
     ],
     coverage: null,
+    oldCoverage: null,
     postTypeTag: null,  // Tag selected by the user
     tagOptions: ['资讯', '帖子', '新闻', '攻略'],  // Initial options for tags
     gameNameTags: [
@@ -243,6 +257,8 @@ export default {
           }
         })  // 确保这是获取帖子详情的正确API路径
             .then(response => {
+              console.log(response)
+              this.oldCoverage = response.picture.img_url;
               this.postData = response;
               this.post_id = response.post_id;
               this.articleTitle = response.post_title;
@@ -369,9 +385,10 @@ export default {
       if (confirm("确定要删除这篇文章吗？")) {
         // 这里调用删除接口
         httpInstance.post('/people/DeletePost/', {
-          id: this.post_id
+          post_id: this.post_id
         }).then(response => {
-          console.log(response)
+          console.log(response);
+          this.$router.push('/Contribution');
         }).catch(error => {
           console.error('删除文章失败:', error);
         });
@@ -383,7 +400,7 @@ export default {
         confirmButtonText: '确定',
         type: 'success',
         callback: () => {
-          this.$router.push('/');
+          this.$router.push('/Contribution');
         }
       });
     },
@@ -438,3 +455,9 @@ export default {
 };
 
 </script>
+
+<style>
+.v-img {
+  display: block;
+}
+</style>
