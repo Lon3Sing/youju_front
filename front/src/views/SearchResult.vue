@@ -4,29 +4,37 @@
       <v-col cols="12" lg="12" xl="12">
         <div>
           <div class="pt-16">
-<!--            <div>{{selectedTab}}</div>-->
+            <!--            <div>{{selectedTab}}</div>-->
             <!-- <h2 class="text-h4 font-weight-bold pb-4">新闻       攻略       资讯</h2> -->
-            <el-button-group class="mb-4">
-              <el-button :type="selectedTab === '全局' ? 'primary' : 'default'" @click="selectedTab = '全局'" text
-                         style="font-size: 20px;">全局
-              </el-button>
-              <el-button :type="selectedTab === '帖子' ? 'primary' : 'default'" @click="selectedTab = '帖子'"
-                         style="font-size: 20px;">帖子
-              </el-button>
-              <el-button :type="selectedTab === '资讯' ? 'primary' : 'default'" @click="selectedTab = '资讯'"
-                         style="font-size: 20px;">资讯
-              </el-button>
-              <el-button :type="selectedTab === '收藏' ? 'primary' : 'default'" @click="selectedTab = '收藏'"
-                         style="font-size: 20px;">收藏
-              </el-button>
-              <el-button :type="selectedTab === '其他' ? 'primary' : 'default'" @click="selectedTab = '其他'"
-                         style="font-size: 20px;">未过审的帖子
-              </el-button>
-            </el-button-group>
+            <div class="mb-4">
+              <v-btn
+                  v-for="(item,index) in barItem" :key="index"
+                  :color="selectedTab === item ? '#ebd4ff' : 'default'"
+                  @click="change_volume(item)"
+                  :style="{'font-size': '20px','font-weight': 'bold',color : textColor(item)}"
+                  class="borderless"
+              >{{ item }}
+              </v-btn>
+            </div>
+            <!--            <el-button-group class="mb-4">-->
+            <!--              <el-button :type="selectedTab === '全局' ? 'primary' : 'default'" @click="selectedTab = '全局'" text-->
+            <!--                         style="font-size: 20px;">全局-->
+            <!--              </el-button>-->
+            <!--              <el-button :type="selectedTab === '帖子' ? 'primary' : 'default'" @click="selectedTab = '帖子'"-->
+            <!--                         style="font-size: 20px;">帖子-->
+            <!--              </el-button>-->
+            <!--              <el-button :type="selectedTab === '资讯' ? 'primary' : 'default'" @click="selectedTab = '资讯'"-->
+            <!--                         style="font-size: 20px;">资讯-->
+            <!--              </el-button>-->
+            <!--              <el-button :type="selectedTab === '收藏' ? 'primary' : 'default'" @click="selectedTab = '收藏'"-->
+            <!--                         style="font-size: 20px;">收藏-->
+            <!--              </el-button>-->
+            <!--              <el-button :type="selectedTab === '其他' ? 'primary' : 'default'" @click="selectedTab = '其他'"-->
+            <!--                         style="font-size: 20px;">未过审的帖子-->
+            <!--              </el-button>-->
+            <!--            </el-button-group>-->
             <v-row>
-              <v-col v-for="(post,index) in selectedTab === '全局' ? this.globalSearchList :
-                     selectedTab === '帖子' ? this.postSearchList : selectedTab === '资讯' ? this.infoSearchList
-                        : selectedTab === '收藏' ? this.collectSearchList : this.otherList" :key="index" cols="12"
+              <v-col v-for="(post,index) in show_list" :key="index" cols="12"
                      lg="3" md="6">
                 <v-hover
                     v-slot:default="{ hover }"
@@ -77,6 +85,18 @@
                   </div>
                 </v-hover>
               </v-col>
+
+              <v-col v-if="show_list.length === 0">
+                <v-card width="70%" class="transparent borderless">
+                  <v-img :src='not_found_img' height="50%" width="50%" >
+                    <v-card-text class="fill-height d-flex align-content-center align-center">
+                      <h2 class="text-h3 py-3" style="line-height: 1.2">
+                        没有搜索到内容~
+                      </h2>
+                    </v-card-text>
+                  </v-img>
+                </v-card>
+              </v-col>
             </v-row>
           </div>
 
@@ -101,9 +121,27 @@ export default {
       infoSearchList: [],
       collectSearchList: [],
       otherList: [],
+      barItem: ['全局', '帖子', '资讯', '收藏', '其他'],
+      show_list: [],
+      not_found_img: " https://youju-1316987049.cos.ap-beijing.myqcloud.com/20240530144518355-806c0a308d6185ae84730dd7bb1f41e704b59c4d.jpg ",
     };
   },
-  methods: {},
+  methods: {
+    textColor(tag) {
+      // 根据`selectedTab`的值动态返回颜色
+      return this.selectedTab === tag ? '#9635ff' : '#000000';
+    },
+    change_volume(tag) {
+      this.selectedTab = tag
+      this.changeList()
+    },
+    changeList() {
+      let selectedTab = this.selectedTab
+      this.show_list = selectedTab === '全局' ? this.globalSearchList :
+          selectedTab === '帖子' ? this.postSearchList : selectedTab === '资讯' ? this.infoSearchList
+              : selectedTab === '收藏' ? this.collectSearchList : this.otherList
+    }
+  },
   watch: {
     '$route'(to, from) {
       if (to.params.keyword !== from.params.keyword) {
@@ -414,5 +452,10 @@ export default {
 
 .v-btn--active {
   background-color: transparent !important;
+}
+
+.npborderless {
+  border: none !important; /* 移除边框 */
+  box-shadow: none !important; /* 移除阴影 */
 }
 </style>
