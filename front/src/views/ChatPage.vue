@@ -102,7 +102,7 @@ export default {
       } else {
         alert('未找到对应的会话！'+chatUserId)
       }
-    }, 1000);
+    }, 1500);
     //在sessions中找到user2.user_id等于chatUserId的session
 
   },
