@@ -312,10 +312,10 @@ export default {
       user_id: '',
       user_name: "",
       post_success: 2, //1:通过 2:审核中 3:审核不通过
-      title: "测试标题",
+      title: "",
       post_user_id: '',
-      abstract: "测试概要",
-      image: "https://th.bing.com/th/id/R.bae9e662270fd9864c034b3c7bf24563?rik=GLvf79TcpQXsZA&riu=http%3a%2f%2fimage.9game.cn%2f2019%2f3%2f26%2f62569740.jpg&ehk=dJDxPPOwDaS3q%2ffCIRVaN77K%2brs8NsP1w%2bdOfGlUoqM%3d&risl=1&pid=ImgRaw&r=0",
+      abstract: "",
+      image: "https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg",
       time: "2024.1.1",
       content: '',
       related_posts: [],
@@ -329,7 +329,7 @@ export default {
       reportContent: '', // 用户输入的举报内容
       showCommentErrorDialog: false, // 控制评论错误对话框显示状态
       comments: [], // 假设这是从API加载的评论列表
-      author: {profile: {img_url: 'https://pic4.zhimg.com/v2-efd4f4517d5bdb43858a04f7e4ff5f7f_r.jpg'}},
+      author: {profile: {img_url: 'https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg'}},
       browseNum: '',
       showTags: [
         {
@@ -525,6 +525,7 @@ export default {
       }).catch(error => {
         console.error('Error posting comment:', error);
       });
+      this.$router.go(0);
     },
     submitReport() {
       if (this.user_id === null) {
