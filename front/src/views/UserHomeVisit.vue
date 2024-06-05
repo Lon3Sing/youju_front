@@ -42,7 +42,7 @@
 
                         <v-card-text>
                           <div class="text-h5 font-weight-bold primary--text">{{ post.title }}</div>
-                          <div class="text-body-1 py-4">{{ post.abstract }}</div>
+                          <div class="text-body-1 py-4 post-abstract">{{ post.abstract }}</div>
                           <div class="d-flex align-center">
                             <div class="pl-2">{{ post.date }}</div>
                           </div>
@@ -315,4 +315,15 @@ export default {
   text-decoration: none;
   color: inherit;
 }
+.post-abstract {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* 设置最大行数为3 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal; /* 确保文本换行 */
+  line-height: 2; /* 确保行高适应文本 */
+  max-height: 7.4em; /* 最大高度为3行的行高 */
+}
+
 </style>

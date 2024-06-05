@@ -80,7 +80,7 @@
                           {{ post.post_title }}
                         </div>
 
-                        <div class="text-body-1 py-4 max_abstract">
+                        <div class="text-body-1 py-4 max_abstract post-abstract">
                           {{ post.post_abstract }}
                         </div>
 
@@ -374,4 +374,15 @@ export default {
   border: none !important; /* 移除边框 */
   box-shadow: none !important; /* 移除阴影 */
 }
+.post-abstract {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* 设置最大行数为3 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal; /* 确保文本换行 */
+  line-height: 2; /* 确保行高适应文本 */
+  max-height: 7.4em; /* 最大高度为3行的行高 */
+}
+
 </style>
