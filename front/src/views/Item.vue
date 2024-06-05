@@ -283,6 +283,18 @@
         </div>
       </v-col>
     </v-row>
+    <v-dialog v-model="showCommentErrorDialog" max-width="500px">
+      <v-card>
+        <v-card-title class="text-h5">评论失败</v-card-title>
+        <v-card-text>
+          帖子审核未通过!
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text @click="showCommentErrorDialog = false">关闭</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -299,6 +311,7 @@ export default {
       post_id: '',
       user_id: '',
       user_name: "",
+      post_success: 2, //1:通过 2:审核中 3:审核不通过
       title: "测试标题",
       post_user_id: '',
       abstract: "测试概要",
@@ -314,6 +327,7 @@ export default {
       commentText: '',
       showReportDialog: false, // 控制对话框显示的状态
       reportContent: '', // 用户输入的举报内容
+      showCommentErrorDialog: false, // 控制评论错误对话框显示状态
       comments: [], // 假设这是从API加载的评论列表
       author: {profile: {img_url: 'https://pic4.zhimg.com/v2-efd4f4517d5bdb43858a04f7e4ff5f7f_r.jpg'}},
       browseNum: '',
@@ -336,6 +350,7 @@ export default {
   mounted() {
     this.user_id = this.$cookies.get('user_id');
     this.post_id = this.$route.params.id
+    console.log("post_id:", this.post_id, "user_id:", this.user_id)
     this.load()
   },
   watch: {
@@ -384,6 +399,7 @@ export default {
         this.time = response.post_time
         this.content = response.post_content
         this.likesCount = response.post_like
+        this.post_success = response.post_success
         this.author = response.user
         this.post_user_id = response.user.user_id
         this.browseNum = response.browseNum
@@ -477,6 +493,11 @@ export default {
       if (this.user_id === null) {
         alert('请先登录！')
         this.$router.push('/login')
+        return;
+      }
+      if (this.post_success !== 1) {
+        this.showCommentErrorDialog = true;
+        this.commentText = ''; // 清空输入框
         return;
       }
       let newCommentId = null;

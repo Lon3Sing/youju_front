@@ -81,7 +81,7 @@ export default {
             post : item.post,
           })
       )
-      console.log(this.message_list)
+      console.log("Replies:", this.message_list)
     }).catch(error => {
       console.log(error)
     })
