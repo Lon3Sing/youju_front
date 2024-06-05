@@ -158,7 +158,7 @@ export default {
   },
   mounted() {
     this.loading = true; // 确保请求开始前loading为true
-    console.log('Component is now mounted!');
+
     httpInstance.get('/home/GetInfoByOrder/',{
       params : {
         opt : 0,
@@ -169,12 +169,13 @@ export default {
           console.log(response)
           this.carousel_items=response.map(
               post => ({
-                img_url: post.picture.img_url,
+                img_url: post.picture.img_url === null ? 'https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg' : post.picture.img_url,
                 post_id: post.post_id,
                 title: post.post_title,
                 author: post.user.user_nickName,
               })
           )
+          console.log('Component is now mounted!');
           console.log(this.carousel_items)
         })
         .catch(error => {
@@ -189,8 +190,8 @@ export default {
         k : 6,
       }
     }).then(response=>{
-      console.log('info')
-      console.log(response)
+      //console.log('info')
+      //console.log(response)
       this.infoLists = response.map(
           post => ({
             post_collect_Num : post.post_collect_Num,
@@ -208,7 +209,7 @@ export default {
             post_user : post.user,
           })
       )
-      console.log(this.infoLists)
+      //console.log(this.infoLists)
     }).catch(error=>{
       console.log(error)
     });
@@ -219,8 +220,8 @@ export default {
         k : 6,
       }
     }).then(response=>{
-      console.log('news')
-      console.log(response)
+      //console.log('news')
+      //console.log(response)
       this.newsLists = response.map(
           post => ({
             post_collect_Num : post.post_collect_Num,
