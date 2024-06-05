@@ -212,7 +212,7 @@ export default {
             oppo_user_id: this.visitId,
           })
           .then(() => {
-            this.$router.push('/ChatPage');
+            this.$router.push('/ChatPage/' + this.visitId);
           })
           .catch(error => {
             console.error('Error sending message:', error);

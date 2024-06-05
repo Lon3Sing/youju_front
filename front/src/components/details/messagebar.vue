@@ -39,7 +39,7 @@ export default {
       this.$router.push(`/ReplyMessage`);
     },
     goToTalk() {
-      this.$router.push(`/ChatPage`);
+      this.$router.push(`/ChatPage/-1`);
     },
   },
   mounted() {

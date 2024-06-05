@@ -83,8 +83,28 @@ export default {
       this.$router.push('/login')
     }
     this.user_id = this.$cookies.get('user_id');
+    //获取路由中的id参数
+
     this.fetchSessionList();
     this.startPolling();
+    //延迟一秒后执行，确保sessions已经加载
+    if (this.$route.params.id === '-1') {
+      return;
+    }
+    setTimeout(() => {
+      console.log("进来了");
+      const chatUserId = parseInt(this.$route.params.id);
+      let session = this.sessions.find(session => session.user2.user_id === chatUserId);
+      console.log("session:", this.sessions);
+      console.log("chatUserId:", chatUserId);
+      if (session) {
+        this.loadChat_and_jump(session.session_id, session);
+      } else {
+        alert('未找到对应的会话！'+chatUserId)
+      }
+    }, 1000);
+    //在sessions中找到user2.user_id等于chatUserId的session
+
   },
   beforeDestroy() {
     this.stopPolling();
@@ -101,14 +121,14 @@ export default {
         container.scrollTop = container.scrollHeight;
       });
     },
-    fetchSessionList() {
-      httpInstance.get('/people/message/GetSessionList/', {
+    async fetchSessionList() {
+      await httpInstance.get('/people/message/GetSessionList/', {
         params: {
           user_id: this.user_id
         }
       }).then(response => {
         this.sessions = response; // 修正 sessions 数据结构
-        console.log('sessions:', this.sessions);
+        // console.log('sessions:', this.sessions);
       });
     },
     loadChat_and_jump(sessionId, curSession) {

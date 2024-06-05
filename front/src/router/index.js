@@ -124,9 +124,10 @@ const routes = [
         component: () => import("@/views/Chat.vue"),
     },
     {
-        path: '/ChatPage',
+        path: '/ChatPage/:id',
         name: 'ChatPage',
         component: () => import("@/views/ChatPage.vue"),
+        props: true // 允许通过props将路由参数传递给组件
     },
     {
         path: '/EditArticle/:id',
