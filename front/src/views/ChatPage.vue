@@ -42,7 +42,7 @@
             </v-card-text>
           </div>
         </v-card>
-        <v-card class="mt-8" style="border: none; box-shadow: none;" color="transparent">
+        <v-card class="mt-8" style="border: none; box-shadow: none;" color="transparent" v-if="currentSessionId !== -1">
           <v-form @submit.prevent="sendNewMessage">
             <v-text-field
                 v-model="newMessage"
@@ -68,7 +68,7 @@ export default {
       user_id: '',
       sessions: [],
       messages: [],
-      currentSessionId: 0,
+      currentSessionId: -1,
       curSession: null,
       newMessage: "",
       pollInterval: null,
@@ -270,5 +270,8 @@ export default {
   background-color: #f0f0f0;
   text-align: left;
   margin-right: auto;
+}
+.active-session {
+  background-color: #cce8ff;
 }
 </style>

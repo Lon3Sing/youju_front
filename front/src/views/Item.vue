@@ -606,10 +606,12 @@ export default {
         comment.replies.push(newReply);
         comment.newReply = ''; // 清空输入框
         this.replyingToId = -1; // 关闭回复框
+        //alert('回复成功！')
       }).catch(error => {
+        //alert('回复失败！')
         console.error('Error posting reply:', error);
       });
-
+      this.$router.go(0);
     },
     submitReplyToReply(comment, reply) {
       // 这里可以添加对二级评论的回复处理逻辑
@@ -636,13 +638,13 @@ export default {
         if (!comment.replies) {
           this.$set(comment, 'replies', []); // 确保replies数组存在
         }
-        comment.replies.push(newReply);
+        //comment.replies.push(newReply);
         reply.newReply = ''; // 清空输入框
         this.replyingToId = -1; // 关闭回复框
       }).catch(error => {
         console.error('Error posting reply:', error);
       });
-
+      this.$router.go(0);
     },
   },
 };

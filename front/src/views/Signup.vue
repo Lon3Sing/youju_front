@@ -9,6 +9,7 @@
         </v-card-title>
         <v-card-text>
           <v-text-field v-model="username" label="账号" outlined></v-text-field>
+          <v-text-field v-model="nickname" label="昵称" outlined></v-text-field>
           <v-text-field v-model="email" label="邮箱" outlined></v-text-field>
           <v-text-field v-model="password" label="密码" outlined></v-text-field>
           <v-text-field v-model="password_1" label="确认密码" outlined></v-text-field>
@@ -28,6 +29,7 @@ export default {
   data() {
     return {
       username: '',
+      nickname:'',
       email: '',
       password: '',
       password_1: ''
@@ -43,6 +45,7 @@ export default {
       try {
         const response = await httpInstance.post('/auth/Register/', {
           username: this.username,
+          nickname: this.nickname,
           email: this.email,
           password: this.password
         });
