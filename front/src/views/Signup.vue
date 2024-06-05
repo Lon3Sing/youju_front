@@ -42,20 +42,44 @@ export default {
             alert('两次密码长度不一致')
             return;
         }
-      try {
-        const response = await httpInstance.post('/auth/Register/', {
+      // try {
+      //   const response = await httpInstance.post('/auth/Register/', {
+      //     username: this.username,
+      //     nickname: this.nickname,
+      //     email: this.email,
+      //     password: this.password
+      //   });
+      //   if (response.code !== 200) {
+      //     console.error('注册失败', response.data);
+      //     alert('注册失败')
+      //     return;
+      //   }
+      //   console.log('注册成功', response.data);
+      //   alert('注册成功')
+      //   await this.$router.push('/login');
+      // } catch (error) {
+      //   console.error('注册失败', error);
+      //   alert(error)
+      // }
+        httpInstance.post('/auth/Register/', {
           username: this.username,
           nickname: this.nickname,
           email: this.email,
           password: this.password
-        });
-        console.log('注册成功', response.data);
-        alert('注册成功')
-        await this.$router.push('/login');
-      } catch (error) {
-        console.error('注册失败', error);
-        alert('注册失败！')
-      }
+        }).then(response => {
+          if (response.data.code !== 200) {
+            console.error('注册失败', response.data);
+            alert('注册失败');
+            return;
+          }
+          console.log('注册成功', response.data);
+          alert('注册成功')
+          this.$router.push('/login');
+        }).catch(error => {
+          console.error('注册失败', error);
+          alert(error.response.data.error)
+        })
+
     }
   }
 };
