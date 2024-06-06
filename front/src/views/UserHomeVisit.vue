@@ -134,6 +134,10 @@ export default {
         alert("您还未登录!");
         this.$router.push('/login');
       }
+      this.userPosts = [];
+      this.userFollows = [];
+      this.browsingHistory = [];
+
       httpInstance.get('/people/PeopleHome/',
           {
             params: {
@@ -227,6 +231,9 @@ export default {
       return;
     }
     this.fetchUserHome();
+  },
+  watch: {
+    '$route.params.visitId': 'fetchUserHome',
   },
 };
 </script>

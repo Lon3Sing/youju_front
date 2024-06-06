@@ -67,11 +67,6 @@ export default {
           email: this.email,
           password: this.password
         }).then(response => {
-          if (response.data.code !== 200) {
-            console.error('注册失败', response.data);
-            alert('注册失败');
-            return;
-          }
           console.log('注册成功', response.data);
           alert('注册成功')
           this.$router.push('/login');

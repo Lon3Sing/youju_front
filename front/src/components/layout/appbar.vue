@@ -50,10 +50,10 @@
             justify="space-between"
         >
           <v-col class="d-flex align-center">
-            <v-app-bar-nav-icon
+<!--            <v-app-bar-nav-icon-->
 
-                @click.stop="drawer = !drawer"
-            />
+<!--                @click.stop="drawer = !drawer"-->
+<!--            />-->
             <v-toolbar-title
                 class="font-weight-bold text-h5 primary--text"
                 style="cursor: pointer"
