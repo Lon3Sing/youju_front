@@ -61,9 +61,10 @@ export default {
       this.$router.push(`/item/${postId}`);
     },
     loadPostMessage() {
-      httpInstance.get('/home/GetInfoByOrder/', {
-      opt: 0,
-      k: 5,
+      httpInstance.get('/forum/GetRelatePosts/', {
+        params: {
+          post_id: this.$route.params.id
+        }
     })
         .then(response => {
           this.post_list = response.map(
