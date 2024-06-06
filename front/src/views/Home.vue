@@ -166,7 +166,7 @@ export default {
       }
     })
         .then(response => {
-          console.log(response)
+          // console.log(response)
           this.carousel_items=response.map(
               post => ({
                 img_url: post.picture.img_url === null ? 'https://pic.616pic.com/ys_bnew_img/00/42/63/jcjsOKj8uk.jpg' : post.picture.img_url,
@@ -175,8 +175,8 @@ export default {
                 author: post.user.user_nickName,
               })
           )
-          console.log('Component is now mounted!');
-          console.log(this.carousel_items)
+          // console.log('Component is now mounted!');
+          // console.log(this.carousel_items)
         })
         .catch(error => {
           console.log(error);
@@ -220,8 +220,8 @@ export default {
         k : 6,
       }
     }).then(response=>{
-      //console.log('news')
-      //console.log(response)
+      console.log('news')
+      console.log(response)
       this.newsLists = response.map(
           post => ({
             post_collect_Num : post.post_collect_Num,
@@ -249,8 +249,8 @@ export default {
         k : 6,
       }
     }).then(response=>{
-      console.log('攻略')
-      console.log(response)
+      // console.log('攻略')
+      // console.log(response)
       this.strategyLists = response.map(
           post => ({
             post_collect_Num : post.post_collect_Num,

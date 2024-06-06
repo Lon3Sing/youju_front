@@ -44,7 +44,7 @@
         @click="openDialog"
         @change="openDialog"
     ></v-select>
-    <v-dialog v-model="dialog" persistent width="100%" max-width="800px">
+    <v-dialog v-model="dialog" width="100%" max-width="800px">
       <v-card>
         <v-card-title class="d-flex justify-space-between align-center">
           <span>选择标签</span>
@@ -166,11 +166,25 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-row>
+      <v-col cols="3">
+        <v-btn @click="handleArticleUpload" class="borderless">提交文章</v-btn>
+      </v-col>
+      <v-col cols="2"></v-col>
+      <v-col cols="3">
+        <v-btn @click="getRegulation" class="borderless">提交规则</v-btn>
+      </v-col>
+    </v-row>
 
-    <v-btn @click="handleArticleUpload">提交文章</v-btn>
-<!--    <div>{{ user_id }}</div>-->
-<!--    <div>{{ content }}</div>-->
-<!--    <div>{{ selectedGameNameTags }}{{ selectedPreDefinedTags }}{{ selectedSelfDefinedTags }}</div>-->
+    <v-dialog v-model="regulation" width="100%" max-width="800px">
+      <v-card>
+        <v-card-title class="d-flex justify-space-between align-center" v-html="regulation_message">
+        </v-card-title>
+      </v-card>
+    </v-dialog>
+    <!--    <div>{{ user_id }}</div>-->
+    <!--    <div>{{ content }}</div>-->
+    <!--    <div>{{ selectedGameNameTags }}{{ selectedPreDefinedTags }}{{ selectedSelfDefinedTags }}</div>-->
   </div>
 </template>
 
@@ -246,6 +260,9 @@ export default {
     selectedSelfDefinedTags: [],  // 已添加的自定义标签
     searchGameNameTag: '',
     searchPreDefinedTag: '',
+
+    regulation: false,
+    regulation_message : '',
   }),
 
   mounted() {
@@ -309,18 +326,26 @@ export default {
     handleArticleUpload() {
       //TODO 上传文章
       let formData = new FormData()
+      let require1 = false
+      let require2 = false
       formData.append('user_id', this.user_id)
       formData.append('picture', this.coverage);
       //TODO 未解决superuser添加标签的情况
-      formData.append('PostTypeTag', this.postTypeTag);
+      if (this.postTypeTag !== null) {
+        formData.append('PostTypeTag', this.postTypeTag);
+        require1 = true
+      }
       this.selectedGameNameTags.forEach(tag => {
         formData.append('GameNameTag', tag);
+        require2 = true
       });
       this.selectedPreDefinedTags.forEach(tag => {
         formData.append('PreDefinedTag', tag);
+        require2 = true
       });
       this.selectedSelfDefinedTags.forEach(tag => {
         formData.append('SelfDefinedTag', tag);
+        require2 = true
       });
       formData.append('post_title', this.articleTitle);
       formData.append('post_abstract', this.articleAbstract);
@@ -332,21 +357,27 @@ export default {
         formData.append('post_type', 1);
       }
 
-      httpInstance.post(
-          `/forum/AssignOrEditPost/`,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data'
+      if (require1 === true && require2 === true) {
+        httpInstance.post(
+            `/forum/AssignOrEditPost/`,
+            formData,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
             }
-          }
-      ).then(response => {
-        console.log(response);
-        this.showSuccessMessage();
-      }).catch(error => {
-        console.error(error);
-        // 处理错误情况
-      });//上传文章
+        ).then(response => {
+          console.log(response);
+          this.showSuccessMessage();
+        }).catch(error => {
+          console.error(error);
+          let error_message = error.response.data
+          alert(error_message)
+          // 处理错误情况
+        });//上传文章
+      } else {
+        alert('未输入必填项！')
+      }
     },
     showSuccessMessage() {
       MessageBox.alert('上传成功', '成功', {
@@ -408,7 +439,17 @@ export default {
     },
     removeSelfDefinedTag(tag) {
       this.selectedSelfDefinedTags = this.selectedSelfDefinedTags.filter(t => t !== tag);
-    }
+    },
+    getRegulation() {
+      this.regulation = true
+      httpInstance.get('/forum/GetRegulation/')
+          .then(response => {
+            this.regulation_message = response.regulation
+            console.log(this.regulation_message)
+          }).catch(error => {
+            console.log(error)
+      })
+    },
   }
 };
 
@@ -418,5 +459,10 @@ export default {
 .search-input {
   width: 200px; /* 设置输入框的宽度 */
   float: right; /* 将输入框靠右显示 */
+}
+
+.borderless {
+  border: none !important; /* 移除边框 */
+  box-shadow: none !important; /* 移除阴影 */
 }
 </style>

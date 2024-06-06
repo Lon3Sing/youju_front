@@ -231,6 +231,7 @@ export default {
       params: {
         sign: 1,
         user_id: this.user_id,
+        post_type : 1
       }
     }).then(response => {
       console.log(response)

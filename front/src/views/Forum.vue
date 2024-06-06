@@ -224,6 +224,7 @@ export default {
       params: {
         sign: 0,
         user_id: this.user_id,
+        post_type : 0,
       }
     }).then(response => {
       console.log(response)
